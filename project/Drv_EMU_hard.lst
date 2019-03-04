@@ -1,0 +1,360 @@
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE DRV_EMU_HARD
+OBJECT MODULE PLACED IN .\Drv_EMU_hard.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S1_HardDrv\V9811A_EMU\Drv_EMU_hard.c LARGE BROWSE INCDIR(..\C_S
+                    -ource\S0_System;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5
+                    -_ApiProtocol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S
+                    -1_HardDrv\E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\Drv_EMU_hard.lst) OBJECT(.\Drv_EMU_hard.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : Drv_EMU_hard.c
+   6          **Author                : maji
+   7          **date                  : 2016-04-20 
+   8          **description   : V9811A的EMU计量模块硬件底层驱动C代码
+   9          **note                  : V9811A ，MERTER FOR DL03C
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2016-04-26   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          
+  18          #include <MyIncludes_H.h>
+  19          
+  20          
+  21          
+  22          /*******************************************************************************************
+  23          ** 函数名称: Open_EmuPwr
+  24          ** 函数描述: 打开EMU基准电源
+  25          ** 输入参数: 无
+  26          ** 输出参数: 无
+  27          ** 说明    : 
+  28          *******************************************************************************************/
+  29          /*void Open_EmuPwr(uint8 mode)
+  30          {
+  31              INT8U temp;
+  32          
+  33              temp=0;
+  34              while(!temp)
+  35                  temp=SetPLL(SETPLL_3DOT2M);
+  36          
+  37             if(mode ==EMU_NORMALL_MODE)
+  38             {
+  39                  //ADC SET  //
+  40                  CtrlADC5=0; //m channel measure temperature new sensor
+  41                  CtrlADC6=0;
+  42                  ADCOPEN(ADCAPDN+ADCUPDN);//OPEN ADC U A 
+  43                 CtrlADC0=(ADCA16X+ADCU2X); //ADC A 16X GAIN  ADC B 4x GAIN ADC U 2X GAIN       
+  44             }
+  45          
+  46                  //     SP 初始化  // 
+  47              PMG=0;
+  48              SetMeterCfgACK(0x00,PMCtrl4);
+  49              SetMeterCfgACK(0x00,PMCtrl1);
+  50              SetMeterCfgACK(INITGATEP,GATEP);//设置计量初始值
+  51              SetMeterCfgACK(INITGATEQ,GATEQ);
+  52              SetMeterCfgACK(0,0x10f0);
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 2   
+
+  53              SetMeterCfgACK(0,0x10f1);
+  54              SetMeterCfgACK(0,0x10f2);
+  55              SetMeterCfgACK(0,0x10f3);
+  56              SetMeterCfgACK(0,0x10f6);
+  57              SetMeterCfgACK(0,0x10f7);
+  58              SetMeterCfgACK(0,0x10f8);
+  59              SetMeterCfgACK(0,0x10f9);
+  60              SetMeterCfgACK(0xC8,PMCtrl4);               // 待定
+  61              SetMeterCfgACK(0x08,PMCtrl4);
+  62              SetMeterCfgACK(0x00,PMCtrl4);
+  63              SetMeterCfgACK(0,0x10f0);
+  64              SetMeterCfgACK(0,0x10f1);
+  65              SetMeterCfgACK(0,0x10f2);
+  66              SetMeterCfgACK(0,0x10f3);
+  67              SetMeterCfgACK(0,0x10f6);
+  68              SetMeterCfgACK(0,0x10f7);
+  69              SetMeterCfgACK(0,0x10f8);
+  70              SetMeterCfgACK(0,0x10f9);
+  71              SetMeterCfgACK(0x01,GATECP);//潜动1  //
+  72              SetMeterCfgACK(0x01,GATECQ);//潜动2   //
+  73              SetMeterCfgACK(0x00,DATACP);//常数功率寄存器 //
+  74          
+  75              SetMeterCfgACK(0x57,PMCtrl1);//开启所有通道
+  76              SetMeterCfgACK(0x00,PMCtrl2);//
+  77              SetMeterCfgACK(0x30,PMCtrl3);//开启两路有功，次谐波抑制
+  78              SetMeterCfgACK(0xc0,PMCtrl4);//等待滤波器稳定后开启
+  79              SetMeterCfgACK(0,PHCCtrl1);//清0
+  80                 SetMeterCfgACK(0,PHCCtrl2);//清0   
+  81          
+  82          } */
+  83          
+  84          /*******************************************************************************************
+  85          ** 函数名称: Close_EmuPwr
+  86          ** 函数描述: 关闭EMU基准电源
+  87          ** 输入参数: 无
+  88          ** 输出参数: 无
+  89          ** 说明    : 
+  90          *******************************************************************************************/
+  91          void Close_EmuPwr(void)
+  92          {
+  93   1      
+  94   1      }
+  95          
+  96          /*******************************************************************************************
+  97          ** 函数名称: OpenCF
+  98          ** 函数描述:  打开CF计量功能
+  99          ** 输入参数: 无
+ 100          ** 输出参数: 
+ 101          ** 说明    : 
+ 102          *******************************************************************************************/
+ 103          void OpenCF(void)
+ 104          {
+ 105   1          if((EIE&BIT1)!=BIT1)       EIE|=BIT1;
+ 106   1          if((ExInt3IE&BIT7)!=BIT7)  ExInt3IE|=BIT7;     // 开启CF2中断 //
+ 107   1      
+ 108   1      }
+ 109          
+ 110          
+ 111          /*******************************************************************************************
+ 112          ** 函数名称: Close_Cf
+ 113          ** 函数描述:  关闭CF计量功能
+ 114          ** 输入参数: 无
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 3   
+
+ 115          ** 输出参数: 
+ 116          ** 说明    : 
+ 117          *******************************************************************************************/
+ 118          void Close_Cf(void)
+ 119          {   
+ 120   1              INT32U PmPara;
+ 121   1      
+ 122   1              PmPara = ReadMeterParaACK(PMCtrl4);
+ 123   1              PmPara &= ~(BIT4+BIT3+BIT5);     
+ 124   1              SetMeterCfgACK(PmPara,PMCtrl4);  //禁止E1 、E2  、累加和脉冲输出和计数 //
+ 125   1      
+ 126   1              ExInt2IE &= ~BIT7;           // 关闭CF中断 //
+ 127   1         // 输出GPIO 禁止//
+ 128   1              P1OD|= BIT3;
+ 129   1      }
+ 130          
+ 131          
+ 132          /*******************************************************************************************
+ 133          ** 函数名称: SetMeterCfgACKPM800K
+ 134          ** 函数描述: 双口ram设置，使用ACK信号
+ 135          ** 输入参数: u32PMdatal 数据
+ 136          **                      : addr  地址
+ 137          ** 输出参数: FALSE 设置失败；TRUE 设置成功;
+ 138          ** 说明    : 
+ 139          *******************************************************************************************/
+ 140          INT8U SetMeterCfgACKPM800K(unsigned long u32PMdatal ,unsigned int addr)
+ 141          {
+ 142   1          unsigned char  index;
+ 143   1          index=0;
+ 144   1              
+ 145   1          XBYTE[INVD]=0XCC;
+ 146   1          XBYTE[INVD]=0x00;
+ 147   1          while(XBYTE[ACK])
+ 148   1           {
+ 149   2             index++;
+ 150   2                 if(index>CFGDELAY)
+ 151   2                      {
+ 152   3                        return FALSE  ;
+ 153   3                      }
+ 154   2           }
+ 155   1         XBYTE[BUFF0]=(INT8U)(u32PMdatal&0xff);
+ 156   1         XBYTE[BUFF1]=(INT8U)((u32PMdatal>>8)&(0xff));
+ 157   1         XBYTE[BUFF2]=(INT8U)((u32PMdatal>>16)&(0xff));
+ 158   1         XBYTE[BUFF3]=(INT8U)((u32PMdatal>>24)&(0xff));
+ 159   1         XBYTE[addr]=0;//向真正的地址写入0，启动缓冲输入到真正的地址
+ 160   1         for(index=0;index<CFGDELAY;index++)
+ 161   1              _nop_();
+ 162   1         index=0;
+ 163   1         while(XBYTE[ACK])
+ 164   1            {
+ 165   2                index++;
+ 166   2                if(index>CFGDELAY)
+ 167   2                       return FALSE   ;
+ 168   2            }
+ 169   1         return TRUE  ;
+ 170   1          
+ 171   1      }
+ 172          
+ 173          
+ 174          
+ 175          
+ 176          /*******************************************************************************************
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 4   
+
+ 177          ** 函数名称: SetMeterCfgI
+ 178          ** 函数描述: 双口ram设置，使用ACK信号
+ 179          ** 输入参数: u32PMdatal 数据
+ 180          **                      : addr  地址
+ 181          ** 输出参数: FALSE 设置失败；TRUE 设置成功;
+ 182          ** 说明    : 
+ 183          *******************************************************************************************/
+ 184          INT8U SetMeterCfgI(unsigned long u32PMdatal ,unsigned int addr)
+ 185          {
+ 186   1          unsigned char  index,i;
+ 187   1          index=0;
+ 188   1              
+ 189   1          XBYTE[INVD]=0XCC;
+ 190   1          XBYTE[INVD]=0x00;
+ 191   1          while(XBYTE[ACK])
+ 192   1           {
+ 193   2             index++;
+ 194   2                 if(index>CFGDELAY)
+ 195   2                      {
+ 196   3                        return FALSE  ;
+ 197   3                      }
+ 198   2           }
+ 199   1         XBYTE[BUFF0]=(INT8U)(u32PMdatal&0xff);
+ 200   1         XBYTE[BUFF1]=(INT8U)((u32PMdatal>>8)&(0xff));
+ 201   1         XBYTE[BUFF2]=(INT8U)((u32PMdatal>>16)&(0xff));
+ 202   1         XBYTE[BUFF3]=(INT8U)((u32PMdatal>>24)&(0xff));
+ 203   1         
+ 204   1         MEAFRQ=1;
+ 205   1               while(!(MEAFRQ))
+ 206   1                      {
+ 207   2                         i++;
+ 208   2                         if(i>30)
+ 209   2                         {
+ 210   3                            break ; //在一定时间内没有锁定
+ 211   3                         }
+ 212   2                      }  
+ 213   1         XBYTE[addr]=0;//向真正的地址写入0，启动缓冲输入到真正的地址
+ 214   1        for(index=0;index<CFGDELAY;index++)
+ 215   1              _nop_();
+ 216   1         index=0;
+ 217   1         while(XBYTE[ACK])
+ 218   1            {
+ 219   2                index++;
+ 220   2                if(index>CFGDELAY)
+ 221   2                       return FALSE   ;
+ 222   2            }
+ 223   1          
+ 224   1         return TRUE  ;
+ 225   1          
+ 226   1      }
+ 227          
+ 228          
+ 229          /*******************************************************************************************
+ 230          ** 函数名称: SetMeterCfgACK
+ 231          ** 函数描述: 双口ram设置，使用ACK信号
+ 232          ** 输入参数: u32PMdatal 数据
+ 233          **                      : addr  地址
+ 234          ** 输出参数: FALSE 设置失败；TRUE 设置成功;
+ 235          ** 说明    : 
+ 236          *******************************************************************************************/
+ 237          INT8U SetMeterCfgACK(unsigned long u32PMdatal ,unsigned int addr)
+ 238          {
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 5   
+
+ 239   1          unsigned char  index;
+ 240   1          index=0;
+ 241   1              
+ 242   1          XBYTE[INVD]=0XCC;
+ 243   1          XBYTE[INVD]=0x00;
+ 244   1          while(XBYTE[ACK])
+ 245   1           {
+ 246   2             index++;
+ 247   2                 if(index>CFGDELAY)
+ 248   2                      {
+ 249   3                        return FALSE  ;
+ 250   3                      }
+ 251   2           }
+ 252   1         XBYTE[BUFF0]=(INT8U)(u32PMdatal&0xff);
+ 253   1         XBYTE[BUFF1]=(INT8U)((u32PMdatal>>8)&(0xff));
+ 254   1         XBYTE[BUFF2]=(INT8U)((u32PMdatal>>16)&(0xff));
+ 255   1         XBYTE[BUFF3]=(INT8U)((u32PMdatal>>24)&(0xff));
+ 256   1         XBYTE[addr]=0;//向真正的地址写入0，启动缓冲输入到真正的地址
+ 257   1        for(index=0;index<CFGDELAY;index++)
+ 258   1              _nop_();
+ 259   1         index=0;
+ 260   1         while(XBYTE[ACK])
+ 261   1            {
+ 262   2                index++;
+ 263   2                if(index>CFGDELAY)
+ 264   2                       return FALSE   ;
+ 265   2            }
+ 266   1          
+ 267   1        return TRUE;  
+ 268   1      }
+ 269          
+ 270          
+ 271          /*******************************************************************************************
+ 272          ** 函数名称: ReadMeterParaACK
+ 273          ** 函数描述: 双口ram设置，使用ACK信号
+ 274          ** 输入参数: u32PMdatal 数据
+ 275          **                      : addr  地址
+ 276          ** 输出参数: FALSE 设置失败；TRUE 设置成功;
+ 277          ** 说明    : 
+ 278          *******************************************************************************************/
+ 279          uint32 ReadMeterParaACK(uint16 addr)
+ 280          {
+ 281   1          uint8 data index;
+ 282   1          uint32  u32PMdatal,temp;
+ 283   1      
+ 284   1          XBYTE[INVD]=0XCC;
+ 285   1          XBYTE[INVD]=0x00;
+ 286   1          index=0;
+ 287   1          while(XBYTE[ACK])
+ 288   1          {
+ 289   2              index++;
+ 290   2              if(index>CFGDELAY)
+ 291   2              {
+ 292   3              return FALSE;
+ 293   3              }
+ 294   2          }
+ 295   1      
+ 296   1          index=XBYTE[addr];//读取真实地址，加载数据到缓冲//
+ 297   1          for(index=0;index<CFGDELAY;index++)
+ 298   1          _nop_();
+ 299   1          index=0;
+ 300   1          while(XBYTE[ACK])
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 6   
+
+ 301   1          {
+ 302   2              index++;
+ 303   2              if(index>CFGDELAY)
+ 304   2              {
+ 305   3              return FALSE;
+ 306   3              }
+ 307   2          }
+ 308   1          u32PMdatal=(INT32U)XBYTE[BUFF0];
+ 309   1          temp=(INT32U)XBYTE[BUFF1]<<8;
+ 310   1          u32PMdatal+= temp;
+ 311   1          temp=(INT32U)XBYTE[BUFF2];
+ 312   1          temp=temp<<16;
+ 313   1          u32PMdatal+=temp;
+ 314   1          temp=(INT32U)XBYTE[BUFF3];
+ 315   1          temp=temp<<24;
+ 316   1          u32PMdatal+=temp;
+ 317   1          return u32PMdatal;
+ 318   1               
+ 319   1      }
+ 320          
+ 321          
+ 322          /*******************************************************************************************
+ 323          **    END
+ 324          *******************************************************************************************/
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    882    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      27
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,769 @@
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE DRV_2X817N10
+OBJECT MODULE PLACED IN .\Drv_2X817N10.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE ..\C_Source\S1_HardDrv\RF_2X817N10\Drv_2X817N10.c BROWSE INCDIR(..\C_Source
+                    -\S0_System;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiP
+                    -rotocol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_Har
+                    -dDrv\E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\Drv_2X817N10.lst) OBJECT(.\Drv_2X817N10.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name: App_Metering.c
+   6          **Author: maji
+   7          **date: 
+   8          **description: c code for   app function of energy sum
+   9          **note: memer type  SD03A
+  10          **--------------------Version History -------------------------------------
+  11          ** Date        Rev    By     Description 
+  12          **============================================================================
+  13          **
+  14          ** 1/21/2013  0.1  sosomj   1. frist .                             
+  15          **
+  16          **============================================================================ 
+  17          */
+  18          
+  19          
+  20          #include <MyIncludes_H.h>
+  21          
+  22          
+  23          uint8 RF_Version;
+  24          
+  25          
+  26          #if (VERSION==LSD4RF_2X717N10)
+*** WARNING C322 IN LINE 26 OF ..\C_Source\S1_HardDrv\RF_2X817N10\Drv_2X817N10.c: unknown identifier
+*** WARNING C322 IN LINE 26 OF ..\C_Source\S1_HardDrv\RF_2X817N10\Drv_2X817N10.c: unknown identifier
+  27          #define  HIGH_POWER    0   // =1  HIGH_POWER ÉèÖÃ//
+  28          //////////////////////////////////////////////////////////////////////////////////
+  29          //// ¹¦ÄÜÃèÊö : ¼Ä´æÆ÷×é
+  30          //// ËµÃ÷     : AGC=0£¬AFC=0£¬9600£¬200ohm £¬20dbm  
+  31          //////////////////////////////////////////////////////////////////////////////////
+  32          code _SX12XX_REG LSD_RFregConfig[] = {         // 
+*** ERROR C129 IN LINE 32 OF ..\C_SOURCE\S1_HARDDRV\RF_2X817N10\DRV_2X817N10.C: missing ';' before 'LSD_RFregConfig'
+  33               
+  34              {REG_OPMODE,        0x04},           
+  35              {REG_DATAMODUL,     0x00},           
+  36              {REG_BITRATEMSB,    0X0D},//9600bps
+  37              {REG_BITRATELSB,    0X05}, 
+  38              {REG_FDEVMSB,       0x01},// 20KDEV
+  39              {REG_FDEVLSB,       0x48},    
+  40              {REG_FRFMSB,        0XE1}, //902MHz
+  41              {REG_FRFMID,        0X80},           
+  42              {REG_FRFLSB,        0X00},           
+  43              {REG_OSC1,          0X41},           
+  44              {REG_AFCCTRL,       0x00},
+  45              {REG_LOWBAT,        0x02},           
+  46              {REG_LISTEN1,       0X92},           
+  47              {REG_LISTEN2,       0XF5},           
+  48              {REG_LISTEN3,       0X20},                      
+  49              {REG_PALEVEL,       0x7F},    // PA1 + pA2 , 17dBm    high power off
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 2   
+
+  50              {REG_PARAMP ,       0X09},           
+  51              {REG_OCP,           0X1A},           
+  52              {REG_SERVED14,      0x40},
+  53              {REG_SERVED15,      0xB0},
+  54              {REG_SERVED16,      0x7B},
+  55              {REG_SERVED17,      0x9B},      
+  56              {REG_LNA ,          0X89},
+  57              {REG_RXBW,          0xC4}, //   31K ,0.25
+  58              {REG_AFCBW,         0X8B},           
+  59              {REG_OOKPEAK,       0X40},           
+  60              {REG_OOKAVG,        0X80},           
+  61              {REG_OOKFIX,        0X06},           
+  62              {REG_AFCFEI,        0X10},        
+  63              {REG_DIOMAPPING1,   0X00},     
+  64              {REG_DIOMAPPING2,   0X0F},     //ÐÞ¸ÄÊ±¼ä----20150108£¬07->0F                 
+  65              {REG_RSSITHRESH ,   0XFF},     //ÐÞ¸ÄÊ±¼ä----20150108    
+  66              {REG_RXTIMEOUT1 ,   0X00},           
+  67              {REG_RXTIMEOUT2 ,   0X00},           
+  68              {REG_PREAMBLEMSB,   0X00},           
+  69              {REG_PREAMBLELSB,   0X04},            
+  70              {REG_SYNCCONFIG,    0X9A},           
+  71              {REG_SYNCVALUE1,    0XD3},
+  72              {REG_SYNCVALUE2,    0X91},
+  73              {REG_SYNCVALUE3,    0XD3},     
+  74              {REG_SYNCVALUE4,    0X91},     
+  75              {REG_SYNCVALUE5,    0X00},           
+  76              {REG_SYNCVALUE6,    0X00},           
+  77              {REG_SYNCVALUE7,    0X00},           
+  78              {REG_SYNCVALUE8,    0X00},           
+  79              {REG_PACKETCONFIG1, 0X90},
+  80              {REG_PAYLOADLENGTH, 66},            // max to 66 bytes
+  81              {REG_NODEADRS,      0X00},           
+  82              {REG_BROADCASTADRS, 0X00},           
+  83              {REG_AUTOMODES,     0X00},           
+  84              {REG_FIFOTHRESH,    0XC2},           
+  85              {REG_PACKETCONFIG2, 0X02},        
+  86              {REG_AESKEY1,       0X00},                       
+  87              {REG_AESKEY2,       0X00},                       
+  88              {REG_AESKEY3,       0X00},                       
+  89              {REG_AESKEY4,       0X00},                       
+  90              {REG_AESKEY5,       0X00},                       
+  91              {REG_AESKEY6,       0X00},                       
+  92              {REG_AESKEY7,       0X00},                       
+  93              {REG_AESKEY8,       0X00},                       
+  94              {REG_AESKEY9,       0X00},                       
+  95              {REG_AESKEY10,      0X00},                       
+  96              {REG_AESKEY11,      0X00},                       
+  97              {REG_AESKEY12,      0X00},                       
+  98              {REG_AESKEY13,      0X00},                       
+  99              {REG_AESKEY14,      0X00},                       
+ 100              {REG_AESKEY15,      0X00},                       
+ 101              {REG_AESKEY16,      0X00}, 
+ 102              {REG_PREAMBLE,      0XCA},          //ÐÞ¸ÄÊ±¼ä----20150108£¬¿ªÆôPremble
+ 103              {REG_TESTLNA,       0x2D},
+ 104              {REG_TESTPA1,       0x55},
+ 105              {REG_TESTPA2,       0x70},
+ 106              {REG_TESTDAGC,      0x30},
+ 107              {REG_TESTAFC,       0x00},  
+ 108          };
+ 109          //470-500MhzÆµÂÊ±í//
+ 110          code  unsigned char Freq_Cal_Tab[]=
+ 111          {
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 3   
+
+ 112                0x75,0x80,0x00,           //      470.0   MHZ
+ 113                0x75,0x8C,0xE0,           //      470.2   MHZ
+ 114                0x75,0x99,0xAD,           //      470.4   MHZ
+ 115                0x75,0xA6,0x7A,           //      470.6   MHZ
+ 116                0x75,0xB3,0x46,           //      470.8   MHZ
+ 117                0x75,0xC0,0x13,           //      471.0   MHZ
+ 118                0x75,0xCC,0xE0,           //      471.2   MHZ
+ 119                0x75,0xD9,0xAD,           //      471.4   MHZ
+ 120                0x75,0xE6,0x7A,           //      471.6   MHZ
+ 121                0x75,0xF3,0x46,           //      471.8   MHZ
+ 122                0x76,0x00,0x13,           //      472.0   MHZ
+ 123                0x76,0x0C,0xE0,           //      472.2   MHZ
+ 124                0x76,0x19,0xAD,           //      472.4   MHZ
+ 125                0x76,0x26,0x7A,           //      472.6   MHZ
+ 126                0x76,0x33,0x47,           //      472.8   MHZ
+ 127                0x76,0x40,0x13,           //      473.0   MHZ
+ 128                0x76,0x4C,0xE0,           //      473.2   MHZ
+ 129                0x76,0x59,0xAD,           //      473.4   MHZ
+ 130                0x76,0x66,0x7A,           //      473.6   MHZ
+ 131                0x76,0x73,0x47,           //      473.8   MHZ
+ 132                0x76,0x80,0x13,           //      474.0   MHZ
+ 133                0x76,0x8C,0xE0,           //      474.2   MHZ
+ 134                0x76,0x99,0xAD,           //      474.4   MHZ
+ 135                0x76,0xA6,0x7A,           //      474.6   MHZ
+ 136                0x76,0xB3,0x47,           //      474.8   MHZ
+ 137                0x76,0xC0,0x13,           //      475.0   MHZ
+ 138                0x76,0xCC,0xE0,           //      475.2   MHZ
+ 139                0x76,0xD9,0xAD,           //      475.4   MHZ
+ 140                0x76,0xE6,0x7A,           //      475.6   MHZ
+ 141                0x76,0xF3,0x47,           //      475.8   MHZ
+ 142                0x77,0x00,0x13,           //      476.0   MHZ
+ 143                0x77,0x0C,0xE0,           //      476.2   MHZ
+ 144                0x77,0x19,0xAD,           //      476.4   MHZ
+ 145                0x77,0x26,0x7A,           //      476.6   MHZ
+ 146                0x77,0x33,0x47,           //      476.8   MHZ
+ 147                0x77,0x40,0x14,           //      477.0   MHZ
+ 148                0x77,0x4C,0xE0,           //      477.2   MHZ
+ 149                0x77,0x59,0xAD,           //      477.4   MHZ
+ 150                0x77,0x66,0x7A,           //      477.6   MHZ
+ 151                0x77,0x73,0x47,           //      477.8   MHZ
+ 152                0x77,0x80,0x14,           //      478.0   MHZ
+ 153                0x77,0x8C,0xE0,           //      478.2   MHZ
+ 154                0x77,0x99,0xAD,           //      478.4   MHZ
+ 155                0x77,0xA6,0x7A,           //      478.6   MHZ
+ 156                0x77,0xB3,0x47,           //      478.8   MHZ
+ 157                0x77,0xC0,0x14,           //      479.0   MHZ
+ 158                0x77,0xCC,0xE0,           //      479.2   MHZ
+ 159                0x77,0xD9,0xAD,           //      479.4   MHZ
+ 160                0x77,0xE6,0x7A,           //      479.6   MHZ
+ 161                0x77,0xF3,0x47,           //      479.8   MHZ
+ 162                0x78,0x00,0x14,           //      480.0   MHZ
+ 163                0x78,0x0C,0xE0,           //      480.2   MHZ
+ 164                0x78,0x19,0xAD,           //      480.4   MHZ
+ 165                0x78,0x26,0x7A,           //      480.6   MHZ
+ 166                0x78,0x33,0x47,           //      480.8   MHZ
+ 167                0x78,0x40,0x14,           //      481.0   MHZ
+ 168                0x78,0x4C,0xE0,           //      481.2   MHZ
+ 169                0x78,0x59,0xAD,           //      481.4   MHZ
+ 170                0x78,0x66,0x7A,           //      481.6   MHZ
+ 171                0x78,0x73,0x47,           //      481.8   MHZ
+ 172                0x78,0x80,0x14,           //      482.0   MHZ
+ 173                0x78,0x8C,0xE1,           //      482.2   MHZ
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 4   
+
+ 174                0x78,0x99,0xAD,           //      482.4   MHZ
+ 175                0x78,0xA6,0x7A,           //      482.6   MHZ
+ 176                0x78,0xB3,0x47,           //      482.8   MHZ
+ 177                0x78,0xC0,0x14,           //      483.0   MHZ
+ 178                0x78,0xCC,0xE1,           //      483.2   MHZ
+ 179                0x78,0xD9,0xAD,           //      483.4   MHZ
+ 180                0x78,0xE6,0x7A,           //      483.6   MHZ
+ 181                0x78,0xF3,0x47,           //      483.8   MHZ
+ 182                0x79,0x00,0x14,           //      484.0   MHZ
+ 183                0x79,0x0C,0xE1,           //      484.2   MHZ
+ 184                0x79,0x19,0xAD,           //      484.4   MHZ
+ 185                0x79,0x26,0x7A,           //      484.6   MHZ
+ 186                0x79,0x33,0x47,           //      484.8   MHZ
+ 187                0x79,0x40,0x14,           //      485.0   MHZ
+ 188                0x79,0x4C,0xE1,           //      485.2   MHZ
+ 189                0x79,0x59,0xAD,           //      485.4   MHZ
+ 190                0x79,0x66,0x7A,           //      485.6   MHZ
+ 191                0x79,0x73,0x47,           //      485.8   MHZ
+ 192                0x79,0x80,0x14,           //      486.0   MHZ
+ 193                0x79,0x8C,0xE1,           //      486.2   MHZ
+ 194                0x79,0x99,0xAE,           //      486.4   MHZ
+ 195                0x79,0xA6,0x7A,           //      486.6   MHZ
+ 196                0x79,0xB3,0x47,           //      486.8   MHZ
+ 197                0x79,0xC0,0x14,           //      487.0   MHZ
+ 198                0x79,0xCC,0xE1,           //      487.2   MHZ
+ 199                0x79,0xD9,0xAE,           //      487.4   MHZ
+ 200                0x79,0xE6,0x7A,           //      487.6   MHZ
+ 201                0x79,0xF3,0x47,           //      487.8   MHZ
+ 202                0x7A,0x00,0x14,           //      488.0   MHZ
+ 203                0x7A,0x0C,0xE1,           //      488.2   MHZ
+ 204                0x7A,0x19,0xAE,           //      488.4   MHZ
+ 205                0x7A,0x26,0x7A,           //      488.6   MHZ
+ 206                0x7A,0x33,0x47,           //      488.8   MHZ
+ 207                0x7A,0x40,0x14,           //      489.0   MHZ
+ 208                0x7A,0x4C,0xE1,           //      489.2   MHZ
+ 209                0x7A,0x59,0xAE,           //      489.4   MHZ
+ 210                0x7A,0x66,0x7A,           //      489.6   MHZ
+ 211                0x7A,0x73,0x47,           //      489.8   MHZ
+ 212                0x7A,0x80,0x14,           //      490.0   MHZ
+ 213                0x7A,0x8C,0xE1,           //      490.2   MHZ
+ 214                0x7A,0x99,0xAE,           //      490.4   MHZ
+ 215                0x7A,0xA6,0x7A,           //      490.6   MHZ
+ 216                0x7A,0xB3,0x47,           //      490.8   MHZ
+ 217                0x7A,0xC0,0x14,           //      491.0   MHZ
+ 218                0x7A,0xCC,0xE1,           //      491.2   MHZ
+ 219                0x7A,0xD9,0xAE,           //      491.4   MHZ
+ 220                0x7A,0xE6,0x7B,           //      491.6   MHZ
+ 221                0x7A,0xF3,0x47,           //      491.8   MHZ
+ 222                0x7B,0x00,0x14,           //      492.0   MHZ
+ 223                0x7B,0x0C,0xE1,           //      492.2   MHZ
+ 224                0x7B,0x19,0xAE,           //      492.4   MHZ
+ 225                0x7B,0x26,0x7B,           //      492.6   MHZ
+ 226                0x7B,0x33,0x47,           //      492.8   MHZ
+ 227                0x7B,0x40,0x14,           //      493.0   MHZ
+ 228                0x7B,0x4C,0xE1,           //      493.2   MHZ
+ 229                0x7B,0x59,0xAE,           //      493.4   MHZ
+ 230                0x7B,0x66,0x7B,           //      493.6   MHZ
+ 231                0x7B,0x73,0x47,           //      493.8   MHZ
+ 232                0x7B,0x80,0x14,           //      494.0   MHZ
+ 233                0x7B,0x8C,0xE1,           //      494.2   MHZ
+ 234                0x7B,0x99,0xAE,           //      494.4   MHZ
+ 235                0x7B,0xA6,0x7B,           //      494.6   MHZ
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 5   
+
+ 236                0x7B,0xB3,0x47,           //      494.8   MHZ
+ 237                0x7B,0xC0,0x14,           //      495.0   MHZ
+ 238                0x7B,0xCC,0xE1,           //      495.2   MHZ
+ 239                0x7B,0xD9,0xAE,           //      495.4   MHZ
+ 240                0x7B,0xE6,0x7B,           //      495.6   MHZ
+ 241                0x7B,0xF3,0x47,           //      495.8   MHZ
+ 242                0x7C,0x00,0x14,           //      496.0   MHZ
+ 243                0x7C,0x0C,0xE1,           //      496.2   MHZ
+ 244                0x7C,0x19,0xAE,           //      496.4   MHZ
+ 245                0x7C,0x26,0x7B,           //      496.6   MHZ
+ 246                0x7C,0x33,0x48,           //      496.8   MHZ
+ 247                0x7C,0x40,0x14,           //      497.0   MHZ
+ 248                0x7C,0x4C,0xE1,           //      497.2   MHZ
+ 249                0x7C,0x59,0xAE,           //      497.4   MHZ
+ 250                0x7C,0x66,0x7B,           //      497.6   MHZ
+ 251                0x7C,0x73,0x48,           //      497.8   MHZ
+ 252                0x7C,0x80,0x14,           //      498.0   MHZ
+ 253                0x7C,0x8C,0xE1,           //      498.2   MHZ
+ 254                0x7C,0x99,0xAE,           //      498.4   MHZ
+ 255                0x7C,0xA6,0x7B,           //      498.6   MHZ
+ 256                0x7C,0xB3,0x48,           //      498.8   MHZ
+ 257                0x7C,0xC0,0x14,           //      499.0   MHZ
+ 258                0x7C,0xCC,0xE1,           //      499.2   MHZ
+ 259                0x7C,0xD9,0xAE,           //      499.4   MHZ
+ 260                0x7C,0xE6,0x7B,           //      499.6   MHZ
+ 261                0x7C,0xF3,0x48,           //      499.8   MHZ
+ 262                0x7D,0x00,0x14            //      500.0   MHZ
+ 263          };
+ 264          
+ 265          code  _SX12XX_REG DateRate[]={
+ 266            
+ 267              //9.6Kbps
+ 268              {REG_BITRATEMSB,    0X0D},//9600bps
+ 269              {REG_BITRATELSB,    0X05},
+ 270              {REG_FDEVMSB,       0x01},// 20KDEV
+ 271              {REG_FDEVLSB,       0x48},
+ 272              {REG_RXBW,          0xC4}, //   31K ,0.25  
+ 273              //  4.8kbps
+ 274              {REG_BITRATEMSB,    0X1A},//4800bps
+ 275              {REG_BITRATELSB,    0X0B},
+ 276              {REG_FDEVMSB,       0x01},// 16KDEV
+ 277              {REG_FDEVLSB,       0x06},
+ 278              {REG_RXBW,          0x44}, //   31.3K ,4   
+ 279              //20kbps
+ 280              {REG_BITRATEMSB,    0X06},//20kbps
+ 281              {REG_BITRATELSB,    0X40},
+ 282              {REG_FDEVMSB,       0x01},// 30KDEV
+ 283              {REG_FDEVLSB,       0xEC},
+ 284              {REG_RXBW,          0x4B}, // 50K ,4
+ 285              //40kbps
+ 286              {REG_BITRATEMSB,    0X03},//40kbps
+ 287              {REG_BITRATELSB,    0X20},
+ 288              {REG_FDEVMSB,       0x02},// 40KDEV
+ 289              {REG_FDEVLSB,       0x8F},
+ 290              {REG_RXBW,          0x43}, //62.5K ,4
+ 291              
+ 292          };
+ 293          #endif
+ 294          
+ 295          
+ 296          
+ 297          
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 6   
+
+ 298          
+ 299          
+ 300          //**********************************************************************************
+ 301          // ¹¦ÄÜÃèÊö : spi·¢ËÍor½ÓÊÕ1×Ö½Ú
+ 302          // ÊäÈë²ÎÊý : unsigned char mosi
+ 303          // ·µ»Ø²ÎÊý : unsigned char
+ 304          // ËµÃ÷     : 
+ 305          //**********************************************************************************
+ 306          static unsigned char LSD_RF_SpiInOut (unsigned char mosi) 
+ 307          { 
+ 308              unsigned char i;
+ 309              unsigned char onebyte;
+ 310              onebyte = mosi;
+ 311              for(i = 8; i > 0; i--) 
+ 312              {
+ 313                  LSD_RF_DELAY();
+ 314                  if(onebyte & 0x80) 
+ 315                  {
+ 316                      LSD4RF_SPI_SET_SDO_HIGH();//LSD_SPI_SIMO_OUT(1) ;
+ 317                  }
+ 318                  else 
+ 319                  {
+ 320                      LSD4RF_SPI_SET_SDO_LOW() ;
+ 321                  }
+ 322          
+ 323                  LSD_RF_DELAY();
+ 324                  LSD4RF_SPI_SET_CLK_HIGH();
+ 325                  onebyte <<= 1;      // next bit
+ 326                  if(LSD_SPI_SOMI_IN()) 
+ 327                  {
+ 328                      onebyte++;      // 1 found on MISO
+ 329                  }
+ 330                  LSD_RF_DELAY();
+ 331                  LSD4RF_SPI_SET_CLK_LOW();
+ 332              }
+ 333              return onebyte;         // mosi now becomes the value of miso
+ 334          }
+ 335          //**********************************************************************************
+ 336          // ¹¦ÄÜÃèÊö : spi¶ÁÐ´¼Ä´æÆ÷
+ 337          // ÊäÈë²ÎÊý : unsigned char addrµØÖ· unsigned char valÊý¾Ý
+ 338          // ·µ»Ø²ÎÊý : 
+ 339          // ËµÃ÷     : Note: don't call it directely use macro SpiWriteReg and SpiWriteReg  to call this routine
+ 340          //**********************************************************************************
+ 341          unsigned char LSD_RF_SpiRW_Reg (unsigned char addr, unsigned char val) 
+ 342          {
+ 343              unsigned char rc;
+ 344              LSD_RF_SPIInit();
+ 345              LSD4RF_SPI_SET_NSS_LOW();
+ 346              LSD_RF_SpiInOut(addr);
+ 347              rc = LSD_RF_SpiInOut(val);
+ 348              LSD4RF_SPI_SET_NSS_HIGH();
+ 349              return rc;
+ 350          }
+ 351          //**********************************************************************************
+ 352          // ¹¦ÄÜÃèÊö : Ð´¼Ä´æÆ÷
+ 353          // ÊäÈë²ÎÊý : addrµØÖ· valÊý¾Ý
+ 354          // ·µ»Ø²ÎÊý : ÎÞ
+ 355          // ËµÃ÷     : 
+ 356          //**********************************************************************************
+ 357          #define LSD_RF_WriteReg(addr, val)         LSD_RF_SpiRW_Reg(addr|0x80,val)
+ 358          //**********************************************************************************
+ 359          // ¹¦ÄÜÃèÊö : ¶Á¼Ä´æÆ÷
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 7   
+
+ 360          // ÊäÈë²ÎÊý : addrµØÖ·
+ 361          // ·µ»Ø²ÎÊý : ¼Ä´æÆ÷Öµ
+ 362          // ËµÃ÷     : 
+ 363          //**********************************************************************************
+ 364          #define LSD_RF_ReadReg(addr)               LSD_RF_SpiRW_Reg(addr&0x7F, 0)
+ 365          //**********************************************************************************
+ 366          // ¹¦ÄÜÃèÊö : Çå³ýFIFOÒÔ¼°Òç³ö±êÖ¾Î»
+ 367          // ÊäÈë²ÎÊý : 
+ 368          // ·µ»Ø²ÎÊý : 
+ 369          // ËµÃ÷     : 
+ 370          //**********************************************************************************
+ 371          #define LSD_RF_ClearFIFO()                    LSD_RF_WriteReg(REG_IRQFLAGS2, 0x10)
+ 372          //**********************************************************************************
+ 373          // ¹¦ÄÜÃèÊö : È·±£½øÈëstandby
+ 374          // ÊäÈë²ÎÊý : 
+ 375          // ·µ»Ø²ÎÊý : 
+ 376          // ËµÃ÷     : ×¢Òâ£º´Ëº¯Êý½«listen¹¦ÄÜ¹Ø±Õ,TS_OSC>500us
+ 377          //**********************************************************************************
+ 378          void LSD_RF_StandbyMode(void)
+ 379          {
+ 380              unsigned long  i=600000;
+ 381              LSD_RF_WriteReg(REG_OPMODE, (RF_OPMODE_SEQUENCER_ON|RF_OPMODE_LISTEN_OFF | RF_OPMODE_STANDBY));
+ 382              while (((LSD_RF_ReadReg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00)&&i)i--; // Wait for ModeRead
+             -y
+ 383          }
+ 384          //**********************************************************************************
+ 385          // ¹¦ÄÜÃèÊö : È·±£½øÈësleep
+ 386          // ÊäÈë²ÎÊý : 
+ 387          // ·µ»Ø²ÎÊý : 
+ 388          // ËµÃ÷     : ×¢Òâ£º´Ëº¯Êý½«listen¹¦ÄÜ¹Ø±Õ
+ 389          //**********************************************************************************
+ 390          void LSD_RF_SleepMode(void)
+ 391          {
+ 392              unsigned long  i=600000;
+ 393              LSD_RF_StandbyMode();       //ÏÈÇÐ»»µ½standbyÄ£Ê½ÔÙÇÐµ½sleepÄ£Ê½//
+ 394              LSD_RF_WriteReg(REG_OPMODE, (RF_OPMODE_SEQUENCER_ON|RF_OPMODE_LISTEN_OFF | RF_OPMODE_SLEEP));
+ 395              while (((LSD_RF_ReadReg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00)&&i)i--; // Wait for ModeRead
+             -y
+ 396          //    LSD_RF_WriteReg(REG_DIOMAPPING1, RF_DIOMAPPING1_DIO0_00+RF_DIOMAPPING1_DIO1_11+RF_DIOMAPPING1_DIO2_0
+             -1+RF_DIOMAPPING1_DIO3_01); // DIO0 = packet sent
+ 397          //    LSD_RF_WriteReg(REG_DIOMAPPING2, RF_DIOMAPPING2_DIO4_00+RF_DIOMAPPING2_DIO5_00); // DIO0 = packet se
+             -nt
+ 398              LSD4RF_SPI_SET_NSS_LOW();  //½øÈëµÍ¹¦ºÄ£¬Òª½«NSSÀ­µÍ£¬·ÀÖ¹Â©µçÁ÷£¬Õâ¸öºÜÖØÒª//
+ 399          }
+ 400          //**********************************************************************************
+ 401          // ¹¦ÄÜÃèÊö : È·±£½øÈëRXÄ£Ê½
+ 402          // ÊäÈë²ÎÊý : 
+ 403          // ·µ»Ø²ÎÊý : 
+ 404          // ËµÃ÷     : ×¢Òâ£º´Ëº¯Êý½«listen¹¦ÄÜ¹Ø±Õ  £¬DIO3=Premble   DIO0=PLD
+ 405          //**********************************************************************************
+ 406          void LSD_RF_RXmode(void)
+ 407          {
+ 408              unsigned char nTimes,cData;
+ 409              LSD_RF_StandbyMode();       //ÏÈÇÐ»»µ½standbyÄ£Ê½//
+ 410              if(RF_Version==RF_SX1208)
+ 411                 LSD_RF_WriteReg(REG_DIOMAPPING1, RF_DIOMAP1_DIO0_PLD_RDY|RF_DIOMAPPING1_DIO3_01); // DIO0 = PLD_RDY
+ 412              else 
+ 413                 LSD_RF_WriteReg(REG_DIOMAPPING1, RF_DIOMAP1_DIO0_PLD_RDY|RF_DIOMAPPING1_DIO3_10); // DIO0 = PLD_RDY
+ 414              LSD_RF_ClearFIFO();         //ÇåFIFO  
+ 415              while(1)    //·ÀÖ¹Íâ²¿ÒòËØµ¼ÖÂSPIÇÐ»»µ½RXÄ£Ê½Ê§°Ü£¬´Ë´úÂëÎª×ö±£»¤ÓÃ¡£//
+ 416              {
+ 417                   nTimes=100;
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 8   
+
+ 418                   LSD_RF_WriteReg(REG_OPMODE, (RF_OPMODE_SEQUENCER_ON|RF_OPMODE_LISTEN_OFF | RF_OPMODE_RECEIVER));
+ 419                   //µÈ´ý½øÈë½ÓÊÕ×´Ì¬//
+ 420                   do
+ 421                   {
+ 422                       cData=LSD_RF_ReadReg(REG_OPMODE) & 0x1c;
+ 423                       nTimes--;
+ 424                   }
+ 425                   while((cData!=RF_OPMODE_RECEIVER)&&nTimes);
+ 426                   if(!nTimes)
+ 427                        continue;
+ 428          
+ 429                   return;
+ 430               } 
+ 431          }
+ 432          ////**********************************************************************************
+ 433          //// ¹¦ÄÜÃèÊö : Ð´ÅäÖÃ±í
+ 434          //// ÊäÈë²ÎÊý : ÎÞ
+ 435          //// ·µ»Ø²ÎÊý : ÎÞ
+ 436          //// ËµÃ÷     : 
+ 437          ////**********************************************************************************
+ 438          void LSD_RF_Config(void)
+ 439          {
+ 440              _SX12XX_REG code *p;
+ 441              unsigned char i;
+ 442              p = LSD_RFregConfig;
+ 443              for(i=sizeof(LSD_RFregConfig)/2; i>0; i--) 
+ 444              {
+ 445                  LSD_RF_WriteReg(p->addr, p->val);
+ 446                  p++;
+ 447              }
+ 448          }
+ 449          ////**********************************************************************************
+ 450          //// ¹¦ÄÜÃèÊö : ¸´Î»ÎÞÏßÄ£¿é
+ 451          //// ÊäÈë²ÎÊý : ÎÞ
+ 452          //// ·µ»Ø²ÎÊý : ÎÞ
+ 453          //// ËµÃ÷     : 
+ 454          ////**********************************************************************************
+ 455          void LSD_RF_RestRF(void)
+ 456          {
+ 457              LSD4RF_SPI_SET_RESET_DIR_OUT() ;  //¸´Î»Òý½Å×öÊä³ö//
+ 458              LSD4RF_SET_RESET_HIGH(); //¸´Î»Òý½ÅÊä³ö¸ßµçÆ½¸´Î»//
+ 459              Lib_Delay_ms(20);
+ 460              LSD4RF_SET_RESET_LOW();   //¸´Î»Òý½ÅÊä³öµÍµçÆ½//
+ 461              Lib_Delay_ms(20);
+ 462          
+ 463          }
+ 464          ////**********************************************************************************
+ 465          //// ¹¦ÄÜÃèÊö : RF³õÊ¼»¯
+ 466          //// ÊäÈë²ÎÊý : ÎÞ
+ 467          //// ·µ»Ø²ÎÊý : ÎÞ
+ 468          //// ËµÃ÷     : 
+ 469          ////**********************************************************************************
+ 470          unsigned char LSD_RF_InitRF(void) 
+ 471          {
+ 472              LSD_RF_RestRF();                    //¸´Î»RF
+ 473              LSD_RF_SPIInit();                   //RF³õÊ¼»¯ //
+ 474              LSD_RF_StandbyMode();               //½øÈëstandbyÄ£Ê½//
+ 475              LSD_RF_Config();                    //Ð´RFÅäÖÃ±í£¬×îºÃÔÚstandbyÄ£Ê½»òsleepÄ£Ê½ÏÂÐÞ¸Ä//
+ 476              RF_Version = LSD_RF_ReadReg(REG_VERSION);
+ 477              // to test SPI
+ 478              LSD_RF_WriteReg(REG_SYNCVALUE8, 0x55);
+ 479              if(LSD_RF_ReadReg(REG_SYNCVALUE8) != 0x55) 
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 9   
+
+ 480              {
+ 481                  return 1;// something wrong with SPI
+ 482              }
+ 483              LSD_RF_WriteReg(REG_SYNCVALUE8, 0xD3);
+ 484              if(LSD_RF_ReadReg(REG_SYNCVALUE8) != 0xD3) 
+ 485              {
+ 486                  return 1;// something wrong with SPI
+ 487              }
+ 488             return 0;           
+ 489          }
+ 490          
+ 491          ////////////////////////////////////////////////////////////////////////////
+ 492          // ¹¦ÄÜÃèÊö : ·¢ËÍÊý¾Ý
+ 493          // ÊäÈë²ÎÊý : Uint8 *txBuffer:·¢ËÍÊý¾Ý´æ´¢Êý×éÊ×µØÖ·,
+ 494          //            Uint8 size£º·¢ËÍÊý¾Ý³¤¶È
+ 495          // ·µ»Ø²ÎÊý : ÎÞ
+ 496          // ËµÃ÷     : 
+ 497          //////////////////////////////////////////////////////////////////////////////
+ 498          void LSD_RF_SendPacket(uint8 *txBuffer, uint8 size)
+ 499          {
+ 500              uint8 i;
+ 501              unsigned long  j=600000;   //·¢ËÍ³¬Ê±ÍË³ö£¬¸ù¾ÝÊµ¼ÊÓ¦ÓÃÇë×öµ÷Õû//
+ 502              LSD_RF_StandbyMode();               //½øÈëstandbyÄ£Ê½//
+ 503              LSD_RF_WriteReg(REG_DIOMAPPING1, RF_DIOMAP1_DIO0_PKT_SENT); // DIO0 = packet sent
+ 504              if(HIGH_POWER==1)   //Èç¹ûHigh Power ÉèÖÃenable£¨+20dbm capability on PA_BOOST£©
+ 505              {
+ 506                  LSD_RF_WriteReg(REG_OCP,0x0F);   
+ 507                  LSD_RF_WriteReg(REG_TESTPA1,0x5D);   
+ 508                  LSD_RF_WriteReg(REG_TESTPA2,0x7C);
+ 509              }
+ 510              LSD_RF_ClearFIFO();    //Çå³ýFIFO
+ 511              LSD_RF_WriteReg(REG_FIFO, size);
+ 512              for(i=0;i<size;i++)
+ 513              {
+ 514                  LSD_RF_WriteReg(REG_FIFO, txBuffer[i]);
+ 515              }
+ 516              LSD_RF_WriteReg(REG_OPMODE, (RF_OPMODE_SEQUENCER_ON|RF_OPMODE_LISTEN_OFF | RF_OPMODE_TRANSMITTER));  /
+             -/ÇÐ»»µ½·¢ËÍ//
+ 517              while((!LSD4RF_READ_DIO0())&&j)j--;         // packet sent
+ 518              LSD_RF_StandbyMode();               //½øÈëstandbyÄ£Ê½//
+ 519              if(HIGH_POWER==1)                 //ÍË³ö·¢ËÍºó£¬×¢ÒâÒ»¶¨Òª½«Hing Power Disable¡£//
+ 520              {
+ 521                  LSD_RF_WriteReg(REG_OCP,0x1B);   
+ 522                  LSD_RF_WriteReg(REG_TESTPA1,0x55);   
+ 523                  LSD_RF_WriteReg(REG_TESTPA2,0x70); 
+ 524              }
+ 525              
+ 526          }
+ 527          
+ 528          //////////////////////////////////////////////////////////////////////////////////
+ 529          //// ¹¦ÄÜÃèÊö : ½ÓÊÕÊý¾Ý°ü
+ 530          //// ÊäÈë²ÎÊý : Uint8 *cRxBuf,·µ»ØÊý¾Ý´æ´¢Ê×µØÖ·¡£ Uint8 cLength ¶ÁµÄÊý¾Ý³¤¶È
+ 531          //// ·µ»Ø²ÎÊý : ÎÞ
+ 532          //// ËµÃ÷     : 
+ 533          //////////////////////////////////////////////////////////////////////////////////
+ 534          void LSD_RF_RxPacket(uint8 *cRxBuf, uint8 *cLength)
+ 535          {
+ 536              uint8 i;
+ 537              LSD_RF_StandbyMode();               //½øÈëstandbyÄ£Ê½//
+ 538              *cLength = LSD_RF_ReadReg(REG_FIFO);
+ 539              for(i=0;i<*cLength;i++)
+ 540                cRxBuf[i]=LSD_RF_ReadReg(REG_FIFO);
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 10  
+
+ 541              LSD_RF_ClearFIFO();    //Çå³ýFIFO
+ 542          }
+ 543          //////////////////////////////////////////////////////////////////////////////////
+ 544          //// ¹¦ÄÜÃèÊö : FreqCalSet
+ 545          //// ÊäÈë²ÎÊý : ch   ½¨Òéch=0~75
+ 546          //// ·µ»Ø²ÎÊý : ÎÞ
+ 547          //// ËµÃ÷     : 
+ 548          //////////////////////////////////////////////////////////////////////////////////
+ 549          void LSD_RF_FreqSet(uint8 ch)
+ 550          {
+ 551              LSD_RF_StandbyMode();               //½øÈëstandbyÄ£Ê½//
+ 552              LSD_RF_WriteReg(REG_FRFMSB,Freq_Cal_Tab[ch*3]);
+ 553              LSD_RF_WriteReg(REG_FRFMID,Freq_Cal_Tab[ch*3+1]);
+ 554              LSD_RF_WriteReg(REG_FRFLSB,Freq_Cal_Tab[ch*3+2]);
+ 555          }
+ 556          ////////////////////////////////////////////////////////////////////////////////
+ 557          // ¹¦ÄÜÃèÊö : WOR³õÊ¼»¯
+ 558          // ÊäÈë²ÎÊý : ÎÞ
+ 559          //            
+ 560          // ·µ»Ø²ÎÊý : ÎÞ
+ 561          // ËµÃ÷     : Ç°µ¼£¨2£©+Í¬²½(2)         
+ 562          ////////////////////////////////////////////////////////////////////////////////
+ 563          void LSD_RF_WORInit(void)
+ 564          {
+ 565              LSD_RF_StandbyMode();                //½øÈëstandbyÄ£Ê½//
+ 566              //ÅäÖÃ²ÎÊý
+ 567              LSD_RF_WriteReg(REG_PREAMBLELSB,0x02);   //ÉèÖÃ2¸öÇ°µ¼Âë//
+ 568              LSD_RF_WriteReg(REG_SYNCCONFIG,0x88);   //ÉèÖÃ2¸öÍ¬²½×Ö//
+ 569              LSD_RF_WriteReg(REG_SYNCVALUE1,0x55);   //ÉèÖÃÍ¬²½×ÖÄÚÈÝ //
+ 570              LSD_RF_WriteReg(REG_SYNCVALUE2,0x55);   //ÉèÖÃÍ¬²½×ÖÄÚÈÝ //
+ 571          //    LSD_RF_WriteReg(REG_PACKETCONFIG1,0x80);   //¹Ø±ÕCRC  
+ 572              LSD_RF_WriteReg(REG_DIOMAPPING1, RF_DIOMAPPING1_DIO3_10); // Ó³ÉäDIO3 = SYNC_ADDR£¨Ò²¿ÉÒÔÓÃDIO0£¬ÕâÀïÓ
+             -ÃDIO3ÎªÀý×Ó£©    //
+ 573             
+ 574          }
+ 575          ////////////////////////////////////////////////////////////////////////////////
+ 576          // ¹¦ÄÜÃèÊö : Ö´ÐÐWOR²Ù×÷
+ 577          // ÊäÈë²ÎÊý : Uint8 cLength  0 ½øÈëË¯ÃßÄ£Ê½¡£  1 ½øÈë½ÓÊÕÄ£Ê½¡£
+ 578          //            
+ 579          // ·µ»Ø²ÎÊý : ÎÞ
+ 580          // ËµÃ÷     :  DIO3×öWOR»½ÐÑÖÐ¶Ï
+ 581          ////////////////////////////////////////////////////////////////////////////////
+ 582          void LSD_RF_WORexecute(uint8 cLength)
+ 583          {
+ 584              unsigned long  i=600000; 
+ 585              switch(cLength)
+ 586              {
+ 587                  case 0:  //½øÈëË¯ÃßÄ£Ê½//
+ 588                      // LSD_RF_DIO3_IE =0;      //¹Ø±ÕÖÐ¶Ï//
+ 589                      //                Sleep_RX=0;             //Ö¸Ê¾Ë¯Ãß//
+ 590                      LSD_RF_SleepMode();     //½øÈëË¯Ãß//
+ 591                      //LSD_Sleep_Timerout();   //¿ªÆôË¯Ãß¶¨Ê±Æ÷//
+ 592                      break;
+ 593                  case 1://½øÈë½ÓÊÕÄ£Ê½//
+ 594                      //LSD_RF_DIO3_IE =0;          //¹Ø±ÕÖÐ¶Ï//
+ 595                      //               Sleep_RX=1;                 //Ö¸Ê¾½ÓÊÕ//
+ 596                      LSD_RF_SleepMode();         //½øÈëË¯Ãß //
+ 597                      LSD_RF_ClearFIFO();         //ÇåFIFO //
+ 598                      LSD_RF_WriteReg(REG_OPMODE, (RF_OPMODE_SEQUENCER_ON|RF_OPMODE_LISTEN_OFF | RF_OPMODE_RECEIVER)
+             -);//½øÈë½ÓÊÕ//
+ 599                      while (((LSD_RF_ReadReg(REG_IRQFLAGS1) & RF_IRQFLAGS1_MODEREADY) == 0x00)&&i)i--; // Wait for 
+             -ModeReady
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 11  
+
+ 600                      //LSD_RF_DIO3_IFG=0;          //Çå³ýÖÐ¶Ï±êÖ¾Î»//
+ 601                      // LSD_RF_DIO3_IE =1;          //¿ªÆôÖÐ¶Ï//
+ 602                      //LSD_RX_Timerout();          //¿ªÆô½ÓÊÕ¶¨Ê±Æ÷//
+ 603                      break;
+ 604                  default:break;
+ 605              }
+ 606          
+ 607          }
+ 608          ////////////////////////////////////////////////////////////////////////////////
+ 609          // ¹¦ÄÜÃèÊö : ÍË³öWOR,ÖÍÁôÔÚsdandbyÄ£ÄâÊ½
+ 610          // ÊäÈë²ÎÊý : ÎÞ
+ 611          // ·µ»Ø²ÎÊý : ÎÞ
+ 612          // ËµÃ÷     : ÍË³öWOR,½«¸Ä±ä¹ýµÄ¼Ä´æÆ÷»Ö¸´µ½¼Ä´æÆ÷Êý×éÖÐµÄÖµ
+ 613          ////////////////////////////////////////////////////////////////////////////////
+ 614          void LSD_RF_WOR_Exit(void)
+ 615          {
+ 616             //¹Ø±ÕÖÐ¶Ï
+ 617              //LSD_RF_DIO3_IFG=0;   //Çå³ýÖÐ¶Ï±êÖ¾Î»//
+ 618             // LSD_RF_DIO3_IE =0;  //¹Ø±ÕÖÐ¶Ï//
+ 619              //TimerA_Init();      //ÖØÐÂ³õÊ¼»¯¶¨Ê±Æ÷£¬¹Ø±Õ¶¨Ê±Æ÷//
+ 620              //»Ö¸´¼Ä´æÆ÷//
+ 621              LSD_RF_StandbyMode();                //½øÈëstandbyÄ£Ê½//
+ 622              LSD_RF_WriteReg(REG_DIOMAPPING1, 0x00); // »Ö¸´Ô­Öµ//
+ 623              LSD_RF_WriteReg(REG_PREAMBLELSB,0x04);   //»Ö¸´Ô­Öµ//
+ 624              LSD_RF_WriteReg(REG_SYNCCONFIG,0x9A);   //»Ö¸´Ô­Öµ//
+ 625              LSD_RF_WriteReg(REG_SYNCVALUE1,0xD3);    //»Ö¸´Ô­Öµ//
+ 626              LSD_RF_WriteReg(REG_SYNCVALUE2,0x91);    //»Ö¸´Ô­Öµ//
+ 627          //    LSD_RF_WriteReg(REG_PACKETCONFIG1,0x90);   //»Ö¸´Ô­Öµ //  
+ 628          }
+ 629          
+ 630          ////////////////////////////////////////////////////////////////////////////////
+ 631          // ¹¦ÄÜÃèÊö : »½ÐÑº¯Êý
+ 632          // ÊäÈë²ÎÊý : ÎÞ
+ 633          //            
+ 634          // ·µ»Ø²ÎÊý : ÎÞ
+ 635          // ËµÃ÷     : Ç°µ¼»½ÐÑ·½Ê½
+ 636          ////////////////////////////////////////////////////////////////////////////////
+ 637          void LSD_RF_AwakePkt(void)
+ 638          {
+ 639              //LSD_RF_DIO0_IFG=0;                   //Çå³ýMCU±êÖ¾Î»//
+ 640             // LSD_RF_DIO0_IE=0;                    //¹Ø±ÕÖÐ¶Ï//
+ 641              LSD_RF_StandbyMode();               //½øÈëstandbyÄ£Ê½//
+ 642              if(HIGH_POWER==1)   //Èç¹ûHigh Power ÉèÖÃenable£¨+20dbm capability on PA_BOOST£©
+ 643              {
+ 644                  LSD_RF_WriteReg(REG_OCP,0x0F);   
+ 645                  LSD_RF_WriteReg(REG_TESTPA1,0x5D);   
+ 646                  LSD_RF_WriteReg(REG_TESTPA2,0x7C);
+ 647              }
+ 648              LSD_RF_ClearFIFO();    //Çå³ýFIFO
+ 649          //     P6OUT |= BIT5;     //²âÊÔÌ½Õë
+ 650              LSD_RF_WriteReg(REG_OPMODE, (RF_OPMODE_SEQUENCER_ON|RF_OPMODE_LISTEN_OFF | RF_OPMODE_TRANSMITTER));  /
+             -/ÇÐ»»µ½·¢ËÍ//
+ 651          //    Lib_Delay_s(5);//Êµ¼ÊÊ¾²¨Æ÷²âÊÔ·¢ËÍÊ±¼äÎª4.2s
+ 652          
+ 653          
+ 654          //     P6OUT &=~ BIT5;    //²âÊÔÌ½Õë//
+ 655              LSD_RF_StandbyMode();               //½øÈëstandbyÄ£Ê½
+ 656              if(HIGH_POWER==1)                 //ÍË³ö·¢ËÍºó£¬×¢ÒâÒ»¶¨Òª½«Hing Power Disable¡£
+ 657              {
+ 658                  LSD_RF_WriteReg(REG_OCP,0x1B);   
+ 659                  LSD_RF_WriteReg(REG_TESTPA1,0x55);   
+ 660                  LSD_RF_WriteReg(REG_TESTPA2,0x70); 
+C51 COMPILER V9.01   DRV_2X817N10                                                          11/15/2016 18:55:43 PAGE 12  
+
+ 661              }
+ 662          }
+ 663          
+ 664          
+ 665          
+ 666          //////////////////////////////////////////////////////////////////////////////////
+ 667          //// ¹¦ÄÜÃèÊö : Trigger a RSSI Measurement ´¥·¢Ò»´ÎRSSI²âÁ¿
+ 668          //// ÊäÈë²ÎÊý : ÎÞ         
+ 669          //// ·µ»Ø²ÎÊý : ÎÞ
+ 670          //// ËµÃ÷     : 
+ 671          //////////////////////////////////////////////////////////////////////////////////
+ 672          void LSD_RF_TriggerRssi(void)
+ 673          {
+ 674              LSD_RF_WriteReg(REG_RSSICONFIG,0x01);   
+ 675          }
+ 676          //////////////////////////////////////////////////////////////////////////////////
+ 677          //// ¹¦ÄÜÃèÊö : ¼ÆËãRSSIÖµ
+ 678          //// ÊäÈë²ÎÊý : ÎÞ
+ 679          ////            
+ 680          //// ·µ»Ø²ÎÊý : ÎÞ
+ 681          //// ËµÃ÷     : 
+ 682          //////////////////////////////////////////////////////////////////////////////////
+ 683          unsigned char LSD_RF_GetRSSI(void)
+ 684          {
+ 685              unsigned char cRssi;
+ 686              cRssi = LSD_RF_ReadReg(REG_RSSIVALUE);
+ 687              cRssi = cRssi/2;
+ 688              return cRssi;
+ 689          }
+ 690          
+ 691          
+ 692          /****************************************************************
+ 693          Function:               INT8U Lnk_2X817N10_Intilize(void)       
+ 694          Description: 
+ 695          Input:
+ 696          Parameters:     
+ 697          Returns:                                
+ 698          Others:         
+ 699          ****************************************************************/
+ 700          
+ 701          INT8U Lnk_sx1276_rx_data(INT8U *rx_ptr)
+ 702          {
+ 703           // RF Í¨µÀÊÇ·ñ½ÓÊÕµ½Êý¾Ý //
+ 704              if(LSD4RF_READ_DIO0()==0) return 0;
+ 705              Lib_Delay_Nop(20);
+ 706              if(LSD4RF_READ_DIO0() ==0) return 0;   
+ 707              
+ 708              // ½ÓÊÕµ½Êý¾ÝºóµÄ´¦Àí //
+ 709              //DIO0 =high, mean RFmodule had receievd data  //   
+ 710              LSD_RF_RxPacket(rx_ptr,64);     //½ÓÊÕÊý¾Ý//
+ 711          
+ 712              return (TRUE);
+ 713          
+ 714          
+ 715          }
+ 716          
+ 717          
+ 718          /***************************************************************
+ 719          *    END
+ 720          ****************************************************************/
+ 721          
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  1 ERROR(S)

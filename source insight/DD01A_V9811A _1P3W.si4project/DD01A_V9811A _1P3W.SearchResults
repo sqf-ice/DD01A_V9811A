@@ -1,0 +1,6 @@
+---- 1P2W Matches (5 in 2 files) ----
+Calibration_Power in Lnk_EMU_Adj.c (C:\Users\lyq19\Desktop\DD01A_V9811A _1P3W\C_Source\S1_HardDrv\V9811A_EMU) : #if meter_type == 1P2W
+Calibration_Angular in Lnk_EMU_Adj.c (C:\Users\lyq19\Desktop\DD01A_V9811A _1P3W\C_Source\S1_HardDrv\V9811A_EMU) : #if meter_type == 1P2W
+Calibration_small_signal in Lnk_EMU_Adj.c (C:\Users\lyq19\Desktop\DD01A_V9811A _1P3W\C_Source\S1_HardDrv\V9811A_EMU) : #if meter_type == 1P2W
+lnk_CAL_EMU_constSum_per_second in Lnk_EMU_handl.c (C:\Users\lyq19\Desktop\DD01A_V9811A _1P3W\C_Source\S1_HardDrv\V9811A_EMU) : #if meter_type == 1P2W
+lnk_CAL_EMU_constSum_per_second in Lnk_EMU_handl.c (C:\Users\lyq19\Desktop\DD01A_V9811A _1P3W\C_Source\S1_HardDrv\V9811A_EMU) : #if meter_type == 1P2W

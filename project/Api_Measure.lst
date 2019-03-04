@@ -1,0 +1,180 @@
+C51 COMPILER V9.01   API_MEASURE                                                           02/14/2019 10:20:42 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE API_MEASURE
+OBJECT MODULE PLACED IN .\Api_Measure.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S3_ApiPlat\Api_Measure.c LARGE BROWSE INCDIR(..\C_Source\S0_Sys
+                    -tem;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiProtocol
+                    -;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_HardDrv\E2
+                    -P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\Api_Measure.lst) OBJECT(.\Api_Measure.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : Api_Measure.H
+   6          **Author                : maji
+   7          **date                  : 2016-04-21 
+   8          **description   : c code for 测量程序应用层
+   9          **note                  : MCU- G80F92XD ，MERTER FOR DL06A
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2016-04-21   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          
+  18          
+  19          #include <MyIncludes_H.h>
+  20          
+  21          MEASURE_VAR_DATA gs_measure_var_data;
+  22          MEASURE_STATU_JUDGE_VAR gs_measure_status_judge_var;
+  23          
+  24          
+  25          /*****************************************************************************
+  26          ** Function name    :api_Measure_ram_INIT
+  27          **
+  28          ** Description         :电网测量变量初始化
+  29          **
+  30          ** Parameters         :NONE          
+  31          **
+  32          ** Returned value   :NONE
+  33          **
+  34          **----------------------------------------------------------------------------
+  35          ** V01.01  MJ  2016-04-23
+  36          ******************************************************************************/
+  37          void api_Measure_ram_INIT(void)
+  38          { 
+  39   1          Lib_Set_String(&gs_measure_var_data.gs_really[0].dw_u_val.B08[0],0,sizeof(MEASURE_VAR_DATA));
+  40   1          Lib_Set_String((uint8 *)&gs_measure_status_judge_var,0,sizeof(MEASURE_STATU_JUDGE_VAR));
+  41   1      }
+  42          
+  43          /*****************************************************************************
+  44          ** Function name    :api_measure_deal_pre_second
+  45          **
+  46          ** Description         :每秒调用的测量函数
+  47          **
+  48          ** Parameters         :NONE          
+  49          **
+  50          ** Returned value   :NONE
+  51          **
+  52          **----------------------------------------------------------------------------
+C51 COMPILER V9.01   API_MEASURE                                                           02/14/2019 10:20:42 PAGE 2   
+
+  53          ** V01.01  MJ  2016-04-23
+  54          ******************************************************************************/
+  55          void api_measure_deal_pre_second(void)
+  56          {
+  57   1       uint32 u32_UI, u32_P, u32_PF;
+  58   1           CLRWDT();   // 清看门狗//
+  59   1      
+  60   1          //获取计量通道、能量数据赋值、//
+  61   1           lnk_CAL_EMU_constSum_per_second();
+  62   1      
+  63   1          //电压获取  //
+  64   1          gs_measure_var_data.gs_really[PHASE_TT].dw_u_val.u32= Lnk_get_EMU_voltage(WIRE_L1);
+  65   1         // gs_measure_var_data.gs_really[WIRE_L2].dw_u_val.u32= Lnk_get_EMU_voltage(WIRE_L2);
+  66   1          //电流获取  //
+  67   1          //2018-12-18 cxy  修改为能两路计量
+  68   1          gs_measure_var_data.gs_really[PHASE_TT].dw_i_val.u32 = 0;
+  69   1              gs_measure_var_data.gs_really[PHASE_TT].dw_i_val.u32 += Lnk_get_EMU_current(WIRE_L1);
+  70   1              gs_measure_var_data.gs_really[PHASE_TT].dw_i_val.u32 += Lnk_get_EMU_current(WIRE_L2);
+  71   1              //电网频率测量//
+  72   1          gs_measure_var_data.gs_really[PHASE_TT].w_freq_val.u16 = (uint16)Lnk_get_EMU_freq(WIRE_L1);
+  73   1         // gs_measure_var_data.gs_really[WIRE_L2].w_freq_val.u16 = (uint16)Lnk_get_EMU_freq(WIRE_L2);
+  74   1      
+  75   1         
+  76   1          //功率因数计算  //
+  77   1          //计算功率因数，量纲0.001 格式X.XXX //
+  78   1          u32_P = 1000*gs_measure_var_data.gs_really[PHASE_TT].dw_p_val.u32;
+  79   1          u32_UI = ((gs_measure_var_data.gs_really[PHASE_TT].dw_u_val.u32 * gs_measure_var_data.gs_really[PHASE_
+             -TT].dw_i_val.u32 )/1000);
+  80   1          if(u32_UI ==0)
+  81   1          {
+  82   2               gs_measure_var_data.gs_really[PHASE_TT].dw_pf_val.u16= 1000;             
+  83   2          }
+  84   1          else
+  85   1          {
+  86   2              u32_PF = u32_P/u32_UI;
+  87   2              if(u32_PF>995)  u32_PF = 1000;
+  88   2              gs_measure_var_data.gs_really[PHASE_TT].dw_pf_val.u16 = (uint16)(u32_PF);        
+  89   2          }    
+  90   1      }         
+  91          /*****************************************************************************
+  92          ** Function name    :api_measure_VBAT_pre_min
+  93          **
+  94          ** Description         :每分钟测试一次电池电压
+  95          **
+  96          ** Parameters         :NONE          
+  97          **
+  98          ** Returned value   :NONE
+  99          **
+ 100          **----------------------------------------------------------------------------
+ 101          ** V01.01  MJ  2016-04-23
+ 102          ******************************************************************************/
+ 103          void api_measure_VBAT_pre_min(void)
+ 104          {
+ 105   1          gs_measure_var_data.w_bat_v.u16= (Samlpe_BatAdc());
+ 106   1        
+ 107   1            if( gs_measure_var_data.w_bat_v.u16<= 280 ) 
+ 108   1              {
+ 109   2                gs_measure_var_data.w_bat_v.u16= (Samlpe_BatAdc());
+ 110   2                if( gs_measure_var_data.w_bat_v.u16<= 280 )  
+ 111   2                       {
+ 112   3                       gs_measure_status_judge_var.u8_status |=VBAT_LOW;
+ 113   3                      
+C51 COMPILER V9.01   API_MEASURE                                                           02/14/2019 10:20:42 PAGE 3   
+
+ 114   3                      }
+ 115   2              }
+ 116   1            else
+ 117   1              {
+ 118   2               gs_measure_status_judge_var.u8_status &= (~VBAT_LOW);
+ 119   2             }        
+ 120   1      }
+ 121          
+ 122          
+ 123          /*****************************************************************************
+ 124          ** Function name    :api_measure_VBAT_pre_min
+ 125          **
+ 126          ** Description         :每分钟测试一次电池电压
+ 127          **
+ 128          ** Parameters         :NONE          
+ 129          **
+ 130          ** Returned value   :NONE
+ 131          **
+ 132          **----------------------------------------------------------------------------
+ 133          ** V01.01  MJ  2016-04-23
+ 134          ******************************************************************************/
+ 135          void api_measure_temperature_pre_min(void)
+ 136          {
+ 137   1          Enable_M_ADC(M_ADC_CH1_TEMPERATURE);
+ 138   1          Lib_Delay_ms(10);
+ 139   1      
+ 140   1          gs_measure_var_data.w_temp.u16 = Samlpe_temperatureAdc();
+ 141   1      
+ 142   1          Disable_M_ADC();
+ 143   1      }
+ 144          
+ 145          
+ 146          /***************************************************************
+ 147          *    END
+ 148          ****************************************************************/
+ 149          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    480    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     38      12
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

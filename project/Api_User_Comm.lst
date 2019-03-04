@@ -1,0 +1,1758 @@
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE API_USER_COMM
+OBJECT MODULE PLACED IN .\Api_User_Comm.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S4_ApiUser\Api_User_Comm.c LARGE BROWSE INCDIR(..\C_Source\S0_S
+                    -ystem;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiProtoc
+                    -ol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_HardDrv\
+                    -E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\Api_User_Comm.lst) OBJECT(.\Api_User_Comm.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : Api_User_Comm.c
+   6          **Author                : maji
+   7          **date                  : 2016-04-21 
+   8          **description   : Í¨Ñ¶´¦ÀíÓ¦ÓÃ²ãÏà¹Øº¯Êý³ÌÐòCÎÄ¼þ
+   9          **note                  : V9811A £¬MERTER FOR DL03C
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2016-04-26   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          
+  18          
+  19          
+  20          #include <MyIncludes_H.h>
+  21          
+  22          
+  23          /*******************************************************************************
+  24          * È«¾Ö±äÁ¿¶¨ÒåÇø
+  25          *******************************************************************************/
+  26          uint8 *P_IEC_BUFF;    //Í¨Ñ¶»º³åÇøÖ¸Õë //
+  27          uint8 g_ch_comm;   //µ±Ç°Í¨Ñ¶Í¨µÀºÅ //
+  28          UART_COMM_APP_VAR  gs_uart_iec_app_var[UART_CH_NUM];
+  29          COMM_DATA  comm_data;
+  30          uint8 clr_flag = 0;
+  31          /*******************************************************************************
+  32          * ³£Á¿±íÇøcode
+  33          *******************************************************************************/
+  34          const  INT8U Super_mima_iec[8] ={'4','5','6','1','2','3','0','0'};
+  35          const  INT8U meter_info[Meter_INFO_LENTH] = {'X','L','E','3','D','D','S','3','1','1','-','7','V','4','.','
+             -1',};        // ÒòÎªÔ¶ºìÍâ£¬À©Õ¹Îª2400bps//
+  36          const  INT8U meter_info_IR[Meter_INFO_LENTH] = {'X','L','E','3','D','D','S','3','1','1','-','7','V','4','.
+             -','1',};        // ÒòÎªÔ¶ºìÍâ£¬À©Õ¹Îª2400bps//
+  37          const  INT8U mima_info[MIMA_INFO_LENTH] = {'(','1','1','1','1','1','1','1','1',')',};
+  38          
+  39          /*********************************************************************************************************
+  40          **  Í¨Ñ¶ID±í¸ñ
+  41          ********************************************************************************************************/
+  42           code IEC_COMDISTAB    IEC_ComDisTab[] =
+  43          {
+  44                  // ÓÐ¹¦ºÏÏà·ÑÂÊ×Ü//
+  45                  0x00010000, &gs_energy_user_data.us_val[EC_CH_AC_PT_TT][TARIFF_T].buf[0],       EN_R+P_RAM, 4,8,        //µ±Ç°×ÜµçÁ¿
+  46          #if (BILL_MAX_NUM>0)
+  47                  0x00010001, ADR_BLOCK101_BILL1_DATA_E2P+(OFFSET_bill_data_ec+TARIFF_T*LEN_EC_UNIT), EN_R+P_E2P1+CM_BILL ,
+             -4,8,        //ÉÏ1ÔÂµçÁ¿
+  48                  0x00010002, ADR_BLOCK102_BILL2_DATA_E2P+(OFFSET_bill_data_ec+TARIFF_T*LEN_EC_UNIT), EN_R+P_E2P1+CM_BILL,4
+             -,8,        //ÉÏ2ÔÂµçÁ¿
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 2   
+
+  49                  0x00010003, ADR_BLOCK103_BILL3_DATA_E2P+(OFFSET_bill_data_ec+TARIFF_T*LEN_EC_UNIT), EN_R+P_E2P1+CM_BILL,4
+             -,8,        //ÉÏ3ÔÂµçÁ¿
+  50                  0x00010004, ADR_BLOCK104_BILL4_DATA_E2P+(OFFSET_bill_data_ec+TARIFF_T*LEN_EC_UNIT), EN_R+P_E2P1+CM_BILL,4
+             -,8,        //ÉÏ4ÔÂµçÁ¿
+  51                  0x00010005, ADR_BLOCK105_BILL5_DATA_E2P+(OFFSET_bill_data_ec+TARIFF_T*LEN_EC_UNIT), EN_R+P_E2P1+CM_BILL,4
+             -,8,        //ÉÏ5ÔÂµçÁ¿
+  52                  0x00010006, ADR_BLOCK106_BILL6_DATA_E2P+(OFFSET_bill_data_ec+TARIFF_T*LEN_EC_UNIT), EN_R+P_E2P1+CM_BILL,4
+             -,8,        //ÉÏ6ÔÂµçÁ¿
+  53          #endif
+  54          
+  55          #if (TARIFF_MAX_NUM>0)//ÓÐ¹¦ËÄ·ÑÂÊ
+  56                  0x00010100, &gs_energy_user_data.us_val[EC_CH_AC_PT_TT][TARIFF1].buf[0],        EN_R+P_RAM,     4,8,
+  57                  0x00010200, &gs_energy_user_data.us_val[EC_CH_AC_PT_TT][TARIFF2].buf[0],        EN_R+P_RAM,     4,8,
+  58                  0x00010300, &gs_energy_user_data.us_val[EC_CH_AC_PT_TT][TARIFF3].buf[0],        EN_R+P_RAM,     4,8,
+  59                  0x00010400, &gs_energy_user_data.us_val[EC_CH_AC_PT_TT][TARIFF4].buf[0],        EN_R+P_RAM,     4,8,
+  60          #endif  
+  61                  //ÎÞ¹¦
+  62                  0x00030000, &gs_energy_user_data.us_val[EC_CH_RE_PT_TT][TARIFF_T].buf[0],       EN_R+P_RAM,     4,8,  //×Ü
+  63          #if (TARIFF_MAX_NUM>0)//ËÄ·ÑÂÊ
+  64                  0x00030100, &gs_energy_user_data.us_val[EC_CH_RE_PT_TT][TARIFF1].buf[0],        EN_R+P_RAM,     4,8,
+  65                  0x00030200, &gs_energy_user_data.us_val[EC_CH_RE_PT_TT][TARIFF2].buf[0],        EN_R+P_RAM,     4,8,
+  66                  0x00030300, &gs_energy_user_data.us_val[EC_CH_RE_PT_TT][TARIFF3].buf[0],        EN_R+P_RAM,     4,8,
+  67                  0x00030400, &gs_energy_user_data.us_val[EC_CH_RE_PT_TT][TARIFF4].buf[0],        EN_R+P_RAM,     4,8,
+  68          #endif
+  69          
+  70                  //ÐèÁ¿ ×Ü
+  71                  0x01010000, ADR_BLOCK01_MMD_L0_E2P+(TARIFF_T*LEN_MMD_UNIT), EN_R+P_E2P1,9,18,//µ±Ç°ÐèÁ¿ÀàÊý¾Ý 4+5 ÐèÁ¿+Ê±
+             -¼ä
+  72                  0x010100FF,     &sum_st_mmd_unit_array[0].buf[0],       EN_R+P_RAM,     5,10, //µ±Ç°ÀÛ¼Æ×î´óÐèÁ¿
+  73          #if (BILL_MAX_NUM>0)
+  74                  0x01010001, ADR_BLOCK101_BILL1_DATA_E2P+OFFSET_bill_data_mmd+(TARIFF_T*LEN_MMD_UNIT), EN_R+P_E2P1+CM_BILL
+             -,9,18,//ÉÏ1ÔÂÐèÁ¿Àà
+  75                  0x01010002, ADR_BLOCK102_BILL2_DATA_E2P+OFFSET_bill_data_mmd+(TARIFF_T*LEN_MMD_UNIT), EN_R+P_E2P1+CM_BILL
+             -,9,18,//ÉÏ2ÔÂÐèÁ¿Àà
+  76                  0x01010003, ADR_BLOCK103_BILL3_DATA_E2P+OFFSET_bill_data_mmd+(TARIFF_T*LEN_MMD_UNIT), EN_R+P_E2P1+CM_BILL
+             -,9,18,//ÉÏ3ÔÂÐèÁ¿Àà
+  77                  0x01010004, ADR_BLOCK104_BILL4_DATA_E2P+OFFSET_bill_data_mmd+(TARIFF_T*LEN_MMD_UNIT), EN_R+P_E2P1+CM_BILL
+             -,9,18,//ÉÏ4ÔÂÐèÁ¿Àà
+  78                  0x01010005, ADR_BLOCK105_BILL5_DATA_E2P+OFFSET_bill_data_mmd+(TARIFF_T*LEN_MMD_UNIT), EN_R+P_E2P1+CM_BILL
+             -,9,18,//ÉÏ5ÔÂÐèÁ¿Àà
+  79                  0x01010006, ADR_BLOCK106_BILL6_DATA_E2P+OFFSET_bill_data_mmd+(TARIFF_T*LEN_MMD_UNIT), EN_R+P_E2P1+CM_BILL
+             -,9,18,//ÉÏ6ÔÂÐèÁ¿Àà
+  80          #endif
+  81                  //±äÁ¿Êý¾Ý      //
+  82                  0x02010000,&gs_measure_var_data.gs_really[0].dw_u_val.B08[0],   EN_R+P_RAM, 2,4,        //ºÏÏàµçÑ¹ xxx.x                 YYY
+  83                  0x02010100,&gs_measure_var_data.gs_really[0].dw_u_val.B08[0],   EN_R+P_RAM, 2,4,        //AÏàµçÑ¹ xxx.x          YYY
+  84                  0x02020000,&gs_measure_var_data.gs_really[0].dw_i_val.B08[0],   EN_R+P_RAM, 3,6,        //ºÏÏàµçÁ÷       XXX.XXX
+  85                  0x02020100,&gs_measure_var_data.gs_really[0].dw_i_val.B08[0],   EN_R+P_RAM, 3,6,        //AÏàµçÁ÷   XXX.XXX
+  86                  0x02030000,&gs_measure_var_data.gs_really[0].dw_p_val.B08[0],     EN_R+P_RAM,   3,6,    // TOTAL ACTIVE POWER   XX
+             -.XXXX 
+  87                  0x02030100,&gs_measure_var_data.gs_really[0].dw_p_val.B08[0],     EN_R+P_RAM,   3,6,    // AÏà ACTIVE POWER   XX
+             -.XXXX 
+  88                  0x02030200,&gs_measure_var_data.dw_p_n_val.B08[0],                               EN_R+P_RAM,    3,6,    // BÏà ACTIVE POWER   XX.XXXX 
+  89                  0x02060000,&gs_measure_var_data.gs_really[0].dw_pf_val.B08[0],   EN_R+P_RAM,2,4,        //ºÏÏà¹¦ÂÊÒòÊý  X.XXX
+  90                  0x02060100,&gs_measure_var_data.gs_really[0].dw_pf_val.B08[0],   EN_R+P_RAM,2,4,        // AÏà¹¦ÂÊÒòÊý  X.XXX
+  91                  0x02800001,&gs_measure_var_data.dw_i_n_val.B08[0],              EN_R+P_RAM, 3,6,        //NÏàµçÁ÷   XXX.XXX
+  92                  0x02800002,&gs_measure_var_data.gs_really[0].w_freq_val.B08[0],    EN_R+P_RAM,2,4,      //ÆµÂÊ  XX.XX
+  93          #if (TARIFF_MAX_NUM>1)
+  94                  0x02900001,&gs_current_triff_var.triff_No,        EN_R+P_RAM,1,2,       //µ±Ç°·ÑÂÊ 1~4//
+  95                  0x02900002,&gs_current_triff_var.dayTab_No,    EN_R+P_RAM,1,2,  //µ±Ç°ÈÕÊ±¶Î±í 1~4//
+  96                  0x02900003,&gs_current_triff_var.weekTab_No,    EN_R+P_RAM,1,2, //µ±Ç°ÖÜ±í 1~4//
+  97                  0x02900004,&gs_current_triff_var.seasonTab_No,    EN_R+P_RAM,1,2,       //µ±Ç°¼¾½Ú±í 1~4//
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 3   
+
+  98          #endif
+  99          
+ 100                  //±í¼ÆÐÅÏ¢///
+ 101                  0x04000100,&gs_CurDateTime.Week,                                EN_RW+P_RAM,7,14,       //×¢ÒâÈÕÆÚ£¬Í¨Ñ¶¶ÁÐ´Ë³Ðò YYMMDDWWhhmmss
+ 102                  0x04000103,ADR_METER_PARAM1_MD,                            EN_RW+P_E2P1,        2,      4,      //×î´óÐèÁ¿ÖÜÆÚ,»¬²îÊ±¼ä//
+ 103                  0x04000401,ADR_METER_PARAM1_METER_ID,           EN_RW+P_E2P1,16,32, //Í¨Ñ¶µØÖ· ±íºÅ
+ 104                  0x04000402,ADR_METER_PARAM1_RF_COMM_ID,         EN_RW+P_E2P1,6,12, //RFÍ¨Ñ¶µØÖ· yang 2017-12-21
+ 105                  0x04000409,&sys_parm.meter_cons[0],                     EN_R+P_RAM,3,6,         //³£Êý   //     
+ 106          #if (TARIFF_MAX_NUM>1)//2019-01-07 ÐÂÔöÐÞ¸Ä·ÑÂÊÏà¹ØÃüÁîcxy
+ 107                  0x04000801,ADR_BLOCK83_WEEK_TAB_E2P     ,                       EN_RW+P_E2P1,LEN_WEEK_TABLE_ONE,(2*LEN_WEEK_TABLE_ONE), //ÖÜ±íÆðÊ
+             -¼µØÖ·(4¸öÖÜ±í)        
+ 108                  0x04000802,ADR_BLOCK83_WEEK_TAB_E2P+(1*LEN_WEEK_TABLE_ONE),             EN_RW+P_E2P1,LEN_WEEK_TABLE_ONE,(2*LEN_WEEK_
+             -TABLE_ONE),        //ÖÜ±íÆðÊ¼µØÖ·(4¸öÖÜ±í)
+ 109                  0x04000803,ADR_BLOCK83_WEEK_TAB_E2P+(2*LEN_WEEK_TABLE_ONE),             EN_RW+P_E2P1,LEN_WEEK_TABLE_ONE,(2*LEN_WEEK_
+             -TABLE_ONE),        //ÖÜ±íÆðÊ¼µØÖ·(4¸öÖÜ±í)
+ 110                  0x04000804,ADR_BLOCK83_WEEK_TAB_E2P+(3*LEN_WEEK_TABLE_ONE),             EN_RW+P_E2P1,LEN_WEEK_TABLE_ONE,(2*LEN_WEEK_
+             -TABLE_ONE),        //ÖÜ±íÆðÊ¼µØÖ·(4¸öÖÜ±í) 
+ 111          
+ 112                  0x04010000,ADR_BLOCK82_SEASON_TAB_E2P,               EN_RW+P_E2P1,LEN_SEASON_TABLE, (2*LEN_SEASON_TABLE), 
+             -   // ¼¾½Ú±í 8*3  ÔÂÈÕ+ÖÜ±íºÅ
+ 113                  0x04010001,ADR_BLOCK84_DAY_TAB_E2P,                             EN_RW+P_E2P1,LEN_DAY_TABLE_ONE, (2*LEN_DAY_TABLE_ONE),//Ê±¶Î±í1  Ê
+             -±¶Î±íÆðÊ¼µØÖ·(8¸öÊ±¶Î±í£¬10¸öÊ±¶ÎÊý)  288      BCD  hhnnNN          
+ 114                  0x04010002,ADR_BLOCK84_DAY_TAB_E2P+(1*LEN_DAY_TABLE_ONE),               EN_RW+P_E2P1,LEN_DAY_TABLE_ONE, (2*LEN_DAY_TAB
+             -LE_ONE),//Ê±¶Î±í2  Ê±¶Î±íÆðÊ¼µØÖ·(8¸öÊ±¶Î±í£¬10¸öÊ±¶ÎÊý)  288      BCD  hhnnNN          
+ 115                  0x04010003,ADR_BLOCK84_DAY_TAB_E2P+(2*LEN_DAY_TABLE_ONE),               EN_RW+P_E2P1,LEN_DAY_TABLE_ONE, (2*LEN_DAY_TAB
+             -LE_ONE),//Ê±¶Î±í3  Ê±¶Î±íÆðÊ¼µØÖ·(8¸öÊ±¶Î±í£¬10¸öÊ±¶ÎÊý)  288      BCD  hhnnNN          
+ 116                  0x04010004,ADR_BLOCK84_DAY_TAB_E2P+(3*LEN_DAY_TABLE_ONE),               EN_RW+P_E2P1,LEN_DAY_TABLE_ONE, (2*LEN_DAY_TAB
+             -LE_ONE),//Ê±¶Î±í4  Ê±¶Î±íÆðÊ¼µØÖ·(8¸öÊ±¶Î±í£¬10¸öÊ±¶ÎÊý)  288      BCD  hhnnNN
+ 117          #endif
+ 118          
+ 119                  0x04000B01,ADR_METER_PARAM1_SETL_DDHH,                  EN_RW+P_E2P1,2,4,       //½áËãÈÕ
+ 120                  0x04000B02,ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), EN_RW+P_E2P1,1,2,  
+             -//½áËã·½Ê½
+ 121                  0x04000C01,ADR_METER_PARAM1_PW0,                                        EN_W+P_E2P1,4,8,        //TTL 2¼¶ÃÜÂë
+ 122                  0x04000C02,ADR_METER_PARAM1_RF_PW0,                                     EN_W+P_E2P1,4,8,        //RF 2¼¶ÃÜÂë
+ 123                  0x04800003,ADR_METER_PARAM1_RELAY_CMD,                     EN_RW+P_E2P1,        2,      4,//¼ÌµçÆ÷ÃüÁî¼°×´Ì¬×Ö//
+ 124              0x04000A01,  ADR_METER_PARAM1_load_lptime_inv_var,          EN_RW+P_E2P1,2,4,//¼ÇÂ¼¼ä¸ô
+ 125              0x04000AA1,  ADR_METER_PARAM1_load_egcode_var,            EN_RW+P_E2P1,10,20, //¸ººÉ±í±àÂë
+ 126              0x06010000,  &LPRunPa.Num[0],                                   EN_R+P_RAM,2,4, //ÒÑ¼ÇÂ¼ÌõÊý
+ 127                                  //ÏÔÊ¾Àà²ÎÊý//
+ 128                  0x04000302,ADR_DIS_PARAM_AUTO_SEC,                      EN_RW+P_E2P1,1,2,        //×Ô¶¯Ñ­ÏÔÊ±¼ä 
+ 129                  0x04000303,ADR_DIS_PARAM_EC_FORM,                EN_RW+P_E2P1,1,2,        // µçÁ¿ÏÔÊ¾Î»Êý//
+ 130                  0x04040100,ADR_DIS_PARAM_AUTO_TAB,               EN_RW+P_E2P1,(DIS_MAX_ITEM+1),(2*(DIS_MAX_ITEM+1)), //×Ô¶¯Ñ­ÏÔ±í//
+ 131                  0x04800001,&sys_parm.video[0],                  EN_R+P_RAM,12,12,  //Èí¼þ°æ±¾ºÅ(ASCII)
+ 132          
+ 133          
+ 134                  // ¹¤³§À©Õ¹ÀàÃüÁî//
+ 135                  0x80805001, 0x0000,                                     EN_R+P_E2P1,12,24,  // À©Õ¹ÃüÁî µçÁ¿+¼ÌµçÆ÷×´Ì¬+ÈÕÆÚÊ±¼ä yang 2017-12-22// 
+ 136                  0x08020100,0x0000,                                              EN_W+P_RAM,1,2,                    //ÐèÁ¿ÇåÁã/ÊÖ¶¯¸´Î»//
+ 137                  0x08020200,0x0000,                                              EN_W+P_RAM,1,2,                    //=FF ÊÂ¼þ¼ÇÂ¼ÇåÁã  // Çå¿ª¸Ç
+ 138                  0x08020300,0x0000,                                              EN_W+P_RAM,1,2,                    //=00 ¸ººÉ¼ÇÂ¼ÇåÁã  //
+ 139                  0x08020400,0x0000,                                              EN_W+P_RAM,4,8,                   //xxxxxxxx = 00000000Ê±Çå³ýµ±Ç°ºÍÀúÊ·µçÁ¿ÐèÁ¿Êý¾Ý//
+ 140                  0x08020500,ADR_METER_PARAM1_FC_CFG,     EN_RW+P_E2P1,4,8,                 //¹¤³§³ö³§×´Ì¬×Ö£¬4×Ö½Ú  // 5A:³§ÄÚ   //
+ 141                  0x04000107,ADR_METER_PARAM1_BAT_LEVEL,  EN_RW+P_E2P1,   2,      4,      // µç³ØµÍÑ¹·§Öµ  1 ×Ö½Ú£¬BCD  X.X 
+ 142                  //Õû»ú³õÊ¼»¯ //
+ 143                  0x0000FEFF,0x0000,                                                      EN_W+P_RAM,2,4,         // ³õÊ¼»¯
+ 144                  0xEE000109,ADR_BLOCK70_EMU_PARAM_E2P,                   EN_RW+P_E2P1+W_FCT,32,64,//!Ð£±í²ÎÊýÇø(U,I1,I2,P1,P2,Fre)
+ 145                  0xEE000118,ADR_METER_PARAM1_EEPROM_Flag,        EN_RW+P_E2P1+W_FCT,3,6,//EEPROMÊ×´ÎÉÏµç±êÖ¾Î» Ê×´ÎÉÏµç ¸Ã±êÖ¾Î»²
+             -»µÈÓÚ0x653412£¬ÆäËû¾ùÎªÊ×´ÎÉÏµç///
+ 146                  //ÊÂ¼þ¼ÇÂ¼ID À­Õ¢//
+ 147                  
+ 148                  // Ò»ÀàÊÂ¼þ  //
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 4   
+
+ 149                  //ÐèÁ¿¸´Î»   //
+ 150                  0x03500000, ADR_BLOCK151_EVENI_resetMD_E2P,                         EN_R+P_E2P1, 2,4,   //×Ü´ÎÊý
+ 151                  0x03500101, ADR_BLOCK151_EVENI_resetMD_E2P+2,               EN_R+P_E2P1, 6,12, //×î½üÒ»´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë ¿ªÊ¼Ê±
+             -¼ä ½áÊøÊ±¼ä
+ 152                  0x03500102, (ADR_BLOCK151_EVENI_resetMD_E2P+2+ 1*6),    EN_R+P_E2P1, 6,12,//×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 153                  0x03500103, (ADR_BLOCK151_EVENI_resetMD_E2P+2+ 2*6),    EN_R+P_E2P1, 6,12,//×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 154                  0x03500104, (ADR_BLOCK151_EVENI_resetMD_E2P+2+ 3*6),    EN_R+P_E2P1, 6,12,//×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 155                  0x03500105, (ADR_BLOCK151_EVENI_resetMD_E2P+2+ 4*6),    EN_R+P_E2P1, 6,12,//×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 156                  0x03500106, (ADR_BLOCK151_EVENI_resetMD_E2P+2+ 5*6),    EN_R+P_E2P1, 6,12,//×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 157                  0x03500107, (ADR_BLOCK151_EVENI_resetMD_E2P+2+ 6*6),    EN_R+P_E2P1, 6,12,//×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 158                  0x03500108, (ADR_BLOCK151_EVENI_resetMD_E2P+2+ 7*6),    EN_R+P_E2P1, 6,12,//×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 159                  0x03500109, (ADR_BLOCK151_EVENI_resetMD_E2P+2+ 8*6),    EN_R+P_E2P1, 6,12,//×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 160                  0x0350010A, (ADR_BLOCK151_EVENI_resetMD_E2P+2+ 9*6),    EN_R+P_E2P1, 6,12,//×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 161          
+ 162          //      0x0350FFFF, ADR_BLOCK151_EVENI_resetMD_E2P+2,                   EN_R+P_E2P1, 60,120,//×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼Ê
+             -±¼ä ½áÊøÊ±¼ä
+ 163          
+ 164                  //ÃÜÂëÈÏÖ¤´íÎó
+ 165                  0x03560000,  ADR_BLOCK153_EVENI_MMERR_E2P,                  EN_R+P_E2P1,        2,4,    //×Ü´ÎÊý
+ 166                  0x03560101,  ADR_BLOCK153_EVENI_MMERR_E2P+2,            EN_R+P_E2P1, 6,12,               //×î½üÒ»´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë ¿ªÊ¼Ê±¼ä
+             - ½áÊøÊ±¼ä
+ 167                  0x03560102,  (ADR_BLOCK153_EVENI_MMERR_E2P+2+ 1*6),     EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 168                  0x03560103,  (ADR_BLOCK153_EVENI_MMERR_E2P+2+ 2*6),     EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 169                  0x03560104,  (ADR_BLOCK153_EVENI_MMERR_E2P+2+ 3*6),     EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 170                  0x03560105,  (ADR_BLOCK153_EVENI_MMERR_E2P+2+ 4*6),     EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 171                  0x03560106,  (ADR_BLOCK153_EVENI_MMERR_E2P+2+ 5*6),     EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 172                  0x03560107,  (ADR_BLOCK153_EVENI_MMERR_E2P+2+ 6*6),     EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 173                  0x03560108,  (ADR_BLOCK153_EVENI_MMERR_E2P+2+ 7*6),     EN_R+P_E2P1 , 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 174                  0x03560109,  (ADR_BLOCK153_EVENI_MMERR_E2P+2+ 8*6),     EN_R+P_E2P1 , 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 175                  0x0356010A,  (ADR_BLOCK153_EVENI_MMERR_E2P+2+ 9*6),     EN_R+P_E2P1 , 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 176          
+ 177          //      0x0356FFFF,  ADR_BLOCK153_EVENI_MMERR_E2P+2,            EN_R+P_E2P1 , 60,120, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ¼
+             -Ê±¼ä ½áÊøÊ±¼ä
+ 178          
+ 179                  //Ê±ÖÓÐ£×¼
+ 180                  0x03570000,  ADR_BLOCK152_EVENI_setRtc_E2P,                         EN_R+P_E2P1,        2,4,    //×Ü´ÎÊý
+ 181                  0x03570101,  ADR_BLOCK152_EVENI_setRtc_E2P+2,               EN_R+P_E2P1, 6,12,           //×î½üÒ»´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë 
+             -¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 182                  0x03570102,  (ADR_BLOCK152_EVENI_setRtc_E2P+2+ 1*6),    EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 183                  0x03570103,  (ADR_BLOCK152_EVENI_setRtc_E2P+2+ 2*6),    EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 184                  0x03570104,  (ADR_BLOCK152_EVENI_setRtc_E2P+2+ 3*6),    EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 5   
+
+ 185                  0x03570105,  (ADR_BLOCK152_EVENI_setRtc_E2P+2+ 4*6),    EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 186                  0x03570106,  (ADR_BLOCK152_EVENI_setRtc_E2P+2+ 5*6),    EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 187                  0x03570107,  (ADR_BLOCK152_EVENI_setRtc_E2P+2+ 6*6),    EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 188                  0x03570108,  (ADR_BLOCK152_EVENI_setRtc_E2P+2+ 7*6),    EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 189                  0x03570109,  (ADR_BLOCK152_EVENI_setRtc_E2P+2+ 8*6),    EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 190                  0x0357010A,  (ADR_BLOCK152_EVENI_setRtc_E2P+2+ 9*6),    EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ª
+             -Ê¼Ê±¼ä ½áÊøÊ±¼ä
+ 191          
+ 192          //      0x0357FFFF,  ADR_BLOCK152_EVENI_setRtc_E2P+2,                   EN_R+P_E2P1, 60,120,             //×î½üÒ»´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂ
+             -ë ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 193          
+ 194                  //E2P´íÎó
+ 195                  0x03580000,  ADR_BLOCK156_EVENII_EERR_E2P,                  EN_R+P_E2P1,        2,4,    //×Ü´ÎÊý
+ 196                  0x03580101,  ADR_BLOCK156_EVENII_EERR_E2P+2,            EN_R+P_E2P1, 6,12,               //×î½üÒ»´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë ¿ªÊ¼Ê±¼
+             -ä ½áÊøÊ±¼ä
+ 197                  0x03580102,  (ADR_BLOCK156_EVENII_EERR_E2P+2+ 1*6),     EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 198                  0x03580103,  (ADR_BLOCK156_EVENII_EERR_E2P+2+ 2*6),     EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 199                  0x03580104,  (ADR_BLOCK156_EVENII_EERR_E2P+2+ 3*6),     EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 200                  0x03580105,  (ADR_BLOCK156_EVENII_EERR_E2P+2+ 4*6),     EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 201                  0x03580106,  (ADR_BLOCK156_EVENII_EERR_E2P+2+ 5*6),     EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 202                  0x03580107,  (ADR_BLOCK156_EVENII_EERR_E2P+2+ 6*6),     EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 203                  0x03580108,  (ADR_BLOCK156_EVENII_EERR_E2P+2+ 7*6),     EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 204                  0x03580109,  (ADR_BLOCK156_EVENII_EERR_E2P+2+ 8*6),     EN_R+P_E2P1, 6,12, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 205                  0x0358010A,  (ADR_BLOCK156_EVENII_EERR_E2P+2+ 9*6),     EN_R+P_E2P1, 6,12, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë  ¿ªÊ
+             -¼Ê±¼ä ½áÊøÊ±¼ä
+ 206          
+ 207          //      0x0358FFFF,   ADR_BLOCK156_EVENII_EERR_E2P+2,                   EN_R+P_E2P1, 60,120,             //×î½üÒ»´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´úÂ
+             -ë ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 208          
+ 209          //  ¶þÀàÊÂ¼þ    //
+ 210                  //µç³ØÇ·Ñ¹ ÌØÊâ´¦Àí  Ö»³­¶Á·¢ÉúÊ±¼ä//   
+ 211                  0x03590000,   ADR_BLOCK162_EVENII_lowbattery_E2P,            EN_R+P_E2P1, 2,4,  //×Ü´ÎÊý
+ 212                  0x03590001,   ADR_BLOCK162_EVENII_lowbattery_E2P+2,          EN_R+P_E2P1, 4,8,  //ÀÛ¼ÆÊ±¼ä
+ 213                  0x03590101,   ADR_BLOCK162_EVENII_lowbattery_E2P+6,                  EN_R+P_E2P1+CM_EBIL, 12,24,         //×î½üÒ»´Îµµ°¸¼ÇÂ¼
+             -  ÊÂ¼þ´úÂë ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 214                  0x03590102,  (ADR_BLOCK162_EVENII_lowbattery_E2P+6+ 1*6),        EN_R+P_E2P1+CM_EBIL, 12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼
+             -  ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 215                  0x03590103,  (ADR_BLOCK162_EVENII_lowbattery_E2P+6+ 2*6),        EN_R+P_E2P1+CM_EBIL, 12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼
+             -  ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 216                  0x03590104,  (ADR_BLOCK162_EVENII_lowbattery_E2P+6+ 3*6),        EN_R+P_E2P1+CM_EBIL, 12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼
+             -  ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 217                  0x03590105,  (ADR_BLOCK162_EVENII_lowbattery_E2P+6+ 4*6),        EN_R+P_E2P1+CM_EBIL, 12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼
+             -  ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 218                  0x03590106,  (ADR_BLOCK162_EVENII_lowbattery_E2P+6+ 5*6),        EN_R+P_E2P1+CM_EBIL, 12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼
+             -  ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 219                  0x03590107,  (ADR_BLOCK162_EVENII_lowbattery_E2P+6+ 6*6),        EN_R+P_E2P1+CM_EBIL, 12,24,//×î½üÈý´Îµµ°¸¼ÇÂ¼ 
+             - ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 220                  0x03590108,  (ADR_BLOCK162_EVENII_lowbattery_E2P+6+ 7*6),        EN_R+P_E2P1+CM_EBIL, 12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼
+             -  ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 6   
+
+ 221                  0x03590109,  (ADR_BLOCK162_EVENII_lowbattery_E2P+6+ 8*6),        EN_R+P_E2P1+CM_EBIL, 12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼
+             -  ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 222                  0x0359010A,  (ADR_BLOCK162_EVENII_lowbattery_E2P+6+ 9*6),        EN_R+P_E2P1+CM_EBIL, 12,24,//×î½ü¶þ´Îµµ°¸¼ÇÂ¼ 
+             - ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 223          
+ 224          //      0x0359FFFF,  ADR_BLOCK162_EVENII_lowbattery_E2P+6,               EN_R+P_E2P1, 60,120,//¿ªÊ¼¼ÇÂ¼  6*10´Î
+ 225                  
+ 226                  // µçÔ´µôµç  // 
+ 227                  0x03380000,  ADR_BLOCK161_EVENII_PWN_E2P,                      EN_R+P_E2P1,     2,4,    //×Ü´ÎÊý
+ 228                  0x03380001,  ADR_BLOCK161_EVENII_PWN_E2P+2,                  EN_R+P_E2P1,       4,8,    //ÀÛ¼ÆÊ±¼ä
+ 229                  0x03380101,  ADR_BLOCK161_EVENII_PWN_E2P+6,                     EN_R+P_E2P1+CM_EBIL, 12,24,              //×î½üÒ»´Îµµ°¸¼ÇÂ¼  Ê
+             -Â¼þ´úÂë ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 230                  0x03380102,  (ADR_BLOCK161_EVENII_PWN_E2P+6+ 1*6),       EN_R+P_E2P1+CM_EBIL, 12,24, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ
+             -´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 231                  0x03380103,  (ADR_BLOCK161_EVENII_PWN_E2P+6+ 2*6),       EN_R+P_E2P1+CM_EBIL, 12,24, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ
+             -´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 232                  0x03380104,  (ADR_BLOCK161_EVENII_PWN_E2P+6+ 3*6),       EN_R+P_E2P1+CM_EBIL, 12,24, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ
+             -´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 233                  0x03380105,  (ADR_BLOCK161_EVENII_PWN_E2P+6+ 4*6),        EN_R+P_E2P1+CM_EBIL, 12,24, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 234                  0x03380106,  (ADR_BLOCK161_EVENII_PWN_E2P+6+ 5*6),        EN_R+P_E2P1+CM_EBIL, 12,24, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 235                  0x03380107,  (ADR_BLOCK161_EVENII_PWN_E2P+6+ 6*6),       EN_R+P_E2P1+CM_EBIL, 12,24, //×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼þ´
+             -úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 236                  0x03380108,  (ADR_BLOCK161_EVENII_PWN_E2P+6+ 7*6),        EN_R+P_E2P1+CM_EBIL, 12,24, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 237                  0x03380109,  (ADR_BLOCK161_EVENII_PWN_E2P+6+ 8*6),        EN_R+P_E2P1+CM_EBIL, 12,24, ///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 238                  0x0338010A,  (ADR_BLOCK161_EVENII_PWN_E2P+6+ 9*6),        EN_R+P_E2P1+CM_EBIL, 12,24, ///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 239          
+ 240          //      0x0338FFFF,   ADR_BLOCK161_EVENII_PWN_E2P+6,                   EN_R+P_E2P1+CM_GETHER_EBIL, 120,240,              //×î½üÒ»´Îµ
+             -µ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 241          
+ 242                  //COVER_//      
+ 243                  0x03450000,  ADR_BLOCK163_EVENII_COVER_E2P,           EN_R+P_E2P1,      2,4,    //×Ü´ÎÊý
+ 244                  0x03450001,  ADR_BLOCK163_EVENII_COVER_E2P+2,         EN_R+P_E2P1,      4,8,    //×Ü´ÎÊý
+ 245                  0x03450101,  ADR_BLOCK163_EVENII_COVER_E2P+6,                 EN_R+P_E2P1+CM_EBIL, 12,24,                //×î½üÒ»´Îµµ°¸¼ÇÂ¼  ÊÂ
+             -¼þ´úÂë ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 246                  0x03450102,  (ADR_BLOCK163_EVENII_COVER_E2P+6+ 1*6),     EN_R+P_E2P1+CM_EBIL, 12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 247                  0x03450103,  (ADR_BLOCK163_EVENII_COVER_E2P+6+ 2*6),     EN_R+P_E2P1+CM_EBIL, 12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 248                  0x03450104,  (ADR_BLOCK163_EVENII_COVER_E2P+6+ 3*6),     EN_R+P_E2P1+CM_EBIL, 12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 249                  0x03450105,  (ADR_BLOCK163_EVENII_COVER_E2P+6+ 4*6),  EN_R+P_E2P1+CM_EBIL, 12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 250                  0x03450106,  (ADR_BLOCK163_EVENII_COVER_E2P+6+ 5*6),     EN_R+P_E2P1+CM_EBIL, 12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 251                  0x03450107,  (ADR_BLOCK163_EVENII_COVER_E2P+6+ 6*6),  EN_R+P_E2P1+CM_EBIL, 12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 252                  0x03450108,  (ADR_BLOCK163_EVENII_COVER_E2P+6+ 7*6),     EN_R+P_E2P1+CM_EBIL, 12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 253                  0x03450109,  (ADR_BLOCK163_EVENII_COVER_E2P+6+ 8*6),     EN_R+P_E2P1+CM_EBIL, 12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 254                  0x0345010A,  (ADR_BLOCK163_EVENII_COVER_E2P+6+ 9*6),     EN_R+P_E2P1+CM_EBIL, 12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  ÊÂ¼
+             -þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 255          
+ 256          //      0x0341FFFF,  ADR_BLOCK163_EVENII_NOL1_E2P+6,                   EN_R+P_E2P1+CM_GETHER_EBIL, 120,240,              //×î½üÒ»´Îµ
+             -µ°¸¼ÇÂ¼  ÊÂ¼þ´úÂë ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 257                  //L2 ¶ÏÏà //
+ 258          //      0x03420000,  ADR_BLOCK164_EVENII_NOL2_E2P,                      EN_R+P_E2P1,    2,4,    //×Ü´ÎÊý
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 7   
+
+ 259          //      0x03420001, ( ADR_BLOCK164_EVENII_NOL2_E2P+2),               EN_R+P_E2P1,       4,8,    //×ÜÀÛ¼ÆÊ±¼ä//
+ 260          ////    0x03420101,  ADR_BLOCK164_EVENII_NOL2_E2P+6,                     EN_R+P_E2P1+CM_EBIL,   12,24,//×î½üÒ»´Îµµ°¸¼ÇÂ¼
+             -  ÊÂ¼þ´úÂë ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 261          //      0x03420102,  (ADR_BLOCK164_EVENII_NOL2_E2P+6+ 1*6),       EN_R+P_E2P1+CM_EBIL,  12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  
+             -ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 262          //      0x03420103,  (ADR_BLOCK164_EVENII_NOL2_E2P+6+ 2*6),       EN_R+P_E2P1+CM_EBIL,  12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼  
+             -ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 263          //      0x03420104,  (ADR_BLOCK164_EVENII_NOL2_E2P+6+ 3*6),       EN_R+P_E2P1+CM_EBIL,  12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  
+             -ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 264          //      0x03420105,  (ADR_BLOCK164_EVENII_NOL2_E2P+6+ 4*6),       EN_R+P_E2P1+CM_EBIL,  12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼  
+             -ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 265          //      0x03420106,  (ADR_BLOCK164_EVENII_NOL2_E2P+6+ 5*6),       EN_R+P_E2P1+CM_EBIL,  12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  
+             -ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 266          //      0x03420107,  (ADR_BLOCK164_EVENII_NOL2_E2P+6+ 6*6),       EN_R+P_E2P1+CM_EBIL,  12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼  
+             -ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 267          //      0x03420108,  (ADR_BLOCK164_EVENII_NOL2_E2P+6+ 7*6),       EN_R+P_E2P1+CM_EBIL,  12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  
+             -ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 268          //      0x03420109,  (ADR_BLOCK164_EVENII_NOL2_E2P+6+ 8*6),       EN_R+P_E2P1+CM_EBIL,  12,24,///×î½üÈý´Îµµ°¸¼ÇÂ¼  
+             -ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 269          //      0x0342010A,  (ADR_BLOCK164_EVENII_NOL2_E2P+6+ 9*6),       EN_R+P_E2P1+CM_EBIL,  12,24,///×î½ü¶þ´Îµµ°¸¼ÇÂ¼  
+             -ÊÂ¼þ´úÂë  ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 270          
+ 271          //      0x0342FFFF,  ADR_BLOCK164_EVENII_NOL2_E2P+6,               EN_R+P_E2P1+CM_GETHER_EBIL,  120,240,//×î½üÒ»´Îµµ°¸¼ÇÂ
+             -¼  ÊÂ¼þ´úÂë ¿ªÊ¼Ê±¼ä ½áÊøÊ±¼ä
+ 272                  // ¹¦ÂÊ·´ÏòÊÂ¼þ  //     
+ 273                  0x03360000,  ADR_BLOCK164_EVENII_L1reverse_E2P,                       EN_R+P_E2P1,      2,4,    //×Ü´ÎÊý
+ 274                  0x03360001, ( ADR_BLOCK164_EVENII_L1reverse_E2P+2),                EN_R+P_E2P1,         4,8,    //×ÜÀÛ¼ÆÊ±¼ä//
+ 275                  0x03360101,  (ADR_BLOCK164_EVENII_L1reverse_E2P+6),                EN_R+P_E2P1+CM_EBIL,         12,24,  //¿ªÊ¼Ê±¼
+             -ä+½áÊøÊ±¼ä//
+ 276                  0x03360102, ( ADR_BLOCK164_EVENII_L1reverse_E2P+6+1*6),         EN_R+P_E2P1+CM_EBIL,    12,24,  //¿ªÊ¼Ê±¼ä+½
+             -áÊøÊ±¼ä//
+ 277                  0x03360103,  (ADR_BLOCK164_EVENII_L1reverse_E2P+6+2*6),         EN_R+P_E2P1+CM_EBIL,    12,24,  //¿ªÊ¼Ê±¼ä+½
+             -áÊøÊ±¼ä//
+ 278                  0x03360104, ( ADR_BLOCK164_EVENII_L1reverse_E2P+6+3*6),         EN_R+P_E2P1+CM_EBIL,    12,24,  //¿ªÊ¼Ê±¼ä+½
+             -áÊøÊ±¼ä//
+ 279                  0x03360105, ( ADR_BLOCK164_EVENII_L1reverse_E2P+6+4*6),         EN_R+P_E2P1+CM_EBIL,    12,24,  //¿ªÊ¼Ê±¼ä+½
+             -áÊøÊ±¼ä//
+ 280                  0x03360106, ( ADR_BLOCK164_EVENII_L1reverse_E2P+6+5*6),         EN_R+P_E2P1+CM_EBIL,    12,24,  //¿ªÊ¼Ê±¼ä+½
+             -áÊøÊ±¼ä//
+ 281                  0x03360107,  (ADR_BLOCK164_EVENII_L1reverse_E2P+6+6*6),         EN_R+P_E2P1+CM_EBIL,    12,24,  //¿ªÊ¼Ê±¼ä+½
+             -áÊøÊ±¼ä//
+ 282                  0x03360108, ( ADR_BLOCK164_EVENII_L1reverse_E2P+6+7*6),         EN_R+P_E2P1+CM_EBIL,    12,24,  //¿ªÊ¼Ê±¼ä+½
+             -áÊøÊ±¼ä//
+ 283                  0x03360109, ( ADR_BLOCK164_EVENII_L1reverse_E2P+6+8*6),         EN_R+P_E2P1+CM_EBIL,    12,24,  //¿ªÊ¼Ê±¼ä+½
+             -áÊøÊ±¼ä//
+ 284                  0x0336010A,  (ADR_BLOCK164_EVENII_L1reverse_E2P+6+9*6),         EN_R+P_E2P1+CM_EBIL,    12,24,  //¿ªÊ¼Ê±¼ä+½
+             -áÊøÊ±¼ä//
+ 285          
+ 286          //      0x0336FFFF,  (ADR_BLOCK165_EVENII_L1reverse_E2P+6),                EN_R+P_E2P1+CM_GETHER_EBIL,  120,240
+             -,        //¿ªÊ¼Ê±¼ä+½áÊøÊ±¼ä//
+ 287          
+ 288                  // ÉÏÒ»´Î½áËãÊ±¼ä
+ 289                  0x03700101 ,   ADR_BLOCK101_BILL1_DATA_E2P ,      EN_R+P_E2P1+CM_BILL, 6,12,  // ÄêÔÂÈÕÊ±·ÖÃë
+ 290                  0x03700102 ,   ADR_BLOCK102_BILL2_DATA_E2P ,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë
+ 291                  0x03700103 ,   ADR_BLOCK103_BILL3_DATA_E2P ,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë
+ 292                  0x03700104 ,   ADR_BLOCK104_BILL4_DATA_E2P ,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë
+ 293                  0x03700105 ,   ADR_BLOCK105_BILL5_DATA_E2P ,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë
+ 294                  0x03700106 ,   ADR_BLOCK106_BILL6_DATA_E2P ,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë 
+ 295          //      0x03700107 ,   ADR_BLOCK107_BILL7_DATA_E2P ,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë
+ 296          //      0x03700108 ,   ADR_BLOCK108_BILL8_DATA_E2P ,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë
+ 297          //      0x03700109 ,   ADR_BLOCK109_BILL9_DATA_E2P ,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë
+ 298          //      0x0370010A ,   ADR_BLOCK110_BILL10_DATA_E2P ,     EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 8   
+
+ 299          //      0x0370010B ,   ADR_BLOCK111_BILL11_DATA_E2P,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë 
+ 300          //      0x0370010C ,   ADR_BLOCK112_BILL12_DATA_E2P,      EN_R+P_E2P1+CM_BILL, 6,12, // ÄêÔÂÈÕÊ±·ÖÃë
+ 301          
+ 302          //ÈÕ¶³½á
+ 303                  0x0506FF01,    0x0000,    EN_R+P_E2P1, 18,36,
+ 304                  0x0506FF02,    0x0000,    EN_R+P_E2P1, 18,36,
+ 305                  0x0506FF03,    0x0000,    EN_R+P_E2P1, 18,36,
+ 306                  0x0506FF04,    0x0000,    EN_R+P_E2P1, 18,36,
+ 307          
+ 308                  //Í¨Ñ¶ÅúÁ¿Ð£±í 6 //
+ 309                  0x0000FEBB,0x0000,                                              EN_W+P_E2P1+W_FCT,2,4,//ÅäÖÃEMU ±¶Æµ //
+ 310                  0x80800803, 0x0000,                                     EN_W+P_E2P1+W_FCT,2,4,  // EMU¼ÆÁ¿²ÎÊý³õÊ¼»¯ £¬ÓÃÄ¬ÈÏ²ÎÊý¸³Öµ // 
+ 311                  0x0000FEB0, 0x0000,                                     EN_W+P_E2P1+W_FCT,12,24,   //Ö÷»ØÂ· 1.0L IB Îó²îºÍÓÐÐ§ÖµÐ£×¼// 
+ 312                  0x0000FEB1, 0x0000,                                     EN_W+P_E2P1+W_FCT,12,24,   //Ö÷»ØÂ· 0.5L IB Îó²îÐ£×¼// 
+ 313                  0x0000FEB2, 0x0000,                                     EN_W+P_E2P1+W_FCT,12,24,   //´Î»ØÂ·1.0L IB Îó²îÐ£×¼// 
+ 314                  0x0000FEB3, 0x0000,                                     EN_W+P_E2P1+W_FCT,12,24,   //´Î»ØÂ·0.5L IB Îó²îÐ£×¼// 
+ 315                  0x0000FEB4, 0x0000,                                     EN_W+P_E2P1+W_FCT,12,24,  //´Î»ØÂ·0.5L IB Îó²îÐ£×¼// 
+ 316                  0x0000FEB5, 0x0000,                                     EN_W+P_E2P1+W_FCT,12,24,  //´Î»ØÂ·1.0L 5%IB Îó²îÐ£×¼// 
+ 317          };
+ 318          //---------------------------------------------------------------------//
+ 319          //¹¦ÄÜ:   ¼ÆËãÓÉÆðÊ¼µØÖ·¿ªÊ¼µ½F½ØÖ¹µÄ³¤¶È//
+ 320          //     0000F     return 4
+ 321          //      *Addr Êý¾ÝÆðÊ¼µØÖ·£¬numÊý¾Ý³¤¶È
+ 322          //---------------------------------------------------------------------//
+ 323          INT8U get_meter_id_asclen(INT8U *Addr,INT8U numbyte)
+ 324          {
+ 325   1              INT8U i;
+ 326   1              INT8U asclen=0;
+ 327   1              for(i=0;i<numbyte;i++)
+ 328   1              {
+ 329   2                      if((((*(Addr+i))>>4)&0x0F)==0x0F)
+ 330   2                      {
+ 331   3                              return asclen;
+ 332   3                      }
+ 333   2                      asclen++;
+ 334   2                      if(((*(Addr+i))&0x0F)==0x0F)
+ 335   2                      {
+ 336   3                              return asclen;
+ 337   3                      }
+ 338   2                      asclen++;
+ 339   2              }
+ 340   1              return asclen;
+ 341   1      }
+ 342          
+ 343          
+ 344          /*****************************************************************
+ 345           name:          INT8U  get_comm_var( INT16U id )
+ 346           function:      get command information precess  
+ 347           input:         no            
+ 348           return:        GetComVar()
+ 349                          =0    succeed  precess 
+ 350                          =1    fail precess 
+ 351          *****************************************************************/
+ 352          INT8U  get_IEC_comm_var( INT32U id )
+ 353          {
+ 354   1              INT16U i;  
+ 355   1          //²»ÔÚ±í¸ñÄÚÊý¾Ý ¸ººÉÊý¾Ý//
+ 356   1          if((id>=0x06010001)&&(id<=0x060105A0))//¸ººÉÊý¾Ý×î¶à¼ÇÂ¼900Ìõ   //SXL 2019-01-6
+ 357   1          {
+ 358   2                      comm_data.addr =0;
+ 359   2                      comm_data.Info.u16 = EN_R;              //²»ÄÜ»òÉÏ
+ 360   2                      comm_data.len = 0;
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 9   
+
+ 361   2                      comm_data.len_asc = 0;
+ 362   2                      return TRUE;
+ 363   2          }
+ 364   1                       if((id>=0x060A0001)&&(id<=0x060A0120))//¸ººÉÊý¾Ý¿é×î¶à¼ÇÂ¼90Ìõ   //SXL 2019-01-6
+ 365   1          {
+ 366   2                      comm_data.addr =0;
+ 367   2                      comm_data.Info.u16 = EN_R;              //²»ÄÜ»òÉÏ
+ 368   2                      comm_data.len = 0;
+ 369   2                      comm_data.len_asc = 0;
+ 370   2                      return TRUE;
+ 371   2          }
+ 372   1         for( i = 0 ; i <dim(IEC_ComDisTab) ; i++ )
+ 373   1              {
+ 374   2                  if( id == IEC_ComDisTab[i].ComID )
+ 375   2                  {
+ 376   3                      comm_data.addr = IEC_ComDisTab[i].Addr;
+ 377   3                      comm_data.Info.u16 = IEC_ComDisTab[i].ComInfo;
+ 378   3                      comm_data.len = IEC_ComDisTab[i].Len;
+ 379   3                      comm_data.len_asc = IEC_ComDisTab[i].Len_Asc;
+ 380   3                      return TRUE;
+ 381   3                  }
+ 382   2              }
+ 383   1              return FALSE;   
+ 384   1      
+ 385   1              
+ 386   1      
+ 387   1      /*   INT16U i;  
+ 388   1      
+ 389   1          //²»ÔÚ±í¸ñÄÚÊý¾Ý//
+ 390   1          if((id>=0x06010001)&&(id<=0x060116A9))
+ 391   1          {
+ 392   1              comm_data.addr =0;
+ 393   1              comm_data.Info.u16 = EN_R;              //²»ÄÜ»òÉÏ
+ 394   1              comm_data.len = 0;
+ 395   1              comm_data.len_asc = 0;
+ 396   1              return 1;
+ 397   1          }
+ 398   1      
+ 399   1          if((id>=0x06012001)&&(id<=0x06012245))
+ 400   1          {
+ 401   1              comm_data.addr =0;
+ 402   1              comm_data.Info.u16 = EN_R;              //²»ÄÜ»òÉÏ
+ 403   1              comm_data.len = 0;
+ 404   1              comm_data.len_asc = 0;
+ 405   1              return 1;
+ 406   1          }
+ 407   1      
+ 408   1          //±í¸ñÄÚÊý¾Ý·ÖÇøÓò²é±í//
+ 409   1          
+ 410   1              if(id<0x01000000) //µçÁ¿ÇøÓò
+ 411   1              {
+ 412   1                  for( i = 0 ; i <dim(IEC_ComDisTab) ; i++ )
+ 413   1                  {
+ 414   1                      if( id == IEC_ComDisTab[i].ComID )
+ 415   1                      {
+ 416   1                          comm_data.addr = IEC_ComDisTab[i].Addr;
+ 417   1                          comm_data.Info.u16 = IEC_ComDisTab[i].ComInfo;
+ 418   1                          comm_data.len = IEC_ComDisTab[i].Len;
+ 419   1                          comm_data.len_asc = IEC_ComDisTab[i].Len_Asc;
+ 420   1                          return TRUE;
+ 421   1                      }
+ 422   1                  }
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 10  
+
+ 423   1              }
+ 424   1              else if(id<0x02000000)//ÐèÁ¿Çø
+ 425   1              {
+ 426   1                  for( i = 0 ; i <dim(IEC_ComDisTab1) ; i++ )
+ 427   1                  {
+ 428   1                      if( id == IEC_ComDisTab1[i].ComID )
+ 429   1                      {
+ 430   1                          comm_data.addr = IEC_ComDisTab1[i].Addr;
+ 431   1                          comm_data.Info.u16 = IEC_ComDisTab1[i].ComInfo;
+ 432   1                          comm_data.len = IEC_ComDisTab1[i].Len;
+ 433   1                          comm_data.len_asc = IEC_ComDisTab1[i].Len_Asc;
+ 434   1                          return TRUE;
+ 435   1                      }
+ 436   1                  }
+ 437   1              }
+ 438   1              else if(id<0x03000000)//ÏµÍ³±äÁ¿Çø
+ 439   1              {
+ 440   1                  for( i = 0 ; i <dim(IEC_ComDisTab2) ; i++ )
+ 441   1                  {
+ 442   1                      if( id == IEC_ComDisTab2[i].ComID )
+ 443   1                      {
+ 444   1                          comm_data.addr = IEC_ComDisTab2[i].Addr;
+ 445   1                          comm_data.Info.u16 = IEC_ComDisTab2[i].ComInfo;
+ 446   1                          comm_data.len = IEC_ComDisTab2[i].Len;
+ 447   1                          comm_data.len_asc = IEC_ComDisTab2[i].Len_Asc;
+ 448   1                          return TRUE;
+ 449   1                      }
+ 450   1                  }
+ 451   1              }
+ 452   1              else if(id<0x04000000)//ÊÂ¼þ¼ÇÂ¼Çø
+ 453   1              {
+ 454   1                  for( i = 0 ; i <dim(IEC_ComDisTab3) ; i++ )
+ 455   1                  {
+ 456   1                      if( id == IEC_ComDisTab3[i].ComID )
+ 457   1                      {
+ 458   1                          comm_data.addr = IEC_ComDisTab3[i].Addr;
+ 459   1                          comm_data.Info.u16 = IEC_ComDisTab3[i].ComInfo;
+ 460   1                          comm_data.len = IEC_ComDisTab3[i].Len;
+ 461   1                          comm_data.len_asc = IEC_ComDisTab3[i].Len_Asc;
+ 462   1                          return TRUE;
+ 463   1                      }
+ 464   1                  }
+ 465   1              }
+ 466   1              else if(id<0x05000000)//ÏµÍ³²ÎÊýÇø
+ 467   1              {
+ 468   1                  for( i = 0 ; i <dim(IEC_ComDisTab4) ; i++ )
+ 469   1                  {
+ 470   1                      if( id == IEC_ComDisTab4[i].ComID )
+ 471   1                      {
+ 472   1                          comm_data.addr = IEC_ComDisTab4[i].Addr;
+ 473   1                          comm_data.Info.u16 = IEC_ComDisTab4[i].ComInfo;
+ 474   1                          comm_data.len = IEC_ComDisTab4[i].Len;
+ 475   1                          comm_data.len_asc = IEC_ComDisTab4[i].Len_Asc;
+ 476   1                          return TRUE;
+ 477   1                      }
+ 478   1                  }
+ 479   1              }
+ 480   1              else if(id<0x09000000)//ÏµÍ³²ÎÊýÇø
+ 481   1              {
+ 482   1                  for( i = 0 ; i <dim(IEC_ComDisTab5) ; i++ )
+ 483   1                  {
+ 484   1                      if( id == IEC_ComDisTab5[i].ComID )
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 11  
+
+ 485   1                      {
+ 486   1                          comm_data.addr = IEC_ComDisTab5[i].Addr;
+ 487   1                          comm_data.Info.u16 = IEC_ComDisTab5[i].ComInfo;
+ 488   1                          comm_data.len = IEC_ComDisTab5[i].Len;
+ 489   1                          comm_data.len_asc = IEC_ComDisTab5[i].Len_Asc;
+ 490   1                          return TRUE;
+ 491   1                      }
+ 492   1                  }
+ 493   1              }
+ 494   1      
+ 495   1          return FALSE;*/
+ 496   1      }
+ 497          
+ 498          /*****************************************************************
+ 499           name:          uchar  GetComVar( uchar* Addr, uint* Info )
+ 500           function:      get command information precess  
+ 501           input:         no            
+ 502           return:        GetComVar()
+ 503                          =0    succeed  precess 
+ 504                          =1    fail precess 
+ 505          *****************************************************************/
+ 506          INT8U SecurityCK(void)
+ 507          {
+ 508   1              INT8U secType;
+ 509   1              secType = comm_data.Info.B08[0]&0x07; //È¨ÏÞ¼ì²â//
+ 510   1              /*
+ 511   1              if(secType ==(W_FCT>>8))
+ 512   1              {
+ 513   1                      if(ADJA_KEY)    // 0 ¶Ì½Ó 1 Î´¶Ì½Ó
+ 514   1                      {
+ 515   1                              return (mmover);
+ 516   1                      }
+ 517   1              }
+ 518   1          */
+ 519   1              return (mmok);
+ 520   1      }
+ 521          
+ 522          //-------------------------------------------------------------------------------//
+ 523          //  Function:      INT8U IEC_Cmd_Password_Deal(INT8U* sptr,INT8U len) 
+ 524          //  Description:   iec Í¨Ñ¶ÃÜÂëÖ¸Áî´¦Àí³ÌÐò
+ 525          //  Parameters:    
+ 526          //  Returns:        ÎÞ                          
+ 527          //  Others:         
+ 528          //-------------------------------------------------------------------------------//
+ 529          INT8U IEC_Cmd_Password_Deal(INT8U* sptr)
+ 530          {
+ 531   1        INT8U tmp_8u_01[4];
+ 532   1        INT8U tmp_8u_02[8];
+ 533   1      
+ 534   1          if((gs_uart_iec_app_var[g_ch_comm].iec_status & (COMM_REQUIST_OK_IEC+COMM_INFO_OK_IEC)) != 0x03)   ret
+             -urn(FALSE);
+ 535   1      
+ 536   1           mem_read(&tmp_8u_01[0], ADR_METER_PARAM1_PW0, 4, MEM_E2P1);
+ 537   1           Lib_BCD_AscA(&tmp_8u_02[0], &tmp_8u_01[0], 4);
+ 538   1               
+ 539   1      
+ 540   1          if(Lib_Cmp_TwoArry((sptr+5), &tmp_8u_02[0], 8) == 0x00)  
+ 541   1          {
+ 542   2               gs_uart_iec_app_var[g_ch_comm].iec_status |= COMM_MIMA_OK_IEC;  // ¸ø³öÇëÇóÃüÁî³É¹¦±êÊ¶ //
+ 543   2               Get_ACK_Answer(sptr);
+ 544   2               gs_uart_iec_app_var[g_ch_comm].len = 1;
+ 545   2               return TRUE;
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 12  
+
+ 546   2          }
+ 547   1          else
+ 548   1          {
+ 549   2              if(Lib_Cmp_TwoArry((sptr+5), &Super_mima_iec[0], 8) == 0x00) 
+ 550   2              {
+ 551   3                  gs_uart_iec_app_var[g_ch_comm].iec_status |= COMM_MIMA_OK_IEC;  // ¸ø³öÇëÇóÃüÁî³É¹¦±êÊ¶ //
+ 552   3                  Get_ACK_Answer(sptr);
+ 553   3                  gs_uart_iec_app_var[g_ch_comm].len = 1;
+ 554   3                  return TRUE;
+ 555   3              }
+ 556   2          }
+ 557   1          api_deal_even_class_recode(ID_CLASS_I_MMERR,START); //  
+ 558   1          return FALSE;
+ 559   1      }
+ 560          
+ 561          
+ 562          //-------------------------------------------------------------------------------//
+ 563          //  Function:      INT8U IEC_Cmd_Read_Deal(INT8U* sptr,INT8U len)
+ 564          //  Description:   iec Í¨Ñ¶¶ÁÖ¸Áî´¦Àí³ÌÐò
+ 565          //  Parameters:    
+ 566          //  Returns:        ÎÞ                          
+ 567          //  Others:         
+ 568          //-------------------------------------------------------------------------------//
+ 569          INT8U IEC_Cmd_Read_Deal(INT8U* sptr)
+ 570          {
+ 571   1       INT8U i,j;
+ 572   1       INT8U  mem_type;
+ 573   1       INT8U  data_buff[128];
+ 574   1       INT8U  *ptr_adr;
+ 575   1       INT16U ctmp1;
+ 576   1       ST_U32_U08  long_tmp;
+ 577   1       ST_U16_U08      LPRecStart,LPRecEnd;
+ 578   1      
+ 579   1      SUM_MMD_DATA_UNIT t;
+ 580   1      NEW_MMD_DATA_UNIT te;
+ 581   1          if((gs_uart_iec_app_var[g_ch_comm].iec_status &(COMM_REQUIST_OK_IEC+COMM_INFO_OK_IEC+COMM_MIMA_OK_IEC)
+             -) != 0x07)   return(FALSE);   
+ 582   1          //get comm DI1 DI0
+ 583   1           Lib_Asc_BCDA(&comm_data.di1_di0.B08[0], sptr+4,8);
+ 584   1      
+ 585   1          //get other comm fram data  
+ 586   1          if(get_IEC_comm_var( comm_data.di1_di0.u32) == 0 )   return(FALSE);
+ 587   1          if( ( comm_data.Info.u16& EN_R) == 0 )  return(FALSE);
+ 588   1          //  »ñÈ¡Êý¾ÝµÄ´æ´¢ÀàÐÍ //
+ 589   1          mem_type = (comm_data.Info.B08[0]>>3)&0x07;         
+ 590   1          //Êý¾ÝÓòÇåÁã²¢ÉèÖÃ·¢ËÍ³¤¶È
+ 591   1          Lib_Set_String((sptr+2), '0', comm_data.len_asc);  
+ 592   1      
+ 593   1          ptr_adr = comm_data.addr;
+ 594   1      
+ 595   1            //    // 
+ 596   1              //²»ÔÚ±í¸ñÄÚID´¦Àí µ¥Ìõ¸ººÉID 
+ 597   1              if((comm_data.di1_di0.u32>=0x06010001)&&(comm_data.di1_di0.u32<=0x060105A0))
+ 598   1              {
+ 599   2                      ctmp1 = (INT16U)(comm_data.di1_di0.u32 - 0x06010001);
+ 600   2                      if(ctmp1 < LPRunPa.Num[0])      // ¶ÁÈ¡ID Ð¡ÓÚÓÚÒÑ¼ÇÂ¼Êý
+ 601   2                      {
+ 602   3                              comm_data.len = LPRec_Read_1(sptr+2, ctmp1);
+ 603   3                              comm_data.len_asc = 2*comm_data.len;    
+ 604   3                      }
+ 605   2                      else
+ 606   2                      {
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 13  
+
+ 607   3      //                      comm_data.len = LPRec_Read_1(sptr+2, ctmp1);
+ 608   3      //                      comm_data.len_asc = 2*comm_data.len;    
+ 609   3      //                      Lib_Set_String((sptr+2), 'F', comm_data.len_asc); 
+ 610   3                              comm_data.len_asc = 0;  
+ 611   3                      }
+ 612   2      
+ 613   2      
+ 614   2                      // ³É¹¦ºóÊý¾Ý×éÖ¡ //
+ 615   2                      //api_deal_even_class_recode(ID_CLASS_I_COMM,START);
+ 616   2                      gs_uart_iec_app_var[g_ch_comm].len= (comm_data.len_asc+5);
+ 617   2                      *(sptr+0) = STX;
+ 618   2                      *(sptr+1) = '(';
+ 619   2                      CLRWDT(); *(sptr+2+comm_data.len_asc) = ')';
+ 620   2                      *(sptr+gs_uart_iec_app_var[g_ch_comm].len-2) =ETX;
+ 621   2              CLRWDT();       *(sptr+gs_uart_iec_app_var[g_ch_comm].len-1) = Get_Bcc_Chk(sptr, 1, gs_uart_iec_app_var[g_ch_c
+             -omm].len-2);
+ 622   2      
+ 623   2                      return(TRUE); 
+ 624   2              }
+ 625   1              
+ 626   1              
+ 627   1              if((comm_data.di1_di0.u32>=0x060A0001)&&(comm_data.di1_di0.u32<=0x060A0120))//   //SXL 2019-01-6
+ 628   1        {
+ 629   2                      LPRecStart.u16 =(INT16U)((comm_data.di1_di0.u32 - 0x060A0001)*BLOCK_MAX_LEN);
+ 630   2                      LPRecEnd.u16 =LPRecStart.u16+BLOCK_MAX_LEN;
+ 631   2                      
+ 632   2                      if(LPReadPara.ReadLoraFlag == FALSE )
+ 633   2                      {                       
+ 634   3                              LPReadPara.Original_FrameNum = LPRunPa.Num[0] ;
+ 635   3                              LPReadPara.Original_Ptr = LPRunPa.Ptr[0] ;
+ 636   3                      }               
+ 637   2                      
+ 638   2                      comm_data.len_asc  = LPRec_Read_Block(sptr+2,LPRecStart.u16, LPRecEnd.u16);
+ 639   2                       
+ 640   2                      
+ 641   2                      if(LPReadPara.ReadLoraFlag == FALSE )   LPReadPara.ReadLoraFlag = TRUE; 
+ 642   2                              
+ 643   2                      gs_uart_iec_app_var[g_ch_comm].len= (comm_data.len_asc+5);
+ 644   2                      CLRWDT(); 
+ 645   2                      *(sptr+0) = STX;
+ 646   2                      *(sptr+1) = '(';CLRWDT(); 
+ 647   2                      *(sptr+2+comm_data.len_asc) = ')';
+ 648   2                      CLRWDT(); *(sptr+gs_uart_iec_app_var[g_ch_comm].len-2) =ETX;
+ 649   2                      *(sptr+gs_uart_iec_app_var[g_ch_comm].len-1) = Get_Bcc_Chk(sptr, 1, gs_uart_iec_app_var[g_ch_comm].len-2
+             -);
+ 650   2      CLRWDT(); 
+ 651   2                      return(TRUE); 
+ 652   2                      
+ 653   2                      }
+ 654   1              
+ 655   1          // ¸ù¾Ý¶ÁÈ¡Êý¾ÝµÄIDÏîÄ¿×ö·ÖÖ§´¦Àí //
+ 656   1          switch(comm_data.di1_di0.u32)
+ 657   1          {   
+ 658   2                      case 0x02010000:    //µçÑ¹ Ô´Êý¾ÝÎªHEX32£¬0.1VÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XV //
+ 659   2                      case 0x02010100:    //µçÑ¹ Ô´Êý¾ÝÎªHEX32£¬0.1VÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XV //
+ 660   2                              Lib_long_bcd4(&long_tmp.B08[0],gs_measure_var_data.gs_really[0].dw_u_val.u32);
+ 661   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[2], 2);
+ 662   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len); 
+ 663   2                      break;
+ 664   2                      
+ 665   2                      case 0x02020000:    //LµçÁ÷ Ô´Êý¾ÝÎªHEX32£¬0.001AÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XXXA //
+ 666   2                      case 0x02020100:    //LµçÁ÷ Ô´Êý¾ÝÎªHEX32£¬0.001AÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XXXA //
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 14  
+
+ 667   2                              Lib_long_bcd4(&long_tmp.B08[0],(gs_measure_var_data.gs_really[0].dw_i_val.u32));
+ 668   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[1], 3);
+ 669   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len); 
+ 670   2                      break;
+ 671   2                      
+ 672   2                      case 0x02800001:    //NµçÁ÷ Ô´Êý¾ÝÎªHEX32£¬0.001AÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XXXA //
+ 673   2                              Lib_long_bcd4(&long_tmp.B08[0],(gs_measure_var_data.dw_i_n_val.u32));
+ 674   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[1], 3);
+ 675   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len); 
+ 676   2                      break;
+ 677   2                      
+ 678   2                      case 0x02030000:    //L   ¹¦ÂÊÔ´Êý¾ÝÎªHEX32£¬0.0001KWÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XX.XXXXkW //
+ 679   2                      case 0x02030100:        //¹¦ÂÊÔ´Êý¾ÝÎªHEX32£¬0.0001KWÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XX.XXXXkW //
+ 680   2                              Lib_long_bcd4(&long_tmp.B08[0],(gs_measure_var_data.gs_really[0].dw_p_val.u32));
+ 681   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[1], 3);
+ 682   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len); 
+ 683   2                      break;
+ 684   2                      
+ 685   2                      case 0x02030200:    //N¹¦ÂÊÔ´Êý¾ÝÎªHEX32£¬0.0001KWÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XX.XXXXkW //
+ 686   2                              Lib_long_bcd4(&long_tmp.B08[0],(gs_measure_var_data.dw_p_n_val.u32));
+ 687   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[1], 3);
+ 688   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len); 
+ 689   2                      break;
+ 690   2      
+ 691   2                      case 0x02060000:        //¹¦ÂÊÒòÊýÊý¾ÝÎªHEX16£¬0.001£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½0.001 //
+ 692   2                      case 0x02060100:    //¹¦ÂÊÒòÊýÊý¾ÝÎªHEX16£¬0.001£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½0.001 //
+ 693   2                              Lib_word_bcd2(&long_tmp.B08[0],(gs_measure_var_data.gs_really[0].dw_pf_val.u16));
+ 694   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[0], 2);
+ 695   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len); 
+ 696   2                      break;
+ 697   2      
+ 698   2                      case 0x02800002:    //µçÍøÆµÂÊÊý¾ÝÎªHEX16£¬0.01Hz£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½xx.xx //
+ 699   2                              Lib_word_bcd2(&long_tmp.B08[0],(gs_measure_var_data.gs_really[0].w_freq_val.u16));
+ 700   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[0], 2);
+ 701   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len); 
+ 702   2                      break;
+ 703   2      
+ 704   2                      case 0x04000100://ÈÕÆÚ¼°ÐÇÆÚ(ÆäÖÐ0´ú±íÐÇÆÚÌì)YYMMDDWWhhmmss
+ 705   2                              Lib_Copy_Str_TwoArry(&data_buff[0], ptr_adr, comm_data.len);
+ 706   2                              data_buff[7] = data_buff[0];    //ww
+ 707   2                              data_buff[0] = data_buff[1];    //YY
+ 708   2                              data_buff[1] = data_buff[2];    //MM
+ 709   2                              data_buff[2] = data_buff[3];    //DD
+ 710   2                              data_buff[3] = data_buff[7];    //WW
+ 711   2                              data_buff[4] = data_buff[4];    //hh
+ 712   2                              data_buff[5] = data_buff[5];    //mm
+ 713   2                              data_buff[6] = data_buff[6];    //ss
+ 714   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len); 
+ 715   2                      break;
+ 716   2      
+ 717   2                      case 0x04000401://±íµØÖ· ±íºÅ NNNNNNNNNNNN
+ 718   2                              mem_read(&data_buff[0], (INT16U)comm_data.addr,  comm_data.len,  mem_type );
+ 719   2                              comm_data.len_asc = get_meter_id_asclen(&data_buff[0], 16);
+ 720   2                              comm_data.len = comm_data.len_asc>>1;
+ 721   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len);
+ 722   2                      break;
+ 723   2                      
+ 724   2                      case 0x04800001: //Èí¼þ°æ±¾ºÅ ÒÑÊÇASCÂë
+ 725   2                              Lib_Copy_Str_TwoArry(sptr+2, ptr_adr, comm_data.len);
+ 726   2                      break;          
+ 727   2                      
+ 728   2                      case 0x80805001:        //µ±Ç°ÔÂ×ÜµçÁ¿+¼ÌµçÆ÷×´Ì¬+±í¼ÆÈÕÆÚÊ±¼ä //
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 15  
+
+ 729   2                              //µ±Ç°ÔÂ×ÜµçÁ¿
+ 730   2                              mem_read(&data_buff[10], (INT16U)&gs_energy_user_data.us_val[0][0].buf[0], LEN_EC_UNIT, MEM_RAM);         //»
+             -ñÈ¡µ±Ç°Êý¾Ý //
+ 731   2                              api_get_energy_LCD(&data_buff[10], 0x62,&data_buff[0]);
+ 732   2                              Lib_BCD_AscA(sptr+2, &data_buff[0], 4); 
+ 733   2                              //¼ÌµçÆ÷×´Ì¬
+ 734   2                              mem_read(&data_buff[0], (INT16U)ADR_METER_PARAM1_RELAY_CMD, 2, MEM_E2P1);         //»ñÈ¡µ±Ç°Êý¾Ý //
+ 735   2                              Lib_BCD_AscA(sptr+2+8, &data_buff[0], 2); 
+ 736   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &gs_CurDateTime.Year, 6);
+ 737   2                              Lib_BCD_AscA(sptr+2+8+4, &data_buff[0], 6); 
+ 738   2                      break;
+ 739   2      
+ 740   2                      case 0x0506FF01: //¶³½á1
+ 741   2                      case 0x0506FF02: //¶³½á2
+ 742   2                      case 0x0506FF03: //¶³½á3
+ 743   2                      case 0x0506FF04: //¶³½á4
+ 744   2                                i = comm_data.di1_di0.B08[3];
+ 745   2                                mem_read(&data_buff[10], &energy_data_array[i].buf[0], LEN_BLOCK_4Energy_E2P/4,MEM_RAM);//µçÁ¿
+*** WARNING C214 IN LINE 745 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: 'Argument': conversion: pointer to non-pointer
+ 746   2                                api_get_energy_LCD(&data_buff[10], 0x62,&data_buff[0]);
+ 747   2                                Lib_BCD_AscA(sptr+2+10, &data_buff[0], 4);    
+ 748   2                                      
+ 749   2                                mem_read(&te, &st_mmd_unit_array[i].buf[0], LEN_NEW_MMD_UNIT, MEM_RAM);//ÐèÁ¿
+*** WARNING C182 IN LINE 749 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: pointer to different objects
+*** WARNING C214 IN LINE 749 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: 'Argument': conversion: pointer to non-pointer
+ 750   2                                te.val.val_hex32 /=100;
+ 751   2                                data_buff[0] = te.val.val_hex32/1000000;
+ 752   2                                data_buff[1] = te.val.val_hex32%1000000/10000;
+ 753   2                                data_buff[2] = te.val.val_hex32%10000/100 ;
+ 754   2                                data_buff[3] = te.val.val_hex32%100  ;
+ 755   2                                for(j=0;j<4;j++)
+ 756   2                                {
+ 757   3                                      if(data_buff[j]>0x09)
+ 758   3                                      {
+ 759   4                                              data_buff[j]+= 0x06*(data_buff[j]/10);
+ 760   4                                      }
+ 761   3                                }
+ 762   2                                Lib_BCD_AscA(sptr+2+10+8,&data_buff[0],4);
+ 763   2                                //Lib_BCD_AscA(sptr+2+10+8,&te.buf[0],4);
+ 764   2                               
+ 765   2                                mem_read(&t, &sum_st_mmd_unit_array[i].buf[0], LEN_SUM_MMD_UNIT, MEM_RAM);//ÀÛ¼ÆÐèÁ¿
+*** WARNING C182 IN LINE 765 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: pointer to different objects
+*** WARNING C214 IN LINE 765 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: 'Argument': conversion: pointer to non-pointer
+ 766   2                                t.val.val_hex32 /=100;
+ 767   2                                data_buff[0] = t.val.val_hex32/1000000;
+ 768   2                                data_buff[1] = t.val.val_hex32%1000000/10000;
+ 769   2                                data_buff[2] = t.val.val_hex32%10000/100; 
+ 770   2                                data_buff[3] = t.val.val_hex32%100;
+ 771   2                                for(j=0;j<4;j++)
+ 772   2                                {
+ 773   3                                      if(data_buff[j]>0x09)
+ 774   3                                      {
+ 775   4                                              data_buff[j]+=0x06*(data_buff[j]/10);
+ 776   4                                      }
+ 777   3                                }
+ 778   2                                Lib_BCD_AscA(sptr+2+10+8+8,&data_buff[0],4);
+ 779   2                               // Lib_BCD_AscA(sptr+2+10+8+8,&t.buf[0],4);
+ 780   2                                data_buff[0] = te.val.date_rtc[0];    //YY
+ 781   2                                data_buff[1] = te.val.date_rtc[1];    //MM
+ 782   2                                data_buff[2] = te.val.date_rtc[2];    //DD
+ 783   2                                data_buff[3] = te.val.date_rtc[3];    //hh
+ 784   2                                data_buff[4] = te.val.date_rtc[4];    //mm
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 16  
+
+ 785   2                                Lib_BCD_AscA(sptr+2, &data_buff[0], 5);
+ 786   2                                if(t.buf[4]>0x09)
+ 787   2                                      {
+ 788   3                                              t.buf[4]+=0x06*(t.buf[4]/10);
+ 789   3                                      }
+ 790   2                                Lib_BCD_AscA(sptr+2+10+8+8+8,&t.buf[4],1);//´ÎÊý
+ 791   2                      break;
+ 792   2                      
+ 793   2              default:
+ 794   2                              ////////////////µçÄÜÁ¿ÌØÊâ´¦Àí/////////////////////////////
+ 795   2                              if(comm_data.di1_di0.B08[0]==0x00)
+ 796   2                              {
+ 797   3                                      comm_data.len = LEN_EC_UNIT;   // ÐÞ¸Ä»ñÈ¡³¤¶È//
+ 798   3                              }
+ 799   2                              ///////////////////////////////////////////////////////////////////
+ 800   2      
+ 801   2                              if((comm_data.Info.u16&CM_ALL) == CM_BILL)
+ 802   2                              {
+ 803   3                                      mem_read(&data_buff[0],api_get_bill_record_addr((INT16U)comm_data.addr), comm_data.len,  mem_type );
+ 804   3                              }
+ 805   2                              else if((comm_data.Info.u16&CM_ALL) == CM_EBIL)//ÊÂ¼þ¼ÇÂ¼ÀàÊý¾Ý
+ 806   2                      {
+ 807   3              mem_read(&data_buff[0], comm_data.addr,     (comm_data.len>>1),  mem_type );
+*** WARNING C214 IN LINE 807 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: 'Argument': conversion: pointer to non-pointer
+ 808   3              mem_read(&data_buff[6], comm_data.addr+60,  (comm_data.len>>1),  mem_type );
+*** WARNING C214 IN LINE 808 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: 'Argument': conversion: pointer to non-pointer
+ 809   3                  }
+ 810   2                              
+ 811   2                              else 
+ 812   2                              {
+ 813   3                                      if(mem_type==MEM_RAM)
+ 814   3                                      {
+ 815   4                                              Lib_Copy_Str_TwoArry(&data_buff[0], ptr_adr, comm_data.len);
+ 816   4                                      }
+ 817   3                                      else
+ 818   3                                      {
+ 819   4                                              mem_read(&data_buff[0],(INT16U)comm_data.addr,comm_data.len,mem_type );
+ 820   4                                      }
+ 821   3                              }
+ 822   2                              ////////////////µçÄÜÁ¿ÌØÊâ´¦Àí/////////////////////////////
+ 823   2                              if(comm_data.di1_di0.B08[0]==0x00)
+ 824   2                              {
+ 825   3                                      Lib_Copy_Str_TwoArry(&data_buff[10], &data_buff[0], LEN_EC_UNIT);
+ 826   3                                      api_get_energy_LCD(&data_buff[10], 0x62, &data_buff[0]) ;
+ 827   3                                      comm_data.len=4;
+ 828   3                              }
+ 829   2                              ///////////////////////////////////////////////////////////////////
+ 830   2      
+ 831   2                              ////////////////×î´óÐèÁ¿ÌØÊâ´¦Àí/////////////////////////////
+ 832   2                              if(comm_data.di1_di0.B08[0]==0x01)
+ 833   2                              {  
+ 834   3                                      Lib_Copy_Str_TwoArry(&long_tmp.B08[0], &data_buff[0], 4);
+ 835   3                                      Lib_long_bcd4(&data_buff[0],long_tmp.u32);
+ 836   3                              }
+ 837   2                              
+ 838   2                              
+ 839   2                              
+ 840   2                              
+ 841   2                              
+ 842   2                              ///////////////////////////////////////////////////////////////////                
+ 843   2                              if(comm_data.len_asc == 5)
+ 844   2                              {
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 17  
+
+ 845   3                                      *(sptr+2) = Lib_BtoA(data_buff[0]&0x0f);
+ 846   3                                      Lib_BCD_AscA(sptr+3, &data_buff[1], 2);   
+ 847   3                              }
+ 848   2                              else
+ 849   2                              {
+ 850   3                                      Lib_BCD_AscA(sptr+2, &data_buff[0], comm_data.len); 
+ 851   3                              }
+ 852   2                  break;      
+ 853   2          }
+ 854   1      
+ 855   1          // ³É¹¦ºóÊý¾Ý×éÖ¡ //
+ 856   1          gs_uart_iec_app_var[g_ch_comm].len= (comm_data.len_asc+5);
+ 857   1          *(sptr+0) = STX;
+ 858   1          *(sptr+1) = '(';
+ 859   1          *(sptr+2+comm_data.len_asc) = ')';
+ 860   1          *(sptr+gs_uart_iec_app_var[g_ch_comm].len-2) =ETX;
+ 861   1          *(sptr+gs_uart_iec_app_var[g_ch_comm].len-1) = Get_Bcc_Chk(sptr, 1, gs_uart_iec_app_var[g_ch_comm].len
+             --2);
+ 862   1              
+ 863   1          return(TRUE); 
+ 864   1      }
+ 865          
+ 866          
+ 867          //-------------------------------------------------------------------------------//
+ 868          //  Function:      INT8U IEC_Cmd_Write_Deal(INT8U* sptr,INT8U len)
+ 869          //  Description:   iec Í¨Ñ¶Ð´Ö¸Áî´¦Àí³ÌÐò
+ 870          //  Parameters:   lenÎªÉèÖÃÊý¾ÝµÄÊµ¼Ê³¤¶È
+ 871          //  Returns:        ÎÞ                          
+ 872          //  Others:         
+ 873          //-------------------------------------------------------------------------------//
+ 874          INT8U IEC_Cmd_Write_Deal(INT8U* sptr,INT8U len)
+ 875          {
+ 876   1      // INT8U tmp_8u_01[16];
+ 877   1       INT8U  mem_type;
+ 878   1       INT8U  data_buff[70];
+ 879   1       INT8U  sectemp;
+ 880   1       INT8U i,MeterID_LenTmp; //±íºÅ  ÓÐÐ§³¤¶È asc
+ 881   1       INT8U  *ptr_adr;
+ 882   1       
+ 883   1          if((gs_uart_iec_app_var[g_ch_comm].iec_status &(COMM_REQUIST_OK_IEC+COMM_INFO_OK_IEC+COMM_MIMA_OK_IEC)
+             -) != 0x07)   return(FALSE);
+ 884   1          //get comm DI1 DI0
+ 885   1          Lib_Asc_BCDA(&comm_data.di1_di0.B08[0], sptr+4,8);
+ 886   1          //get other comm fram data 
+ 887   1          if(get_IEC_comm_var( comm_data.di1_di0.u32) == 0 )   return(FALSE);
+ 888   1      
+ 889   1          if( ( comm_data.Info.u16& EN_W) == 0 )  return(FALSE);
+ 890   1          //  »ñÈ¡Êý¾ÝµÄ´æ´¢ÀàÐÍ //
+ 891   1          mem_type = (comm_data.Info.B08[0]>>3)&0x07;         
+ 892   1          sectemp = SecurityCK();                                     //È¨ÏÞÅÐ¶Ï
+ 893   1          if(sectemp == mmover)   return(FALSE);
+ 894   1      
+ 895   1          //Êý¾ÝÓòÇåÁã²¢¼ì²é½ÓÊÕµÄÊý¾Ý³¤¶ÈºÏ·¨ÐÔ //
+ 896   1          Lib_Set_String(&data_buff[0], 0x00, comm_data.len); 
+ 897   1          if(comm_data.di1_di0.u32== 0x04000401) //³ýÉèÖÃ±íºÅÍâ.¶¼ÐèÒª¶Ô±ÈÊý¾Ý³¤¶È
+ 898   1          {
+ 899   2              if((len > comm_data.len_asc+16)||(len < 16))
+ 900   2              return(FALSE);
+ 901   2          }
+ 902   1          else
+ 903   1          {
+ 904   2              if(len != (comm_data.len_asc+16))          
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 18  
+
+ 905   2              return(FALSE);
+ 906   2          }
+ 907   1      
+ 908   1          ptr_adr = comm_data.addr;
+ 909   1      
+ 910   1          // ¸ù¾ÝÉèÖÃÊý¾ÝµÄIDÏîÄ¿×ö·ÖÖ§´¦Àí //
+ 911   1          switch(comm_data.di1_di0.u32)
+ 912   1          {
+ 913   2      
+ 914   2              case 0x04000100://ÈÕÆÚ¼°ÐÇÆÚ(ÆäÖÐ0´ú±íÐÇÆÚÌì)YYMMDDWWhhmmss  
+ 915   2                  Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);   //AtoB(INT8U Asc)
+ 916   2                  gs_CurDateTime.Year= data_buff[0];
+ 917   2                  gs_CurDateTime.Month= data_buff[1];
+ 918   2                  gs_CurDateTime.Day= data_buff[2];
+ 919   2                  gs_CurDateTime.Week= data_buff[3];
+ 920   2                  gs_CurDateTime.Hour= data_buff[4];
+ 921   2                  gs_CurDateTime.Minute= data_buff[5];
+ 922   2                  gs_CurDateTime.Second= data_buff[6];
+ 923   2                  EA=0;
+ 924   2                  Set_RTCTime(&gs_CurDateTime);
+ 925   2                  EA=1;
+ 926   2                  mem_db_write(ADR_METER_VAR_RTC, &gs_CurDateTime.Week, 7, MEM_E2P1);
+ 927   2                                          api_deal_even_class_recode(ID_CLASS_I_setRtc,START);
+ 928   2                  api_init_md_data_ram();
+ 929   2                      #if (TARIFF_MAX_NUM>0)
+ 930   2                  api_update_triffNo_pre_minute();
+ 931   2                      #endif
+ 932   2                  break;
+ 933   2                              
+ 934   2      
+ 935   2                  //±íºÅÌØÊâ´¦Àí
+ 936   2                  case 0x04000401://±íµØÖ· ±íºÅ 16¸ö×Ö½Ú ×ÔÊÊÓ¦,ÈçÉèÆæÊý£¬ÔòÇ°²¹0
+ 937   2                      MeterID_LenTmp = (len-16);      //ÓÐÐ§±íºÅ  ³¤¶È
+ 938   2                      if(((len-16)%2)!=0)     //ÆæÊýÔòÇ°Ãæ²¹Ò»¸ö0
+ 939   2                      {
+ 940   3                              for(i=(len-16);i>0;i--)
+ 941   3                              {
+ 942   4                                      *(sptr+13+i) = *(sptr+13+i-1) ; //ÏòºóÅ²1Î»
+ 943   4                              }
+ 944   3                              *(sptr+13)= '0';                                        //¸ßÎ»²¹0
+ 945   3                              MeterID_LenTmp = (len-16) +1;
+ 946   3                      }
+ 947   2                                      comm_data.len_asc = MeterID_LenTmp;
+ 948   2                                      Lib_Set_String(&data_buff[0], 0xFF, 16);
+ 949   2                                      Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);   //AtoB(INT8U Asc)                  
+ 950   2                                      mem_db_write((INT16U)comm_data.addr, &data_buff[0], comm_data.len, mem_type);           //Ð´ÈëÓ¦¸ÃÊÇ16×Ö½Ú£¬¶ø²
+             -»ÊÇÉèÖÃµÄ³¤¶È
+ 951   2                      break;
+ 952   2      
+ 953   2                              
+ 954   2                      case 0x04000B01://½áËãÈÕDDHH 4
+ 955   2                      Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);   //AtoB(INT8U Asc)
+ 956   2                      if((data_buff[0]<0x01)||(data_buff[0]>0x28)||(data_buff[1]>0x23))               //´íÎóÅÐ¶Ï
+ 957   2                      {
+ 958   3                          return(FALSE);
+ 959   3                      }
+ 960   2                      mem_db_write((INT16U)comm_data.addr, &data_buff[0], comm_data.len, mem_type);
+ 961   2                      break;
+ 962   2      //              case 0x04800003://À­Õ¢ºÏÕ¢²Ù×÷//)
+ 963   2      //                              Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);       //AtoB(INT8U Asc)
+ 964   2      //                              if(Drv_relay_COMM_CMD_operating(&data_buff[0])==FALSE)  
+ 965   2      ////                            {
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 19  
+
+ 966   2      //                                      return(FALSE);
+ 967   2      //                              }
+ 968   2      //                              break;  
+ 969   2      
+ 970   2                      case 0x04000103://ÐèÁ¿²ÎÊý PERIOD : SLID   4  //ÐÞ¸ÄºóÐèÁ¿ÖØÐÂ¼ÆËã //
+ 971   2                      Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);   //AtoB(INT8U Asc)
+ 972   2                      if(((data_buff[0]%data_buff[1]) !=0)||(data_buff[0]>30)||(data_buff[0]==0)||(data_buff[1]=
+             -=0))                //´íÎóÅÐ¶Ï//
+ 973   2                      {
+ 974   3                          return(FALSE);
+ 975   3                      }
+ 976   2                      mem_db_write((INT16U)comm_data.addr, &data_buff[0], comm_data.len, mem_type);
+ 977   2                      api_init_md_data_ram();
+ 978   2                      break;
+ 979   2      
+ 980   2      
+ 981   2      ///////////Îó²îÐ£±í//////////////////
+ 982   2                      case 0x0000FEB0: 
+ 983   2                      case 0x0000FEB1:
+ 984   2                      case 0x0000FEB2:
+ 985   2                      case 0x0000FEB3:
+ 986   2                      case 0x0000FEB4:
+ 987   2                      case 0x0000FEB5:
+ 988   2                              Measure_Electric_Err_Gain(sptr);//±ØÐëÏÈÐ£×¼Îó²î£¬ÑÓÊ±1ÃëÒÔÉÏÐ£×¼µç²ÎÁ¿²Å×¼//   
+ 989   2                      break;
+ 990   2                      //Ð£±í³õÊ¼»¯(²ÎÊýÇåÁã)
+ 991   2                      case 0x80800803:                
+ 992   2                              if((*(sptr+13)=='3')&&(*(sptr+14)=='3')&&(*(sptr+15)=='3'))  
+ 993   2                              {
+ 994   3                                      if((*(sptr+16)=='3'))                                   // clear all
+ 995   3                                      {
+ 996   4      //                                      gs_adj_emu_param.w1gain=0;
+ 997   4      //                                      gs_adj_emu_param.p1cal=0;
+ 998   4                                              gs_adj_emu_param.watt1os=0;
+ 999   4      //                                      gs_adj_emu_param.irms1os=0;
+1000   4      //                                      gs_adj_emu_param.w2gain=0;
+1001   4      //                                      gs_adj_emu_param.p2cal=0;
+1002   4      //                                      gs_adj_emu_param.watt2os=0;
+1003   4      //                                      gs_adj_emu_param.irms2os=0;
+1004   4      //                                      gs_adj_emu_param.urmsos=0;
+1005   4                                              CLRWDT();
+1006   4                                      }
+1007   3                                      if((*(sptr+16)=='2'))                                   // ÇåµÚ¶þÂ·½»±í²ÎÊý
+1008   3                                      {
+1009   4                                              gs_adj_emu_param.w1gain=0;
+1010   4                                              gs_adj_emu_param.p1cal=0;
+1011   4                                              gs_adj_emu_param.watt1os=0;
+1012   4                                              gs_adj_emu_param.irms1os=0;
+1013   4                                              gs_adj_emu_param.urmsos=0;
+1014   4                                              CLRWDT();
+1015   4                                      }
+1016   3                                      Save_EMU_AdjParam();
+1017   3                                      Check_EMU_AdjParam();//  »Ö¸´Ä¬ÈÏÊý¾Ý//
+1018   3                              }
+1019   2                              else
+1020   2                              {
+1021   3                                      return FALSE;
+1022   3                              }
+1023   2                              break;  
+1024   2      
+1025   2                      case 0x0000FEBB://¼ÆÁ¿±¶Æµ10±¶»ò //     
+1026   2                              if((*(sptr+13)=='0')&&(*(sptr+14)=='0')&&(*(sptr+15)=='1')&&(*(sptr+16)=='6')) 
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 20  
+
+1027   2                              {
+1028   3                                      //±¶Æµ10±¶£¬³£ÊýÎª10000 //
+1029   3                                      data_buff[0] = 0x3C;     // ´ú±í±¶Æµ10±¶ //
+1030   3                                      mem_db_write(ADR_METER_PARAM1_CONST_FAST_FLG, &data_buff[0], 1, MEM_E2P1);
+1031   3                                      Check_EMU_AdjParam();//  »Ö¸´Ä¬ÈÏÊý¾Ý//
+1032   3                              }
+1033   2                              else if((*(sptr+13)=='0')&&(*(sptr+14)=='1')&&(*(sptr+15)=='B')&&(*(sptr+16)=='8')) 
+1034   2                              {
+1035   3                                      //±¶Æµ»Ö¸´£¬³£ÊýÎª1000 //
+1036   3                                       data_buff[0] = 0;         // ´ú±í±¶Æµ10±¶ //
+1037   3                                      mem_db_write(ADR_METER_PARAM1_CONST_FAST_FLG, &data_buff[0], 1, MEM_E2P1);
+1038   3                                      Check_EMU_AdjParam();//  »Ö¸´Ä¬ÈÏÊý¾Ý//
+1039   3                              }
+1040   2                              else
+1041   2                              {
+1042   3                                      return FALSE;
+1043   3                              }
+1044   2                              break;
+1045   2                              
+1046   2                      case 0x08020200://NN=FF£¬Çå³ýËùÓÐÍ¨µÀ£»//
+1047   2                              if((*(sptr+13)=='F')&&(*(sptr+14)=='F'))        //YYY
+1048   2                              {
+1049   3                                      api_clr_even_by_comm(); 
+1050   3                                      CLRWDT();
+1051   3                              }
+1052   2                              else
+1053   2                              {
+1054   3                                      return(FALSE);
+1055   3                              }
+1056   2                              break;
+1057   2                      
+1058   2                              case 0x08020100://Ö»Çåµ±Ç°ÐèÁ¿ÇåÁã//
+1059   2                                      Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);   //AtoB(INT8U Asc)
+1060   2                                      if((data_buff[0]!=0))  return(FALSE);
+1061   2                                      api_clr_current_MD_data();
+1062   2                                      api_deal_even_class_recode(ID_CLASS_I_resetMD,START);
+1063   2                              CLRWDT();
+1064   2                              break;
+1065   2      
+1066   2                  case 0x08020300:
+1067   2                              // Asc_BCDA( &data_buff[0],(sptr+13), 1*2);
+1068   2                  // Ò»¸öÍ¨µÀ¸ººÉ¼ÇÂ¼Ö¸Õë¡¢¼ÇÂ¼¸öÊý 
+1069   2                  if((*(sptr+13)=='0')&&(*(sptr+14)=='0'))    //YYY
+1070   2                              {
+1071   3                                      LoadProRst();
+1072   3                                      CLRWDT();
+1073   3                              }
+1074   2                              else
+1075   2                              {
+1076   3                                      return(FALSE);
+1077   3                              }
+1078   2                              break;
+1079   2                              
+1080   2                              
+1081   2                      case 0x08020400://µçÁ¿ÇåÁã(µç±í×ÜÇå(µçÁ¿+ÐèÁ¿)) //
+1082   2                              Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);   //AtoB(INT8U Asc)
+1083   2                              if((data_buff[0]!=0)||(data_buff[1]!=0)||(data_buff[2]!=0)||(data_buff[3]!=0))  return(FALSE);
+1084   2                              CLRWDT();
+1085   2                              clr_flag = 1;
+1086   2                              break;
+1087   2      
+1088   2                      case 0x08020500:// ¹¤³§Ä£Ê½//   
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 21  
+
+1089   2                              Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);       //AtoB(INT8U Asc)
+1090   2                              gs_sys_globaL_var.meter_factory_status = data_buff[0] ; //¸üÐÂ×´Ì¬×Ö
+1091   2                              mem_db_write((INT16U)comm_data.addr, &data_buff[0], comm_data.len, mem_type);
+1092   2                              break;
+1093   2                              
+1094   2                      case 0xEE000118://EEPROM±êÖ¾//
+1095   2                              Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);       //AtoB(INT8U Asc)
+1096   2                              CLRWDT();
+1097   2                              mem_db_write((INT16U)comm_data.addr, &data_buff[0], comm_data.len, mem_type);
+1098   2                              CLRWDT();
+1099   2                              while(1)
+1100   2                              {
+1101   3                                      NOP();                  // ¸´Î»£¬µÈ´ýÊý¾Ý¼ì²é»Ø¸´Êý¾Ý£¬10Ãë×óÓÒ //
+1102   3                              }       
+1103   2                              CLRWDT();
+1104   2                              break;
+1105   2                              
+1106   2                       //Ð£±í²ÎÊýÍâËùÓÐÊý¾ÝÇåÁã//
+1107   2                      case 0x0000FEFF://NN=FF£¬Çå³ýËùÓÐÍ¨µÀ£»//
+1108   2                               if((*(sptr+13)=='5')&&(*(sptr+14)=='5')&&(*(sptr+15)=='5')&&(*(sptr+16)=='5'))  
+1109   2                              {
+1110   3                                      mem_db_clr(0);   //Êý¾ÝÇøÐ£ÑéºÍÈ«²¿ÇåÁã //
+1111   3                                      //2019-01-24  cxy
+1112   3                                      api_clr_freeze_energy();//Çå³ý¶³½áÊý¾Ý
+*** WARNING C206 IN LINE 1112 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: 'api_clr_freeze_energy': missing function-proto
+             -type
+1113   3      
+1114   3                      while(1)
+1115   3                      {
+1116   4                          NOP();          // ¸´Î»£¬µÈ´ýÊý¾Ý¼ì²é»Ø¸´Êý¾Ý£¬10Ãë×óÓÒ //
+1117   4                      }       
+1118   3                                      CLRWDT();
+1119   3                              }
+1120   2                              else if((*(sptr+13)=='3')&&(*(sptr+14)=='3')&&(*(sptr+15)=='3')&&(*(sptr+16)=='3'))  
+1121   2                               {
+1122   3                                       mem_db_clr(0xA5);   //°üÀ¨Ð£×¼²ÎÊýÈ«²¿ÇåÁã //
+1123   3                                       while(1)
+1124   3                                       {
+1125   4                                               NOP();                  // ¸´Î»£¬µÈ´ýÊý¾Ý¼ì²é»Ø¸´Êý¾Ý£¬10Ãë×óÓÒ //
+1126   4                                       }       
+1127   3                                       CLRWDT();
+1128   3                               }
+1129   2                              else
+1130   2                              {
+1131   3                                      return(FALSE);
+1132   3                              }
+1133   2                              break;
+1134   2      
+1135   2                default:
+1136   2                       Lib_Asc_BCDA(&data_buff[0], (sptr+13), comm_data.len_asc);   //AtoB(INT8U Asc)
+1137   2                          
+1138   2                       if(mem_type == MEM_RAM)
+1139   2                       {
+1140   3                             mem_write((INT16U)comm_data.addr,&data_buff[0], comm_data.len, mem_type);
+1141   3                       }
+1142   2                       else
+1143   2                       {
+1144   3                             mem_db_write((INT16U)comm_data.addr, &data_buff[0], comm_data.len, mem_type);
+1145   3                       }
+1146   2                                       
+1147   2                              break;  
+1148   2                         
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 22  
+
+1149   2              }
+1150   1                      
+1151   1      // Í¨Ñ¶¹ýºó ÏµÍ³¸üÐÂ
+1152   1          #if (TARIFF_MAX_NUM>1)
+1153   1              if(((comm_data.di1_di0.u32 >= 0x04000801)&&(comm_data.di1_di0.u32 <= 0x04000807))
+1154   1                      ||((comm_data.di1_di0.u32 >= 0x04010000)&&(comm_data.di1_di0.u32 <= 0x04010008)))
+1155   1              {
+1156   2              
+1157   2                      api_update_triffNo_pre_minute();
+1158   2              }
+1159   1          #endif
+1160   1      
+1161   1      // ÓÐ¹¦×éºÏ·½Ê½×Ö¸üÐÂ´¦Àí//
+1162   1              if((comm_data.di1_di0.u32 == 0x04000601))
+1163   1              {
+1164   2            mem_read(&gs_sys_globaL_var.fac_energy[0], ADR_METER_PARAM1_FAC_ENERGY, 2, MEM_E2P1);   
+1165   2              }
+1166   1      
+1167   1              if((comm_data.di1_di0.u32 == 0x04000602))
+1168   1              {
+1169   2            mem_read(&gs_sys_globaL_var.Rac_energy[0], ADR_METER_PARAM1_REC_ENERGY, 2, MEM_E2P1);    
+1170   2              }
+1171   1      /////////////////ÉèÖÃÏÔÊ¾²ÎÊýºóÐèÒª¸üÐÂ///////
+1172   1              if((comm_data.di1_di0.u32 == 0x04000302)||(comm_data.di1_di0.u32 == 0x04000303)||(comm_data.di1_di0.u32 =
+             -= 0x04040100))
+1173   1              {
+1174   2                      mem_read(&gs_dis_param.auto_sec, ADR_BLOCK21_DIS_PARAM_E2P, LEN_BLOCK21_DIS_PARAM_E2P, MEM_E2P1);
+1175   2              }       
+1176   1          // Êý¾ÝÉèÖÃ³É¹¦ºóµÄ×éÖ¡²Ù×÷ //
+1177   1           api_deal_even_class_recode(ID_CLASS_I_PROG,START);   //Éú³É±à³ÌÊÂ¼þ¼ÇÂ¼ //
+1178   1          gs_uart_iec_app_var[g_ch_comm].len= 1;
+1179   1          Get_ACK_Answer(sptr);        
+1180   1          return(TRUE); 
+1181   1      }
+1182          
+1183          
+1184          //-------------------------------------------------------------------------------//
+1185          //  Function:     INT8U IEC_Cmd_Break_Deal(INT8U* sptr,INT8U len)
+1186          //  Description:   iec Í¨Ñ¶ÖÕÖ¹Ö¸Áî´¦Àí³ÌÐò
+1187          //  Parameters:   
+1188          //  Returns:        ÎÞ                          
+1189          //  Others:         
+1190          //-------------------------------------------------------------------------------//
+1191          INT8U IEC_Cmd_Break_Deal(INT8U* sptr)
+1192          {
+1193   1      
+1194   1             gs_uart_iec_app_var[g_ch_comm].iec_status |= COMM_BREAK_OK_IEC;
+1195   1               gs_uart_iec_app_var[g_ch_comm].len= 1;
+1196   1             Get_ACK_Answer(sptr);     
+1197   1             return(TRUE);  
+1198   1      }
+1199          
+1200          /*****************************************************************************
+1201          ** Function name    :api_init_md_data_ram
+1202          **
+1203          ** Description         :³õÊ¼»¯µ±Ç°ÐèÁ¿¼ÆËãRAMÇøÊý¾Ý£¬³ÌÐò¸´Î»³õÊ¼»¯µ÷ÓÃ        
+1204          **
+1205          ** Parameters         :NONE          
+1206          **
+1207          ** Returned value   :NONE
+1208          **
+1209          **----------------------------------------------------------------------------
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 23  
+
+1210          ** V01.01  MJ  2016-04-23
+1211          ******************************************************************************/
+1212          void lnk_tx_comm_ready( uint8 ch,uint8 start_index)
+1213          {
+1214   1          uint16 u16_badu;
+1215   1          //comm_IEC_Tx_Ready();   
+1216   1          switch(gs_uart_iec_app_var[ch].baud_rate)
+1217   1          {
+1218   2              case CBaud_3:
+1219   2                  u16_badu =300;
+1220   2              break;
+1221   2              case CBaud_6:
+1222   2                  u16_badu =600;
+1223   2              break;
+1224   2              case CBaud_12:
+1225   2                  u16_badu =1200;
+1226   2              break;
+1227   2              case CBaud_24:
+1228   2                  u16_badu =2400;
+1229   2              break;
+1230   2              case CBaud_48:
+1231   2                  u16_badu =4800;
+1232   2              break;
+1233   2              case CBaud_96:
+1234   2                  u16_badu =9600;
+1235   2              break;
+1236   2      
+1237   2              default:
+1238   2                  u16_badu =300;
+1239   2              break;
+1240   2          }
+1241   1      
+1242   1          P_IEC_BUFF = &gs_uart_drv_var[ch].buff[0] ;
+1243   1         // Tx_UART_frist(&P_IEC_BUFF[0], (gs_uart_iec_app_var[ch].len+start_index),u16_badu,ch); // Êý¾Ý·¢ËÍ //
+             -     
+1244   1          Tx_UART_frist(&P_IEC_BUFF[start_index], (gs_uart_iec_app_var[ch].len),u16_badu,ch);        // Êý¾Ý·¢ËÍ
+             - //     
+1245   1      }
+1246          
+1247          
+1248          /*****************************************************************************
+1249          ** Function name    :api_init_md_data_ram
+1250          **
+1251          ** Description         :³õÊ¼»¯µ±Ç°ÐèÁ¿¼ÆËãRAMÇøÊý¾Ý£¬³ÌÐò¸´Î»³õÊ¼»¯µ÷ÓÃ        
+1252          **
+1253          ** Parameters         :NONE          
+1254          **
+1255          ** Returned value   :NONE
+1256          **
+1257          **----------------------------------------------------------------------------
+1258          ** V01.01  MJ  2016-04-23
+1259          ******************************************************************************/
+1260          void api_handl_COMM_FRAME_ERROR( uint8 ch)
+1261          {
+1262   1          if(ch==UART_CH0_IR)           
+1263   1          {
+1264   2              Lib_Clr_String(&gs_uart_iec_app_var[ch].len, sizeof(UART_COMM_APP_VAR));   
+1265   2              Init_UART4_hard(BPS300);  //reset_uart(UART_RESET_ALL); 
+1266   2              Init_UART_soft(ch); 
+1267   2                          Lib_Set_String( &LPReadPara.Original_Ptr, 0, 5) ;           
+*** WARNING C182 IN LINE 1267 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: pointer to different objects
+1268   2          }
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 24  
+
+1269   1          
+1270   1          if(ch==CH_RF)
+1271   1          {
+1272   2           Lib_Clr_String(&gs_uart_iec_app_var[ch].len, sizeof(UART_COMM_APP_VAR));   
+1273   2           Init_UART_soft(ch); 
+1274   2               SX127x_init();
+1275   2           Rx_mode(); 
+1276   2          }
+1277   1          
+1278   1          return;
+1279   1      }
+1280          
+1281          //-------------------------------------------------------------------------------//
+1282          //  Function:      void init_comm_link(INT8U mode)         
+1283          //  Description:   ³õÊ¼»¯´®¿ÚÁ´Â·²ã±äÁ¿Êý¾Ý
+1284          //  Parameters:   mode: Í¨Ñ¶Í¨µÀÐòºÅ  
+1285          //  Returns:        ÎÞ                          
+1286          //  Others:         
+1287          //-------------------------------------------------------------------------------//
+1288          void process_iec62056_21 (INT8U ch)
+1289          {
+1290   1       INT8U buff_size;
+1291   1       INT8U start_index;
+1292   1       INT8U meterID_len;
+1293   1      
+1294   1       INT8U tmp_8u_01[16];
+1295   1       INT8U tmp_8u_02[32];
+1296   1       int i;
+1297   1      // INT16U  u16_badu;
+1298   1      
+1299   1          
+1300   1          if(ch > UART_CH_INDEX_MAX)  return ;
+1301   1          
+1302   1          if(gs_uart_iec_app_var[ch].tx_delay_flg ==TRUE ) 
+1303   1          {
+1304   2              return ;    //·¢ËÍµÈ´ý×´Ì¬Ê±ÍË³ö //
+1305   2          }
+1306   1      
+1307   1          buff_size = Get_UART_rx_buff(&P_IEC_BUFF,ch);
+1308   1          if(buff_size==0)   return;    // Ã¿¸öÑ­»·»ñÈ¡Ò»´Î½ÓÊÕÊý¾Ý³¤¶È£¬=0£¬ÍË³ö //
+1309   1      
+1310   1      /////////////////////////////////////////////////////////////////////////
+1311   1          if((gs_uart_iec_app_var[ch].iec_status & COMM_INFO_OK_IEC) !=0)
+1312   1          {
+1313   2              CLRWDT();
+1314   2              CLRWDT();
+1315   2          }
+1316   1      ////////////////////////////////////////////////////////////////////////
+1317   1      
+1318   1          // Ç°µ¼×Ö½Ú´¦Àí //
+1319   1          for(start_index=0;start_index<5;start_index++)
+1320   1          {
+1321   2              if((P_IEC_BUFF[start_index]=='/')||(P_IEC_BUFF[start_index]==ACKCOM)||(P_IEC_BUFF[start_index]==SO
+             -H))  break;
+1322   2          }
+1323   1      
+1324   1          if(start_index>3)
+1325   1          {
+1326   2              //½ÓÊÕµÄÊý¾ÝÖ¡´íÎó£¬²¹³ä´®¿Ú¸´Î»²Ù×÷      //
+1327   2              api_handl_COMM_FRAME_ERROR(ch);
+1328   2              return;
+1329   2          }
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 25  
+
+1330   1      
+1331   1          gs_uart_iec_app_var[ch].tx_delay_flg =FALSE;   // ÓÐÊý¾Ý½ÓÊÕÊ±Çå³ý·¢ËÍÑÓÊ±±êÊ¶ //
+1332   1          gs_uart_iec_app_var[ch].delay_10ms = 0;   // ÓÐÊý¾Ý´¦ÀíÊ±Çå³ýÑÓÊ±¼ÆÊýÆ÷ //
+1333   1          gs_uart_iec_app_var[ch].err_flg = 0;
+1334   1          g_ch_comm = ch;
+1335   1          
+1336   1          if(((buff_size >2) &&((P_IEC_BUFF[buff_size-2]) == CR ||(P_IEC_BUFF[buff_size-2]) == ETX )) )
+1337   1          {
+1338   2              buff_size =buff_size-start_index;
+1339   2              // Êý¾ÝÖ¡´¦Àí //
+1340   2              switch(P_IEC_BUFF[start_index])
+1341   2              {
+1342   3                  case IEC_COMM_REQUEST:      
+1343   3                      if((gs_uart_iec_app_var[ch].iec_status & COMM_INFO_OK_IEC) !=0)
+1344   3                      {
+1345   4                          api_handl_COMM_FRAME_ERROR(ch);
+1346   4                          return;
+1347   4                      }
+1348   3                      mem_read (&tmp_8u_01[0],ADR_METER_PARAM1_METER_ID, 16,MEM_E2P1);
+1349   3                      meterID_len = get_meter_id_asclen(&tmp_8u_01[0], 16);   //»ñÈ¡±íºÅÓÐÐ§asc³¤¶È
+1350   3                      Lib_BCD_AscA(&tmp_8u_02[0], &tmp_8u_01[0], 16);
+1351   3                      if(IEC_Comm_Request_Cmd_Judge(&P_IEC_BUFF[start_index], buff_size, &tmp_8u_02[0],meterID_l
+             -en)==TRUE)
+1352   3                      {
+1353   4                          if(ch==UART_CH0_IR)   // TTL//
+1354   4                         {
+1355   5                               Get_IEC_Comm_Request_Cmd_Answer(&P_IEC_BUFF[start_index], Meter_INFO_LENTH,(uint8
+             -*)&meter_info_IR[0]);//start_index
+1356   5                          }
+1357   4                           if(ch==CH_RF)  // RF//
+1358   4                         {
+1359   5                               Get_IEC_Comm_Request_Cmd_Answer(&P_IEC_BUFF[start_index], Meter_INFO_LENTH,(uint8
+             -*)&meter_info[0]);
+1360   5                          }           
+1361   4                          gs_uart_iec_app_var[ch].len = Meter_INFO_LENTH+3;
+1362   4                          gs_uart_iec_app_var[ch].iec_status |= COMM_INFO_OK_IEC;    // ÎÕÊÖÃüÁî³É¹¦±êÊ¶ //
+1363   4                      }
+1364   3                      else
+1365   3                      {
+1366   4                          //¿¼ÂÇµ½¿ª·ÅÊ½Í¨Ñ¶£¬Ê§°ÜÊ±²»·µ»ØÊý¾Ý //
+1367   4                          api_handl_COMM_FRAME_ERROR(ch);
+1368   4                          return;
+1369   4                      }
+1370   3                  break;
+1371   3      
+1372   3                  case IEC_COMM_ACKNOWLEDGEMENT:
+1373   3                      if((gs_uart_iec_app_var[ch].iec_status & COMM_INFO_OK_IEC) ==0)
+1374   3                      {
+1375   4                          api_handl_COMM_FRAME_ERROR(ch);
+1376   4                          return;
+1377   4                      }
+1378   3                      if(IEC_Comm_Acknowledgement_Cmd_Judge(&P_IEC_BUFF[start_index],buff_size)==TRUE)
+1379   3                      {
+1380   4                          gs_uart_iec_app_var[ch].baud_rate = P_IEC_BUFF[start_index+2];      //                
+             -                     //²¨ÌØÂÊ¸³Öµ  //
+1381   4                          Get_IEC_Comm_Operand_Answer(&P_IEC_BUFF[start_index], MIMA_INFO_LENTH,(uint8*)&mima_in
+             -fo[0]); //   // »ñÈ¡Êý¾Ý×éÖ¡ //
+1382   4                          gs_uart_iec_app_var[ch].len = (MIMA_INFO_LENTH+6);
+1383   4                          gs_uart_iec_app_var[ch].iec_status |= COMM_REQUIST_OK_IEC;  // ¸ø³öÇëÇóÃüÁî³É¹¦±êÊ¶ //
+1384   4                      }
+1385   3                      else
+1386   3                      {
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 26  
+
+1387   4                          gs_uart_iec_app_var[ch].iec_status &= ~COMM_REQUIST_OK_IEC;  // clr ÇëÇóÃüÁî³É¹¦±êÊ¶ /
+             -/
+1388   4                          Get_Error_Answer(&P_IEC_BUFF[start_index]);//
+1389   4                          gs_uart_iec_app_var[ch].len = 1;
+1390   4                      }
+1391   3      
+1392   3                  break;
+1393   3      
+1394   3                  case IEC_COMM_COMMAND:
+1395   3                      if((gs_uart_iec_app_var[ch].iec_status & COMM_REQUIST_OK_IEC) ==0)
+1396   3                      {
+1397   4                          api_handl_COMM_FRAME_ERROR(ch);
+1398   4                          return;
+1399   4                      } 
+1400   3              //                      i = IEC_Comm_Command_Cmd_Judge(&P_IEC_BUFF[start_index],buff_size);             
+1401   3                      if(IEC_Comm_Command_Cmd_Judge(&P_IEC_BUFF[start_index],buff_size) !=TRUE)//
+1402   3                      {
+1403   4                           // ÃüÁî³ö´í
+1404   4                              // Êý¾Ý½âÎöÊ§°Ü //
+1405   4                          Get_Error_Answer(&P_IEC_BUFF[start_index]);
+1406   4                          gs_uart_iec_app_var[ch].len = 1;                       
+1407   4                      }
+1408   3                  break;
+1409   3      
+1410   3                  default:
+1411   3                      gs_uart_iec_app_var[ch].err_flg |= FRAME_ERROR;   //Ö¡´íÎó£¬ÐèÒª¸´Î»  //        
+1412   3                  break;
+1413   3              }
+1414   2      
+1415   2          }
+1416   1          else
+1417   1          {
+1418   2              gs_uart_iec_app_var[ch].err_flg |= FRAME_ERROR;   //Ö¡´íÎó£¬ÐèÒª¸´Î»  //        
+1419   2          }
+1420   1      
+1421   1          if((gs_uart_iec_app_var[ch].err_flg & FRAME_ERROR) )
+1422   1          {
+1423   2              //½ÓÊÕµÄÊý¾ÝÖ¡´íÎó£¬²¹³ä´®¿Ú¸´Î»²Ù×÷      //
+1424   2              api_handl_COMM_FRAME_ERROR(ch);
+1425   2              return;
+1426   2          }
+1427   1          else
+1428   1          {
+1429   2              gs_uart_iec_app_var[ch].tx_delay_flg =TRUE;
+1430   2              gs_uart_iec_app_var[ch].tx_ready_10ms = 0;   // ÓÐÊý¾Ý´¦ÀíÊ±Çå³ýÑÓÊ±¼ÆÊýÆ÷ //
+1431   2              if(gs_uart_iec_app_var[ch].iec_status ==(COMM_INFO_OK_IEC+COMM_REQUIST_OK_IEC))
+1432   2              {
+1433   3                  gs_uart_iec_app_var[ch].tx_ready_10ms  += 4;   // ÇÐ»»²¨ÌØÂÊÊ±ÑÓÊ±Ôö¼Ó10ms //
+1434   3              }
+1435   2              gs_uart_iec_app_var[ch].start_index = start_index;
+1436   2          }
+1437   1      }
+*** WARNING C280 IN LINE 1296 OF ..\C_SOURCE\S4_APIUSER\API_USER_COMM.C: 'i': unreferenced local variable
+1438          
+1439          
+1440          /*****************************************************************************
+1441          ** Function name    :api_init_md_data_ram
+1442          **
+1443          ** Description         :³õÊ¼»¯µ±Ç°ÐèÁ¿¼ÆËãRAMÇøÊý¾Ý£¬³ÌÐò¸´Î»³õÊ¼»¯µ÷ÓÃ        
+1444          **
+1445          ** Parameters         :NONE          
+1446          **
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 27  
+
+1447          ** Returned value   :NONE
+1448          **
+1449          **----------------------------------------------------------------------------
+1450          ** V01.01  MJ  2016-04-23
+1451          ******************************************************************************/
+1452          void api_handl_COMM_pre_10ms(uint8 ch)
+1453          {
+1454   1      
+1455   1              process_iec62056_21(ch);    
+1456   1      
+1457   1          if(gs_uart_iec_app_var[ch].delay_10ms >COMM_DELAY_3500MS)
+1458   1          {   
+1459   2              //³¬Ê±ÍË³öÎÕÊÖ£¬ÖØÐÂ½øÈë¿ÕÏÐµÈ´ý×´Ì¬ //
+1460   2              api_handl_COMM_FRAME_ERROR(ch);    
+1461   2          }
+1462   1      
+1463   1          if((gs_uart_iec_app_var[ch].tx_ready_10ms ==0)&&(gs_uart_iec_app_var[ch].tx_delay_flg ==TRUE))
+1464   1          {   
+1465   2              //Êý¾Ý×¼±¸·¢ËÍ   //
+1466   2              gs_uart_iec_app_var[ch].tx_delay_flg =FALSE;
+1467   2              lnk_tx_comm_ready(ch,gs_uart_iec_app_var[ch].start_index);     
+1468   2          }
+1469   1      
+1470   1              if(clr_flag == 1)
+1471   1              {
+1472   2                      clr_flag = 0;
+1473   2                      CLRWDT();
+1474   2                      api_clr_current_energy_data();
+1475   2                      CLRWDT();
+1476   2                      api_clr_current_MD_data();
+1477   2                      CLRWDT();
+1478   2                      #if (BILL_MAX_NUM>0)
+1479   2                      api_clr_bill_data();
+1480   2                      #endif
+1481   2                      gs_uart_iec_app_var[g_ch_comm].delay_10ms = 0; // 
+1482   2                      LoadProRst();
+1483   2                      CLRWDT();
+1484   2                      api_clr_even_by_comm(); 
+1485   2                      CLRWDT();
+1486   2                      //2019-01-24  cxy
+1487   2                      api_clr_freeze_energy();//Çå³ý¶³½áÊý¾Ý
+1488   2                      CLRWDT();
+1489   2                      api_chg_LCDDisplay_adj_item(DIS_DATA_CLR);   // Òº¾§ÏÔÊ¾ //
+1490   2              }
+1491   1      
+1492   1      }
+1493          ///////////////////////////////////////////////////////////////////
+1494          //  RF Í¨Ñ¶²¿·Ö
+1495          ///////////////////////////////////////////////////////////////////
+1496          //-------------------------------------------------------------------------------//
+1497          //  Function:      void uart_comm_deal(void)    ´®¿ÚÍ¨Ñ¶´¦Àíº¯Êý        
+1498          //  Description:   ÊµÏÖ´®¿Ú¹¦ÄÜµÄ¹ÜÀíºÍ²Ù×÷
+1499          //  Parameters:   ÎÞ  
+1500          //  Returns:        ÎÞ                          
+1501          //  Others:         
+1502          //-------------------------------------------------------------------------------//
+1503          void RF_comm_deal(void)
+1504          {  
+1505   1          // RF Í¨µÀÊÇ·ñ½ÓÊÕµ½Êý¾Ý //
+1506   1          if(LSD4RF_READ_DIO0() ==0) return;
+1507   1          Lib_Delay_Nop(20);
+1508   1          if(LSD4RF_READ_DIO0() ==0) return;   
+C51 COMPILER V9.01   API_USER_COMM                                                         02/14/2019 10:20:44 PAGE 28  
+
+1509   1          
+1510   1          // ½ÓÊÕµ½Êý¾ÝºóµÄ´¦Àí //
+1511   1              LSD_RF_RxPacket(&gs_uart_drv_var[CH_RF].buff[0]);
+1512   1          CLRWDT();   // Çå¿´ÃÅ¹·//
+1513   1          gs_uart_iec_app_var[CH_RF].delay_10ms = 0;   // ÓÐÊý¾Ý´¦ÀíÊ±Çå³ýÑÓÊ±¼ÆÊýÆ÷ //
+1514   1          gs_uart_drv_var[CH_RF].rx_over_ticks =5;
+1515   1              ////////////////////////
+1516   1              gs_uart_drv_var[CH_RF].buff_index = G_LoRaConfig.PayloadLength;
+1517   1           ///////////////////////////////
+1518   1      }
+1519          /***************************************************************
+1520          *    END
+1521          ****************************************************************/
+1522          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   8121    ----
+   CONSTANT SIZE    =   2035    ----
+   XDATA SIZE       =     77     328
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  10 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,1022 @@
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE API_TRIFF
+OBJECT MODULE PLACED IN .\Api_Triff.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S3_ApiPlat\Api_Triff.c LARGE BROWSE INCDIR(..\C_Source\S0_Syste
+                    -m;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiProtocol;.
+                    -.\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_HardDrv\E2P_
+                    -24CXXX) DEBUG OBJECTEXTEND PRINT(.\Api_Triff.lst) OBJECT(.\Api_Triff.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : Api_Triff.c
+   6          **Author                : maji
+   7          **date                  : 2016-04-21 
+   8          **description   : ·ÑÂÊ´¦ÀíÓ¦ÓÃ²ãÏà¹Øº¯Êý³ÌÐòCÎÄ¼þ
+   9          **note                  : MERTER FOR DL06A
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2016-04-21   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          
+  18          
+  19          #include <MyIncludes_H.h>
+  20          
+  21          
+  22          #if (TARIFF_MAX_NUM>1)
+  23          
+  24          CURRENT_TRIFF_VAR gs_current_triff_var;
+  25          
+  26          
+  27          /*************************************************************************
+  28          **  ·ÑÂÊ¹¦ÄÜ- ½Ú¼ÙÈÕ³õÊ¼»¯Ä¬ÈÏÊý¾Ý
+  29          *************************************************************************/
+  30          #if (MAX_NUM_HOLIDAY_TAB >0)
+              const  E2P_TRIFF_HOLIDAY_TABLE_MAP  code   default_triff_holiday_tab = 
+              {
+                  0,      0,      0,   //  holiday1 data
+              #if (MAX_NUM_HOLIDAY_TAB>1)
+                  0,      0,      0,   //  holiday2 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>2)
+                  0,      0,      0,   //  holiday3 data ¿Õ
+              #endif  
+              
+              #if (MAX_NUM_HOLIDAY_TAB>3)
+                  0,      0,      0,   //  holiday4 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>4)
+                  0,      0,      0,   //  holiday5 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>5)
+                 0,      0,      0,   //  holiday6 data ¿Õ
+              #endif
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 2   
+
+              
+              #if (MAX_NUM_HOLIDAY_TAB>6)
+                 0,      0,      0,   //  holiday7 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>7)
+                 0,      0,      0,   //  holiday8 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>8)
+                 0,      0,      0,   //  holiday9 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>9)
+                 0,      0,      0,   //  holiday10 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>10)
+                  0,      0,      0,   //  holiday11 data ¿Õ
+              #endif
+                 
+              #if (MAX_NUM_HOLIDAY_TAB>11)
+                0,      0,      0,   //  holiday12 data ¿Õ
+              #endif
+                 
+              #if (MAX_NUM_HOLIDAY_TAB>12)
+                 0,      0,      0,   //  holiday13 data ¿Õ
+              #endif
+                  
+              #if (MAX_NUM_HOLIDAY_TAB>13)
+                 0,      0,      0,   //  holiday14 data ¿Õ
+              #endif
+                      
+              #if (MAX_NUM_HOLIDAY_TAB>14)
+                 0,      0,      0,   //  holiday15 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>15)
+                 0,      0,      0,   //  holiday16 data ¿Õ
+              #endif
+                       
+              #if (MAX_NUM_HOLIDAY_TAB>16)
+                 0,      0,      0,   //  holiday17 data ¿Õ
+              #endif
+                       
+              #if (MAX_NUM_HOLIDAY_TAB>17)
+                  0,      0,      0,   //  holiday18 data ¿Õ
+              #endif
+                        
+              #if (MAX_NUM_HOLIDAY_TAB>18)
+                  0,      0,      0,   //  holiday19 data ¿Õ
+              #endif
+                       
+              #if (MAX_NUM_HOLIDAY_TAB>19)
+                  0,      0,      0,   //  holiday20 data ¿Õ
+              #endif
+                       
+              #if (MAX_NUM_HOLIDAY_TAB>20)
+                  0,      0,      0,   //  holiday21 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>21)
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 3   
+
+                  0,      0,      0,   //  holiday22 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>22)
+                  0,      0,      0,   //  holiday23 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>23)
+                  0,      0,      0,   //  holiday24 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>24)
+                  0,      0,      0,   //  holiday25 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>25)
+                  0,      0,      0,   //  holiday26 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>26)
+                  0,      0,      0,   //  holiday27 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>27)
+                  0,      0,      0,   //  holiday28 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>28)
+                  0,      0,      0,   //  holiday29 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>29)
+                  0,      0,      0,   //  holiday30 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>30)
+                  0,      0,      0,   //  holiday31 data ¿Õ
+              #endif
+              
+              #if (MAX_NUM_HOLIDAY_TAB>31)
+                  0,      0,      0,   //  holiday32 data ¿Õ
+              #endif
+              
+                  0x0000, // csck  //
+              };
+              #endif
+ 161          
+ 162          
+ 163          /*************************************************************************
+ 164          **  ·ÑÂÊ¹¦ÄÜ- ¼¾½Ú±í³õÊ¼»¯Ä¬ÈÏÊý¾Ý
+ 165          *************************************************************************/
+ 166          const  E2P_TRIFF_SEASON_TABLE_MAP  code   default_triff_season_tab = 
+ 167          {
+ 168              1,      1,      1,   //  season-tab1 data   1ÔÂ1ÈÕÖÜ±í1
+ 169          #if (MAX_YEAR_TAB_CHG>1)
+ 170              0,      0,      0,   //  season-tab2 data   ¿Õ
+ 171          #endif
+ 172          
+ 173          #if (MAX_YEAR_TAB_CHG>2)
+ 174              0,      0,      0,   //  season-tab3 data   ¿Õ
+ 175          #endif
+ 176          
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 4   
+
+ 177          #if (MAX_YEAR_TAB_CHG>3)
+ 178              0,      0,      0,   //  season-tab4 data   ¿Õ
+ 179          #endif
+ 180          
+ 181          #if (MAX_YEAR_TAB_CHG>4)
+ 182              0,      0,      0,   //  season-tab5 data   ¿Õ
+ 183          #endif
+ 184          
+ 185          #if (MAX_YEAR_TAB_CHG>5)
+ 186              0,      0,      0,   //  season-tab6 data   ¿Õ
+ 187          #endif
+ 188          
+ 189          #if (MAX_YEAR_TAB_CHG>6)
+ 190              0,      0,      0,   //  season-tab7 data   ¿Õ
+ 191          #endif
+ 192          
+ 193          #if (MAX_YEAR_TAB_CHG>7)
+ 194              0,      0,      0,  //  season-tab8 data   ¿Õ
+ 195          #endif
+ 196          
+ 197          #if (MAX_YEAR_TAB_CHG>8)
+                  0,      0,      0,   //  season-tab9 data ¿Õ
+              #endif
+ 200          
+ 201          #if (MAX_YEAR_TAB_CHG>9)
+                  0,      0,      0,   //  season-tab10 data ¿Õ
+              #endif
+ 204          
+ 205              0x0000, // csck  //
+ 206          };
+ 207          
+ 208          
+ 209          /*************************************************************************
+ 210          **  ·ÑÂÊ¹¦ÄÜ- ÖÜ±í³õÊ¼»¯Ä¬ÈÏÊý¾Ý
+ 211          *************************************************************************/
+ 212          const  E2P_TRIFF_WEEK_TABLE_MAP  code   default_triff_week_tab = 
+ 213          {
+ 214              2,  1,  1,  1,  1,  1,  2,    // week-tab1 data   ÖÜÈÕ~ÖÜ6  ÈÕÊ±¶Î±í1//
+ 215          #if (MAX_INDEX_WEEKDAY_TAB>1)
+ 216              1,  1,  1,  1,  1,  1,  1,    // week-tab2 data   ÖÜÈÕ~ÖÜ6  ÈÕÊ±¶Î±í1//
+ 217          #endif
+ 218          
+ 219          #if (MAX_INDEX_WEEKDAY_TAB>2)
+ 220              1,  1,  1,  1,  1,  1,  1,    // week-tab3 data   ÖÜÈÕ~ÖÜ6  ÈÕÊ±¶Î±í1//
+ 221          #endif
+ 222          
+ 223          #if (MAX_INDEX_WEEKDAY_TAB>3)
+ 224              1,  1,  1,  1,  1,  1,  1,    // week-tab4 data   ÖÜÈÕ~ÖÜ6  ÈÕÊ±¶Î±í1//
+ 225          #endif
+ 226          
+ 227          #if (MAX_INDEX_WEEKDAY_TAB>4)
+                  1,  1,  1,  1,  1,  1,  1,    // week-tab5 data   ÖÜÈÕ~ÖÜ6  ÈÕÊ±¶Î±í1//
+              #endif
+ 230          
+ 231          #if (MAX_INDEX_WEEKDAY_TAB>5)
+                  1,  1,  1,  1,  1,  1,  1,    // week-tab6 data   ÖÜÈÕ~ÖÜ6  ÈÕÊ±¶Î±í1//
+              #endif
+ 234          
+ 235          #if (MAX_INDEX_WEEKDAY_TAB>6)
+                  1,  1,  1,  1,  1,  1,  1,    // week-tab17 data   ÖÜÈÕ~ÖÜ6  ÈÕÊ±¶Î±í1//
+              #endif
+ 238          
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 5   
+
+ 239          #if (MAX_INDEX_WEEKDAY_TAB>7)
+                  1,  1,  1,  1,  1,  1,  1,    // week-tab8 data   ÖÜÈÕ~ÖÜ6  ÈÕÊ±¶Î±í1//
+              #endif
+ 242          
+ 243              0x0000,   // csck  //
+ 244          };
+ 245          
+ 246          
+ 247          /*************************************************************************
+ 248          **  ·ÑÂÊ¹¦ÄÜ- ÈÕÊ±¶Î±í£¨Ã¿ÈÕ×î´óÇÐ»»ÊýÎª10£©³õÊ¼»¯Ä¬ÈÏÊý¾Ý 
+ 249          *************************************************************************/
+ 250          const   E2P_TRIFF_DAY_TABLE_MAP  code   default_triff_day_tab = 
+ 251          {
+ 252              //ÈÕÊ±¶Î±í1  //
+ 253              0x08,      0,        1,   //  day-tab1-chg1  data  0Ê±0·Ö·ÑÂÊ1  //
+ 254              #if (MAX_DAY_TRIFF_CHG>1)
+ 255              0x18,      0,      2,   //  day-tab1-chg2  data  0Ê±0·Ö·ÑÂÊ1  //
+ 256              #endif
+ 257          
+ 258              #if (MAX_DAY_TRIFF_CHG>2)
+ 259              0x22,      0,      3,  //  day-tab1-chg3  data  0Ê±0·Ö·ÑÂÊ1  //
+ 260              #endif
+ 261          
+ 262              #if (MAX_DAY_TRIFF_CHG>3)
+ 263              0,      0,      0,  //  day-tab1-chg4  data  0Ê±0·Ö·ÑÂÊ1  //
+ 264              #endif
+ 265          
+ 266              #if (MAX_DAY_TRIFF_CHG>4)
+ 267              0,      0,      0,   //  day-tab1-chg5  data  0Ê±0·Ö·ÑÂÊ1  //
+ 268              #endif
+ 269          
+ 270              #if (MAX_DAY_TRIFF_CHG>5)
+ 271              0,      0,      0,   //  day-tab1-chg6  data  0Ê±0·Ö·ÑÂÊ1  //
+ 272              #endif
+ 273          
+ 274              #if (MAX_DAY_TRIFF_CHG>6)
+ 275              0,      0,      0,   //  day-tab1-chg7  data  0Ê±0·Ö·ÑÂÊ1  //
+ 276              #endif
+ 277          
+ 278              #if (MAX_DAY_TRIFF_CHG>7)
+ 279              0,      0,      0,  //  day-tab1-chg8  data  0Ê±0·Ö·ÑÂÊ1  //
+ 280              #endif
+ 281          
+ 282              #if (MAX_DAY_TRIFF_CHG>8)
+                  0,      0,      0,   //  day-tab1-chg9 data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+ 285              #if (MAX_DAY_TRIFF_CHG>9)
+                  0,      0,      0,   //  day-tab1-chg10 data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+ 288          
+ 289          #if (MAX_INDEX_DAY_TAB>1)
+ 290              //ÈÕÊ±¶Î±í2  //
+ 291              0x08,      0,      4,   //  day-tab2-chg1  data  0Ê±0·Ö·ÑÂÊ1  //
+ 292              #if (MAX_DAY_TRIFF_CHG>1)
+ 293              0x18,      0,      2,  //  day-tab2-chg2  data  0Ê±0·Ö·ÑÂÊ1  //
+ 294              #endif
+ 295          
+ 296              #if (MAX_DAY_TRIFF_CHG>2)
+ 297              0x22,      0,      3,   //  day-tab2-chg3  data  0Ê±0·Ö·ÑÂÊ1  //
+ 298              #endif
+ 299          
+ 300              #if (MAX_DAY_TRIFF_CHG>3)
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 6   
+
+ 301              0,      0,      0,   //  day-tab2-chg4 data  0Ê±0·Ö·ÑÂÊ1  //
+ 302              #endif
+ 303          
+ 304              #if (MAX_DAY_TRIFF_CHG>4)
+ 305              0,      0,      0,  //  day-tab2-chg5  data  0Ê±0·Ö·ÑÂÊ1  //
+ 306              #endif
+ 307          
+ 308              #if (MAX_DAY_TRIFF_CHG>5)
+ 309              0,      0,      0,   //  day-tab2-chg6  data  0Ê±0·Ö·ÑÂÊ1  //
+ 310              #endif
+ 311          
+ 312              #if (MAX_DAY_TRIFF_CHG>6)
+ 313              0,      0,      0,   //  day-tab2-chg7  data  0Ê±0·Ö·ÑÂÊ1  //
+ 314              #endif
+ 315          
+ 316              #if (MAX_DAY_TRIFF_CHG>7)
+ 317              0,      0,      0,  //  day-tab2-chg8  data  0Ê±0·Ö·ÑÂÊ1  //
+ 318              #endif
+ 319          
+ 320              #if (MAX_DAY_TRIFF_CHG>8)
+                  0,      0,      0,   //  day-tab2-chg9  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+ 323              #if (MAX_DAY_TRIFF_CHG>9)
+                  0,      0,      0,  //  day-tab2-chg10  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+ 326          #endif
+ 327          
+ 328          #if (MAX_INDEX_DAY_TAB>2)
+ 329              //ÈÕÊ±¶Î±í3  //
+ 330              0,      0,      1,   //  day-tab3-chg1  data  0Ê±0·Ö·ÑÂÊ1  //
+ 331              #if (MAX_DAY_TRIFF_CHG>1)
+ 332              0,      0,      0,   //  day-tab3-chg2  data  0Ê±0·Ö·ÑÂÊ1  //
+ 333              #endif
+ 334          
+ 335              #if (MAX_DAY_TRIFF_CHG>2)
+ 336              0,      0,      0,   //  day-tab3-chg3  data  0Ê±0·Ö·ÑÂÊ1  //
+ 337              #endif
+ 338          
+ 339              #if (MAX_DAY_TRIFF_CHG>3)
+ 340              0,      0,      0,   //  day-tab3-chg4  data  0Ê±0·Ö·ÑÂÊ1  //
+ 341              #endif
+ 342          
+ 343              #if (MAX_DAY_TRIFF_CHG>4)
+ 344              0,      0,      0,   //  day-tab3-chg5  data  0Ê±0·Ö·ÑÂÊ1  //
+ 345              #endif
+ 346          
+ 347              #if (MAX_DAY_TRIFF_CHG>5)
+ 348              0,      0,      0,  //  day-tab3-chg6  data  0Ê±0·Ö·ÑÂÊ1  //
+ 349              #endif
+ 350          
+ 351              #if (MAX_DAY_TRIFF_CHG>6)
+ 352              0,      0,      0,  //  day-tab3-chg7  data  0Ê±0·Ö·ÑÂÊ1  //
+ 353              #endif
+ 354          
+ 355              #if (MAX_DAY_TRIFF_CHG>7)
+ 356              0,      0,      0,  //  day-tab3-chg8  data  0Ê±0·Ö·ÑÂÊ1  //
+ 357              #endif
+ 358          
+ 359              #if (MAX_DAY_TRIFF_CHG>8)
+                  0,      0,      0,   //  day-tab3-chg9  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+ 362              #if (MAX_DAY_TRIFF_CHG>9)
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 7   
+
+                  0,      0,      0,   //  day-tab3-chg10  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+ 365          #endif
+ 366          
+ 367          #if (MAX_INDEX_DAY_TAB>3)
+ 368              //ÈÕÊ±¶Î±í4 //
+ 369              0,      0,      1,   //  day-tab4-chg1  data  0Ê±0·Ö·ÑÂÊ1  //
+ 370              #if (MAX_DAY_TRIFF_CHG>1)
+ 371              0,      0,      0,   //  day-tab4-chg2  data  0Ê±0·Ö·ÑÂÊ1  //
+ 372              #endif
+ 373          
+ 374              #if (MAX_DAY_TRIFF_CHG>2)
+ 375              0,      0,      0,    //  day-tab4-chg3  data  0Ê±0·Ö·ÑÂÊ1  //
+ 376              #endif
+ 377          
+ 378              #if (MAX_DAY_TRIFF_CHG>3)
+ 379              0,      0,      0,    //  day-tab4-chg4  data  0Ê±0·Ö·ÑÂÊ1  //
+ 380              #endif
+ 381          
+ 382              #if (MAX_DAY_TRIFF_CHG>4)
+ 383              0,      0,      0,    //  day-tab4-chg5  data  0Ê±0·Ö·ÑÂÊ1  //
+ 384              #endif
+ 385          
+ 386              #if (MAX_DAY_TRIFF_CHG>5)
+ 387              0,      0,      0,    //  day-tab4-chg6  data  0Ê±0·Ö·ÑÂÊ1  //
+ 388              #endif
+ 389          
+ 390              #if (MAX_DAY_TRIFF_CHG>6)
+ 391              0,      0,      0,    //  day-tab4-chg7  data  0Ê±0·Ö·ÑÂÊ1  //
+ 392              #endif
+ 393          
+ 394              #if (MAX_DAY_TRIFF_CHG>7)
+ 395              0,      0,      0,   //  day-tab4-chg8  data  0Ê±0·Ö·ÑÂÊ1  //
+ 396              #endif
+ 397          
+ 398              #if (MAX_DAY_TRIFF_CHG>8)
+                  0,      0,      0,    //  day-tab4-chg9  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+ 401              #if (MAX_DAY_TRIFF_CHG>9)
+                  0,      0,      0,    //  day-tab4-chg10  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+ 404          #endif
+ 405          
+ 406          #if (MAX_INDEX_DAY_TAB>4)
+                  //ÈÕÊ±¶Î±í5  //
+                  0,      0,      1,   //  day-tab5-chg1  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #if (MAX_DAY_TRIFF_CHG>1)
+                  0,      0,      0,   //  day-tab5-chg2  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>2)
+                  0,      0,      0,   //  day-tab5-chg3  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>3)
+                  0,      0,      0,   //  day-tab5-chg4  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>4)
+                  0,      0,      0,  //  day-tab5-chg5  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 8   
+
+                  #if (MAX_DAY_TRIFF_CHG>5)
+                  0,      0,      0,   //  day-tab5-chg6  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>6)
+                  0,      0,      0,   //  day-tab5-chg7  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>7)
+                  0,      0,      0,  //  day-tab5-chg8  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>8)
+                  0,      0,      0,   //  day-tab5-chg9  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+                  #if (MAX_DAY_TRIFF_CHG>9)
+                  0,      0,      0,   //  day-tab5-chg10  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              #endif
+ 444          
+ 445          #if (MAX_INDEX_DAY_TAB>5)
+                  //ÈÕÊ±¶Î±í6  //
+                  0,      0,      1,   //  day-tab6-chg1  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #if (MAX_DAY_TRIFF_CHG>1)
+                  0,      0,      0,  //  day-tab6-chg2  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>2)
+                  0,      0,      0,   //  day-tab6-chg3  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>3)
+                  0,      0,      0,   //  day-tab6-chg4  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>4)
+                  0,      0,      0,   //  day-tab6-chg5  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>5)
+                  0,      0,      0,   //  day-tab6-chg6  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>6)
+                  0,      0,      0,   //  day-tab6-chg7  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>7)
+                  0,      0,      0,  //  day-tab6-chg8  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>8)
+                  0,      0,      0,   //  day-tab6-chg9  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+                  #if (MAX_DAY_TRIFF_CHG>9)
+                  0,      0,      0,   //  day-tab6-chg10  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              #endif
+ 483          
+ 484          #if (MAX_INDEX_DAY_TAB>6)
+                  //ÈÕÊ±¶Î±í7  //
+                  0,      0,      1,   //  day-tab7-chg1  data  0Ê±0·Ö·ÑÂÊ1  //
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 9   
+
+                  #if (MAX_DAY_TRIFF_CHG>1)
+                  0,      0,      0,   //  day-tab7-chg2  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>2)
+                  0,      0,      0,   //  day-tab7-chg3  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>3)
+                  0,      0,      0,   //  day-tab7-chg4  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>4)
+                  0,      0,      0,   //  day-tab7-chg5  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>5)
+                  0,      0,      0,   //  day-tab7-chg6  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>6)
+                  0,      0,      0,   //  day-tab7-chg7  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>7)
+                  0,      0,      0,  //  day-tab7-chg8  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>8)
+                  0,      0,      0,   //  day-tab7-chg9  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+                  #if (MAX_DAY_TRIFF_CHG>9)
+                  0,      0,      0,   //  day-tab7-chg10  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              #endif
+ 522          
+ 523          #if (MAX_INDEX_DAY_TAB>7)
+                  //ÈÕÊ±¶Î±í8  //
+                  0,      0,      1,   //  day-tab8-chg1  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #if (MAX_DAY_TRIFF_CHG>1)
+                  0,      0,      0,   //  day-tab8-chg2  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>2)
+                  0,      0,      0,   //  day-tab8-chg3  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>3)
+                  0,      0,      0,   //  day-tab8-chg4  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>4)
+                  0,      0,      0,   //  day-tab8-chg5  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>5)
+                  0,      0,      0,   //  day-tab8-chg6  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>6)
+                  0,      0,      0,   //  day-tab8-chg7  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 10  
+
+              
+                  #if (MAX_DAY_TRIFF_CHG>7)
+                  0,      0,      0,  //  day-tab8-chg8  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              
+                  #if (MAX_DAY_TRIFF_CHG>8)
+                  0,      0,      0,   //  day-tab8-chg9  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+                  #if (MAX_DAY_TRIFF_CHG>9)
+                  0,      0,      0,   //  day-tab8-chg10  data  0Ê±0·Ö·ÑÂÊ1  //
+                  #endif
+              #endif
+ 561          
+ 562          
+ 563              0x0000,   // csck  //
+ 564          };
+ 565          
+ 566          
+ 567          /*****************************************************************************
+ 568          ** Function name    :api_get_holidayTab_No
+ 569          **
+ 570          ** Description         :¸ù¾Ýµ±Ç°ÔÂÈÕÊý¾ÝºÍ½Ú¼ÙÈÕ±íÊý¾Ý»ñÈ¡µ±Ç°ÈÕÊ±¶Î±íºÅ
+ 571          **
+ 572          ** Parameters         :NONE          
+ 573          **
+ 574          ** Returned value   :INT8U result;µ±ÈÕÊ±¶Î±íºÅ£¬=0XFFÊ±´ú±í»ñÈ¡Ê§°Ü//
+ 575          **
+ 576          **----------------------------------------------------------------------------
+ 577          ** V01.01  MJ  2016-04-23
+ 578          ******************************************************************************/
+ 579          #if (MAX_NUM_HOLIDAY_TAB >0)
+              INT8U api_get_holidayTab_No(void)
+              {
+                HOLIDAY_TABLE  s_holiday_data;
+                INT8U i;
+                INT8U result;
+               INT8U table_ok_len;
+              
+                 
+                  //¶ÁÈ¡½Ú¼ÙÈÕÊý¾Ý  //
+                  mem_read( (char*)&s_holiday_data.tab[0].month_BCD8,ADR_BLOCK81_HILIDAY_TAB_E2P,LEN_HOLIDAY_TABLE ,MEM_
+             -E2P1);
+              
+                  //¼ÆËãÓÐÐ§½Ú¼ÙÈÕ±í³¤¶È  //
+                  table_ok_len=0;
+                  for(i=0;i<MAX_NUM_HOLIDAY_TAB;i++)
+                  {
+                      if((s_holiday_data.tab[i].month_BCD8==0) ||(s_holiday_data.tab[i].month_BCD8 >0x12))    break;    
+             -// ÔÂÊý¾ÝÅÐ¶Ï //
+                      if((s_holiday_data.tab[i].day_BCD8==0) ||(s_holiday_data.tab[i].day_BCD8 >0x31))    break;    // È
+             -ÕÊý¾ÝÅÐ¶Ï //
+                      if((s_holiday_data.tab[i].dayTable_No==0) ||(s_holiday_data.tab[i].dayTable_No >MAX_INDEX_DAY_TAB)
+             -)    break;    // ÈÕÊý¾ÝÅÐ¶Ï //
+                      table_ok_len++;
+                  }
+                  if((table_ok_len==0) ||(table_ok_len>MAX_NUM_HOLIDAY_TAB))
+                  {
+                      return (0xff) ;   // ´ú±í½Ú¼ÙÈÕÊý¾ÝÈ«²¿·Ç·¨ //
+                  }
+              
+                  //»ñÈ¡½Ú¼ÙÈÕÈÕÊ±¶Î±íºÅ  //
+                  result =0xff;
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 11  
+
+                  for(i=0;i<table_ok_len;i++)
+                  {
+                      if((s_holiday_data.tab[i].month_BCD8==0) ||(s_holiday_data.tab[0].month_BCD8 >0x12))    break;    
+             -// ÔÂÊý¾ÝÅÐ¶Ï //
+                      if((s_holiday_data.tab[i].day_BCD8==0) ||(s_holiday_data.tab[0].day_BCD8 >0x31))    break;    // È
+             -ÕÊý¾ÝÅÐ¶Ï //
+                      if((s_holiday_data.tab[i].month_BCD8==gs_CurDateTime.Month) &&(s_holiday_data.tab[i].day_BCD8==gs_
+             -CurDateTime.Day)) 
+                      {
+                          result =   s_holiday_data.tab[i].dayTable_No;
+                          if((result==0)||(result>MAX_INDEX_DAY_TAB))
+                          {
+                              result = 0xff;   
+                          }
+                          break;
+                      }
+                  }
+                  
+                  return (result) ; 
+                  
+              }
+              #endif
+ 626          
+ 627          /*****************************************************************************
+ 628          ** Function name    :api_get_seasonTab_No
+ 629          **
+ 630          ** Description         :¸ù¾Ýµ±Ç°ÔÂÈÕÊý¾ÝºÍ¼¾½Ú±íÊý¾Ý»ñÈ¡µ±Ç°ÖÜ±íºÅ
+ 631          **
+ 632          ** Parameters         :NONE          
+ 633          **
+ 634          ** Returned value   :INT8U result;µ±Ç°ÖÜ±íºÅ£¬=0XFFÊ±´ú±í»ñÈ¡Ê§°Ü
+ 635          **
+ 636          **----------------------------------------------------------------------------
+ 637          ** V01.01  MJ  2016-04-23
+ 638          ******************************************************************************/
+ 639          INT8U api_get_seasonTab_No(void)
+ 640          {
+ 641   1        SEASON_TABLE  s_season_data;
+ 642   1        INT8U i;
+ 643   1        INT8U result;
+ 644   1        INT8U table_ok_len;
+ 645   1      
+ 646   1      
+ 647   1          //¶ÁÈ¡¼¾½Ú±íÊý¾Ý  //
+ 648   1          mem_read( (char*)&s_season_data.tab[0].month_BCD8,ADR_BLOCK82_SEASON_TAB_E2P,LEN_SEASON_TABLE ,MEM_E2P
+             -1);
+ 649   1      
+ 650   1          //¼ÆËãÓÐÐ§¼¾½Ú±í³¤¶È  //
+ 651   1          table_ok_len=0;
+ 652   1          for(i=0;i<MAX_YEAR_TAB_CHG;i++)
+ 653   1          {
+ 654   2              if((s_season_data.tab[i].month_BCD8==0) ||(s_season_data.tab[i].month_BCD8 >0x12))    break;    //
+             - ÔÂÊý¾ÝÅÐ¶Ï //
+ 655   2              if((s_season_data.tab[i].day_BCD8==0) ||(s_season_data.tab[i].day_BCD8 >0x31))    break;    // ÈÕÊ
+             -ý¾ÝÅÐ¶Ï //
+ 656   2              if((s_season_data.tab[i].weekTable_No==0) ||(s_season_data.tab[i].weekTable_No >MAX_INDEX_WEEKDAY_
+             -TAB))    break;    // ÈÕÊý¾ÝÅÐ¶Ï //
+ 657   2              table_ok_len++;
+ 658   2          }
+ 659   1          
+ 660   1          if((table_ok_len==0) ||(table_ok_len>MAX_YEAR_TAB_CHG))
+ 661   1          {
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 12  
+
+ 662   2              return (0XFF) ;   // ´ú±í¶ÁÈ¡Ê§°Ü //
+ 663   2          }
+ 664   1      
+ 665   1          //»ñÈ¡¼¾½Ú±íÄÚµÄÖÜ±íºÅ  //
+ 666   1          result =0XFF;
+ 667   1          gs_current_triff_var.seasonTab_No =0;
+ 668   1          for(i=0;i<table_ok_len;i++)
+ 669   1          {
+ 670   2              if((s_season_data.tab[i].month_BCD8==0) ||(s_season_data.tab[i].month_BCD8 >0x12))    break;    //
+             - ÔÂÊý¾ÝÅÐ¶Ï //
+ 671   2              if((s_season_data.tab[i].day_BCD8==0) ||(s_season_data.tab[i].day_BCD8 >0x31))    break;    // ÈÕÊ
+             -ý¾ÝÅÐ¶Ï //
+ 672   2      
+ 673   2      
+ 674   2              if(s_season_data.tab[i].month_BCD8 < gs_CurDateTime.Month) 
+ 675   2              {
+ 676   3                  gs_current_triff_var.seasonTab_No++;
+ 677   3                  result=s_season_data.tab[i].weekTable_No;
+ 678   3              }
+ 679   2              else if(s_season_data.tab[i].month_BCD8== gs_CurDateTime.Month)
+ 680   2              {
+ 681   3                  if(s_season_data.tab[i].day_BCD8<=gs_CurDateTime.Day)
+ 682   3                  {
+ 683   4                      gs_current_triff_var.seasonTab_No++;
+ 684   4                      result =s_season_data.tab[i].weekTable_No;               
+ 685   4                  }
+ 686   3                  else
+ 687   3                  {
+ 688   4                      if(i==0)
+ 689   4                      {
+ 690   5                          gs_current_triff_var.seasonTab_No =table_ok_len;
+ 691   5                          result =s_season_data.tab[table_ok_len-1].weekTable_No;  
+ 692   5                          break;
+ 693   5                      }
+ 694   4                      else
+ 695   4                      {
+ 696   5                          break;
+ 697   5                      }
+ 698   4                  }   
+ 699   3              }
+ 700   2              else
+ 701   2              {
+ 702   3                      if(i==0)
+ 703   3                      {
+ 704   4                          gs_current_triff_var.seasonTab_No =table_ok_len;
+ 705   4                          result =s_season_data.tab[table_ok_len-1].weekTable_No;  
+ 706   4                          break;
+ 707   4                      }
+ 708   3                      else
+ 709   3                      {
+ 710   4                          break;
+ 711   4                      }
+ 712   3              }
+ 713   2          }
+ 714   1          
+ 715   1          gs_current_triff_var.seasonTab_No ++; //seasonTab_No´Ó1ÆðÊ¼£¬ËùÒÔÊý¾Ý+1 //
+ 716   1          return (result) ; 
+ 717   1          
+ 718   1      }
+ 719          
+ 720          
+ 721          
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 13  
+
+ 722          /*****************************************************************************
+ 723          ** Function name    :api_get_dayTab_No
+ 724          **
+ 725          ** Description         :¸ù¾Ýµ±Ç°RTCÖÜÊý¾ÝºÍÖÜ±íºÅ»ñÈ¡µ±Ç°ÈÕÊ±¶Î±íºÅ
+ 726          **
+ 727          ** Parameters         :INT8U weekTab_no : ÖÜ±íºÅ    
+ 728          **
+ 729          ** Returned value   :INT8U result;µ±Ç°ÈÕÊ±¶Î±íºÅ£¬=0XFFÊ±´ú±í»ñÈ¡Ê§°Ü
+ 730          **
+ 731          **----------------------------------------------------------------------------
+ 732          ** V01.01  MJ  2016-04-23
+ 733          ******************************************************************************/
+ 734          INT8U api_get_dayTab_No(INT8U weekTab_no)
+ 735          {
+ 736   1          WEEK_TABLE_UNIT  s_weekTab_data; 
+ 737   1          INT8U result;
+ 738   1      
+ 739   1          //Êý¾ÝÅÐ¶Ï´¦Àí  //
+ 740   1          if((weekTab_no==0) ||(weekTab_no>MAX_INDEX_WEEKDAY_TAB))
+ 741   1          {
+ 742   2              gs_current_triff_var.weekTab_No =1;
+ 743   2               weekTab_no = 1;    
+ 744   2          }
+ 745   1          //¶ÁÈ¡ÖÜ±íÊý¾Ý  //
+ 746   1          mem_read( (char*)&s_weekTab_data.Sun_Tab,ADR_BLOCK83_WEEK_TAB_E2P+((weekTab_no-1)*LEN_WEEK_TABLE_ONE),
+             -LEN_WEEK_TABLE_ONE ,MEM_E2P1);
+ 747   1          
+ 748   1      
+ 749   1          //»ñÈ¡¶ÔÓ¦ÖÜ±íÖÐµÄÈÕÊ±¶Î±íºÅ  //
+ 750   1          switch(gs_CurDateTime.Week)
+ 751   1          {
+ 752   2              case WEEK_Sunday:
+ 753   2                  result= s_weekTab_data.Sun_Tab;    
+ 754   2                  break;
+ 755   2              case WEEK_Monday:
+ 756   2                  result= s_weekTab_data.Mon_Tab;    
+ 757   2                  break;
+ 758   2              case WEEK_Tuesday:
+ 759   2                  result= s_weekTab_data.Tues_Tab;    
+ 760   2                  break;
+ 761   2              case WEEK_Wednesday:
+ 762   2                  result= s_weekTab_data.Wed_Tab;    
+ 763   2                  break;
+ 764   2              case WEEK_Thursday:
+ 765   2                  result= s_weekTab_data.Thurs_Tab;    
+ 766   2                  break;
+ 767   2              case WEEK_Friday:
+ 768   2                  result= s_weekTab_data.Fri_Tab;    
+ 769   2                  break;
+ 770   2              case WEEK_Saturday:
+ 771   2                  result= s_weekTab_data.Sat_Tab;    
+ 772   2                  break;
+ 773   2              default:
+ 774   2                  sys_err();          //RTC ´íÎó£¬ÏµÍ³¸´Î»´¦Àí //
+ 775   2                  break;
+ 776   2          }
+ 777   1      
+ 778   1          if((result==0)||(result>MAX_INDEX_DAY_TAB))
+ 779   1          {
+ 780   2              result=0xff;       
+ 781   2          }
+ 782   1         
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 14  
+
+ 783   1          return (result) ; 
+ 784   1          
+ 785   1      }
+ 786          
+ 787          
+ 788          /*****************************************************************************
+ 789          ** Function name    :api_get_dayTab_No
+ 790          **
+ 791          ** Description         :¸ù¾Ýµ±Ç°RTCÖÜÊý¾ÝºÍÖÜ±íºÅ»ñÈ¡µ±Ç°ÈÕÊ±¶Î±íºÅ
+ 792          **
+ 793          ** Parameters         :INT8U weekTab_no : ÖÜ±íºÅ    
+ 794          **
+ 795          ** Returned value   :INT8U result;µ±Ç°ÈÕÊ±¶Î±íºÅ£¬=0XFFÊ±´ú±í»ñÈ¡Ê§°Ü
+ 796          **
+ 797          **----------------------------------------------------------------------------
+ 798          ** V01.01  MJ  2016-04-23
+ 799          ******************************************************************************/
+ 800          INT8U api_get_triff_No(INT8U dayTab_no)
+ 801          {
+ 802   1       DAY_TABLE s_dayTab_data;
+ 803   1       INT8U i;
+ 804   1       INT8U table_ok_len;
+ 805   1       INT8U result;
+ 806   1        
+ 807   1          
+ 808   1           //Êý¾ÝÅÐ¶Ï´¦Àí  //
+ 809   1          if((dayTab_no==0)||(dayTab_no>MAX_INDEX_DAY_TAB))
+ 810   1          {
+ 811   2              gs_current_triff_var.dayTab_No =1;
+ 812   2              dayTab_no = 1;          
+ 813   2          }
+ 814   1      
+ 815   1          //¶ÁÈ¡µ±Ç°Ñ¡ÓÃÈÕÊ±¶Î±íÊý¾Ý  //
+ 816   1          mem_read( (char*)&s_dayTab_data.tab[0].hour_BCD8,ADR_BLOCK84_DAY_TAB_E2P+((dayTab_no-1)*LEN_DAY_TABLE_
+             -ONE),LEN_DAY_TABLE_ONE ,MEM_E2P1);
+ 817   1      
+ 818   1          //¼ÆËãÓÐÐ§ÈÕÊ±¶Î±í³¤¶È  //
+ 819   1          table_ok_len=0;
+ 820   1          for(i=0;i<MAX_DAY_TRIFF_CHG;i++)
+ 821   1          {
+ 822   2              if(Lib_BCDCHK(&s_dayTab_data.tab[i].hour_BCD8,2) ==FALSE )  break;    // Ê±ÖÓÊý¾Ý·Ç·¨ //
+ 823   2              if(s_dayTab_data.tab[i].hour_BCD8>0X23 )    break;    // Ð¡Ê±Êý¾ÝÅÐ¶Ï //
+ 824   2              if(s_dayTab_data.tab[i].minute_BCD8>0X59 )    break;    // ·ÖÖÓÊý¾ÝÅÐ¶Ï //
+ 825   2              if((s_dayTab_data.tab[i].triff_No==0) ||(s_dayTab_data.tab[i].triff_No >TARIFF_MAX_NUM))    break;
+             -    // ·ÑÂÊÊý¾ÝÅÐ¶Ï //
+ 826   2              table_ok_len++;
+ 827   2          }
+ 828   1          
+ 829   1          if((table_ok_len==0) ||(table_ok_len>MAX_DAY_TRIFF_CHG))
+ 830   1          {
+ 831   2              return (0XFF) ;   // ´ú±í¶ÁÈ¡Ê§°Ü //
+ 832   2          }
+ 833   1      
+ 834   1      
+ 835   1          //»ñÈ¡¼¾½Ú±íÄÚµÄÖÜ±íºÅ  //
+ 836   1          result =0XFF;
+ 837   1          gs_current_triff_var.seasonTab_No =0;
+ 838   1          for(i=0;i<table_ok_len;i++)
+ 839   1          {
+ 840   2              if(Lib_BCDCHK(&s_dayTab_data.tab[i].hour_BCD8,2) ==FALSE )  break;    // Ê±ÖÓÊý¾Ý·Ç·¨ //
+ 841   2              if(s_dayTab_data.tab[i].hour_BCD8>0X23 )    break;    // Ð¡Ê±Êý¾ÝÅÐ¶Ï //
+ 842   2              if(s_dayTab_data.tab[i].minute_BCD8>0X59 )    break;    // ·ÖÖÓÊý¾ÝÅÐ¶Ï //
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 15  
+
+ 843   2      
+ 844   2      
+ 845   2              if(s_dayTab_data.tab[i].hour_BCD8 < gs_CurDateTime.Hour) 
+ 846   2              {
+ 847   3                  result=s_dayTab_data.tab[i].triff_No;
+ 848   3              }
+ 849   2              else if(s_dayTab_data.tab[i].hour_BCD8== gs_CurDateTime.Hour)
+ 850   2              {
+ 851   3                  if(s_dayTab_data.tab[i].minute_BCD8<=gs_CurDateTime.Minute)
+ 852   3                  {
+ 853   4                      result=s_dayTab_data.tab[i].triff_No;              
+ 854   4                  }
+ 855   3                  else
+ 856   3                  {
+ 857   4                      if(i==0)
+ 858   4                      {
+ 859   5                          result =s_dayTab_data.tab[table_ok_len-1].triff_No;  
+ 860   5                          break;
+ 861   5                      }
+ 862   4                      else
+ 863   4                      {
+ 864   5                          break;
+ 865   5                      }
+ 866   4                  }   
+ 867   3              }
+ 868   2              else
+ 869   2              {
+ 870   3                      if(i==0)
+ 871   3                      {
+ 872   4                         result =s_dayTab_data.tab[table_ok_len-1].triff_No;  
+ 873   4                          break;
+ 874   4                      }
+ 875   3                      else
+ 876   3                      {
+ 877   4                          break;
+ 878   4                      }
+ 879   3              }
+ 880   2          }
+ 881   1          
+ 882   1          return (result) ; 
+ 883   1      
+ 884   1      }
+ 885          
+ 886          
+ 887          /*****************************************************************************
+ 888          ** Function name    :api_update_triffNo_pre_minute
+ 889          **
+ 890          ** Description         :¸üÐÂµ±Ç°·ÑÂÊº¯Êý
+ 891          **
+ 892          ** Parameters         :NONE   
+ 893          **
+ 894          ** Returned value   :NONE   
+ 895          **
+ 896          **----------------------------------------------------------------------------
+ 897          ** V01.01  MJ  2016-04-23
+ 898          ******************************************************************************/
+ 899          void api_update_triffNo_pre_minute(void)
+ 900          {
+ 901   1      INT8U u8_temp;
+ 902   1      
+ 903   1          // ÏÈÅÐ¶Ï½Ú¼ÙÈÕ  //
+ 904   1      #if (MAX_NUM_HOLIDAY_TAB >0)
+C51 COMPILER V9.01   API_TRIFF                                                             02/14/2019 10:20:43 PAGE 16  
+
+                  u8_temp = api_get_holidayTab_No();
+              #else
+ 907   1          u8_temp=0xff;
+ 908   1      #endif
+ 909   1          if(u8_temp!=0xff)
+ 910   1          {
+ 911   2              //µ±Ç°ÈÕÆÚÎª½Ú¼ÙÈÕ  //
+ 912   2              gs_current_triff_var.dayTab_No = u8_temp;
+ 913   2              
+ 914   2          }
+ 915   1          else
+ 916   1          {
+ 917   2              // »ñÈ¡¼¾½Ú±íÎ»ÖÃ //  
+ 918   2              u8_temp = api_get_seasonTab_No();
+ 919   2              if(u8_temp==0xFF)
+ 920   2              {
+ 921   3                  gs_current_triff_var.seasonTab_No =1;
+ 922   3                  gs_current_triff_var.weekTab_No = 1;
+ 923   3              }
+ 924   2              else
+ 925   2              {
+ 926   3                  gs_current_triff_var.weekTab_No = u8_temp;   
+ 927   3              }
+ 928   2              gs_current_triff_var.dayTab_No = api_get_dayTab_No(gs_current_triff_var.weekTab_No);
+ 929   2              
+ 930   2          }
+ 931   1      
+ 932   1          u8_temp = api_get_triff_No(gs_current_triff_var.dayTab_No);
+ 933   1          if((u8_temp ==0) ||(u8_temp >TARIFF_MAX_NUM))
+ 934   1          {
+ 935   2              u8_temp = DEF_TRIFF_no;
+ 936   2          }
+ 937   1      
+ 938   1          gs_current_triff_var.triff_No = u8_temp;
+ 939   1       
+ 940   1      }
+ 941          
+ 942          
+ 943          
+ 944          
+ 945          #endif
+ 946          /***************************************************************
+ 947          *    END
+ 948          ****************************************************************/
+ 949          
+ 950          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    973    ----
+   CONSTANT SIZE    =    154    ----
+   XDATA SIZE       =      4      60
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

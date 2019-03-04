@@ -1,0 +1,213 @@
+C51 COMPILER V9.01   PROC_SYSTEM_CHECK                                                     02/14/2019 10:20:30 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE PROC_SYSTEM_CHECK
+OBJECT MODULE PLACED IN .\Proc_System_Check.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S0_System\Proc_System_Check.c LARGE BROWSE INCDIR(..\C_Source\S
+                    -0_System;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiPro
+                    -tocol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_HardD
+                    -rv\E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\Proc_System_Check.lst) OBJECT(.\Proc_System_Check.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : Proc_System_Check.c
+   6          **Author                : maji
+   7          **date                  : 2016-04-20
+   8          **description   : 系统主循环自检处理相关C代码
+   9          **note                  : V9811A ，MERTER FOR DL03C
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2016-04-26   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          
+  18          #include <MyIncludes_H.h>
+  19          
+  20          
+  21          SYS_CKECK_VAR gs_sys_check_var;
+  22          
+  23          /****************************************************************
+  24          Function:               void SysInitialize(void)  
+  25          Description:            系统上电/复位初始化函数 
+  26          Input:                  no
+  27          Parameters:             no
+  28          Returns:                        no                        
+  29          Others:         
+  30          ****************************************************************/
+  31          void Proc_Check_PROKEY_Pre_sec(void)
+  32          {
+  33   1          if(Judge_ERR_ADJ_key()==TRUE)
+  34   1          {
+  35   2              if(gs_sys_check_var.tmr_proKey<3)
+  36   2              {
+  37   3                  gs_sys_check_var.tmr_proKey++;
+  38   3                  if(gs_sys_check_var.tmr_proKey>=3)
+  39   3                  {
+  40   4                     if((gs_sys_globaL_var.meter_factory_status ==METER_FACTORY_MARK))
+  41   4                      {
+  42   5                          if(gs_sys_check_var.flg_proKey !=TRUE)
+  43   5                          {
+  44   6                                                      //屏蔽硬件短接校准的操作，仅保留短接清零功能 yang 2017-12-28//
+  45   6                                                      //Hardware_AdjustDiv_Sub();
+  46   6                                                      api_clr_current_energy_data(); // 电量清零//
+  47   6                                                      CLRWDT();
+  48   6                                                      api_clr_current_MD_data(); //当前需量清零
+  49   6                                                      CLRWDT();
+  50   6                                                      api_clr_freeze_energy();//清除冻结数据
+*** WARNING C206 IN LINE 50 OF ..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_CHECK.C: 'api_clr_freeze_energy': missing function-prot
+             -otype
+C51 COMPILER V9.01   PROC_SYSTEM_CHECK                                                     02/14/2019 10:20:30 PAGE 2   
+
+  51   6                                                      CLRWDT();
+  52   6                                                      #if (BILL_MAX_NUM>0)
+  53   6                                                      api_clr_bill_data();//结算数据清零
+  54   6                                                      #endif
+  55   6                                                      LoadProRst();
+  56   6                                                      CLRWDT();
+  57   6                                                      api_clr_even_by_comm(); 
+  58   6                                                      CLRWDT();
+  59   6                                                      api_chg_LCDDisplay_adj_item(DIS_DATA_CLR);       // 液晶显示 //
+  60   6                                                      gs_sys_check_var.flg_proKey =TRUE ;       
+  61   6                          }
+  62   5                        }
+  63   4                  }       
+  64   3              }
+  65   2          } 
+  66   1          else
+  67   1          {
+  68   2              if(gs_sys_check_var.tmr_proKey>0)  gs_sys_check_var.tmr_proKey--;
+  69   2              if(gs_sys_check_var.tmr_proKey == 0)  gs_sys_check_var.flg_proKey =FALSE;
+  70   2          }      
+  71   1      }
+  72          
+  73          void Proc_Check_COVER_Pre_sec(void)
+  74          {
+  75   1          if(Judge_ERR_COVER_key()==TRUE)
+  76   1          {
+  77   2              if(gs_sys_check_var.tmr_closeCover<3)
+  78   2              {
+  79   3                  gs_sys_check_var.tmr_closeCover++;
+  80   3                  if(gs_sys_check_var.tmr_closeCover>=3)
+  81   3                  {
+  82   4      //               if((gs_sys_globaL_var.meter_factory_status !=METER_FACTORY_MARK))
+  83   4                      {
+  84   5                         if(gs_sys_check_var.flg_openCover !=TRUE)
+  85   5                         { 
+  86   6                                                                                       api_deal_even_class_recode(ID_CLASS_II_COVER,START);
+  87   6                                                                                 gs_sys_check_var.flg_openCover =TRUE ;   
+  88   6                                                                              
+  89   6                         }
+  90   5                      }       
+  91   4                  }
+  92   3              } 
+  93   2          } 
+  94   1                      else
+  95   1          {
+  96   2              if(gs_sys_check_var.tmr_closeCover>0)  gs_sys_check_var.tmr_proKey--;
+  97   2              if(gs_sys_check_var.tmr_closeCover == 0) 
+  98   2                                      { 
+  99   3                                              if(gs_sys_check_var.flg_openCover ==TRUE)
+ 100   3                { 
+ 101   4                                                      api_deal_even_class_recode(ID_CLASS_II_COVER,END );
+ 102   4                                                      gs_sys_check_var.flg_openCover =FALSE ;   
+ 103   4                                              }       
+ 104   3                                              
+ 105   3              }      
+ 106   2          }
+ 107   1      }
+ 108          
+ 109          /*****************************************************************************
+ 110          ** Function name    :Proc_init_tou_var
+ 111          **
+ 112          ** Description         :获取当前RTC 时间全局变量数据  
+C51 COMPILER V9.01   PROC_SYSTEM_CHECK                                                     02/14/2019 10:20:30 PAGE 3   
+
+ 113          **
+ 114          ** Parameters         :NONE          
+ 115          **
+ 116          ** Returned value   :NONE
+ 117          **
+ 118          **----------------------------------------------------------------------------
+ 119          ** V01.01  MJ  2016-04-23
+ 120          ******************************************************************************/
+ 121          void Proc_init_Check_var(void)
+ 122          {
+ 123   1          Lib_Set_String((uint8*)&gs_sys_check_var,0,sizeof(SYS_CKECK_VAR));      
+ 124   1      }
+ 125          
+ 126          
+ 127          /****************************************************************
+ 128          Function:               void SysInitialize(void)  
+ 129          Description:            系统上电/复位初始化函数 
+ 130          Input:                  no
+ 131          Parameters:             no
+ 132          Returns:                        no                        
+ 133          Others:         
+ 134          ****************************************************************/
+ 135          void Proc_Check_System_Pre_Cycle(void)
+ 136          {
+ 137   1      
+ 138   1         ;                            
+ 139   1                  
+ 140   1      }
+ 141          
+ 142          
+ 143          
+ 144          /*******************************************************************************************
+ 145          ** 函数名称: CheckPOWERUP
+ 146          ** 函数描述: 检测VDCIN，确定当前是否由外部电源供电
+ 147          ** 输入参数: 
+ 148          ** 输出参数: FALSE-掉电；TRUE -有市电;
+ 149          ** 说明    : 
+ 150          *******************************************************************************************/
+ 151          uint8 CheckPOWERUP(void)
+ 152          {
+ 153   1      uint8 i;
+ 154   1      
+ 155   1          for(i = 0; i < 30; i++)        
+ 156   1          {
+ 157   2               #if(MCU_TYPE == MCU_G80F92X)   // 中颖芯片 //
+                         if((LPDCON & Bin(01000000)) == Bin(01000000) )     //bit6 :1>1.2V 
+                       #endif
+ 160   2          
+ 161   2               #if(MCU_TYPE == MCU_V98XX)   // 万工芯片 //
+ 162   2                 // if((Systate&0x03)==0x01)
+ 163   2                   if( (Systate&BIT0))                      // 判断是否电压低
+ 164   2               #endif
+ 165   2      
+ 166   2                    break;
+ 167   2          }   
+ 168   1              if(i < 25)
+ 169   1                 return TRUE;          //有电 
+ 170   1              else
+ 171   1                return FALSE;          //没电
+ 172   1      
+ 173   1      } 
+ 174          
+C51 COMPILER V9.01   PROC_SYSTEM_CHECK                                                     02/14/2019 10:20:30 PAGE 4   
+
+ 175          
+ 176          /***************************************************************
+ 177          *    END
+ 178          ****************************************************************/
+ 179          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    305    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      5    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

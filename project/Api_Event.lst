@@ -1,0 +1,799 @@
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE API_EVENT
+OBJECT MODULE PLACED IN .\Api_Event.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S3_ApiPlat\Api_Event.c LARGE BROWSE INCDIR(..\C_Source\S0_Syste
+                    -m;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiProtocol;.
+                    -.\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_HardDrv\E2P_
+                    -24CXXX) DEBUG OBJECTEXTEND PRINT(.\Api_Event.lst) OBJECT(.\Api_Event.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : Api_Event.C
+   6          **Author                : maji
+   7          **date                  : 2016-04-20 
+   8          **description   : ÊÂ¼þ¼ÇÂ¼´¦ÀíÓ¦ÓÃ²ãÏà¹Øº¯Êý³ÌÐòCÎÄ¼þ
+   9          **note                  : MERTER FOR DL06A
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2016-04-20   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          
+  18          
+  19          #include <MyIncludes_H.h>
+  20          
+  21          const  EVEN_CLASSII_VAR  code   gs_even_var =
+  22          {
+  23          3,    //  even_cnt[0];
+  24          3,
+  25          3,
+  26          3,     // even_cnt[3];
+  27          0,     //  doing_flg[0];
+  28          0, 
+  29          0,   
+  30          0,   //  doing_flg[3]
+  31          0,   // even_data[0]
+  32          0,
+  33          0,
+  34          0,  
+  35          //0,   
+  36          //0,
+  37          //0,
+  38          //0,
+  39          //0,   
+  40          ////0,
+  41          ////0,
+  42          ////0,
+  43          ////0,   
+  44          ////0,
+  45          ////0,
+  46          ////0,// even_data[3]
+  47          
+  48          //0,    
+  49          
+  50          0, // even_csck
+  51          };
+  52          EVEN_FUN_VAR   gs_even_fun_var;
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 2   
+
+  53          
+  54          
+  55          /*******************************************************************************
+  56          * È«¾Ö±äÁ¿¶¨ÒåÇø
+  57          *******************************************************************************/
+  58          
+  59          
+  60          /*******************************************************************************
+  61          * ³£Á¿±íÇø
+  62          *******************************************************************************/
+  63          //  ³£Á¿×Ö·û±í¶¨Òå x//
+  64          const CLASS_I_TAB  code even_class_I_tab[] = {
+  65          
+  66          // Ò»ÀàÊý¾Ý//
+  67              ID_CLASS_I_PROG,           ADR_BLOCK150_EVENI_PROG_E2P,
+  68              ID_CLASS_I_resetMD,        ADR_BLOCK151_EVENI_resetMD_E2P,
+  69              ID_CLASS_I_setRtc,         ADR_BLOCK152_EVENI_setRtc_E2P,
+  70              ID_CLASS_I_MMERR,          ADR_BLOCK153_EVENI_MMERR_E2P,
+  71              ID_CLASS_I_COMM,           ADR_BLOCK154_EVENI_COMM_E2P,
+  72              ID_CLASS_I_setTriff,       ADR_BLOCK155_EVENI_setTriff_E2P, // Î´¿ª·Å//
+  73              ID_CLASS_I_EERR,           ADR_BLOCK156_EVENII_EERR_E2P,
+  74          
+  75          // 2ÀàÊý¾Ý//
+  76              ID_CLASS_II_PWN,           ADR_BLOCK161_EVENII_PWN_E2P,    
+  77              ID_CLASS_II_lowbattery,   ADR_BLOCK162_EVENII_lowbattery_E2P,
+  78                    ID_CLASS_II_COVER,           ADR_BLOCK163_EVENII_COVER_E2P,
+  79          //    ID_CLASS_II_NOL1,           ADR_BLOCK163_EVENII_NOL1_E2P,
+  80          //    ID_CLASS_II_NOL2,           ADR_BLOCK164_EVENII_NOL2_E2P,
+  81              ID_CLASS_II_L1reverse,    ADR_BLOCK164_EVENII_L1reverse_E2P,
+  82          //    ID_CLASS_II_L2reverse,    ADR_BLOCK166_EVENII_L2reverse_E2P,
+  83          
+  84          };
+  85          
+  86          
+  87          
+  88          
+  89          /*****************************************************************************
+  90          ** Function name    :api_measure_deal_pre_second
+  91          **
+  92          ** Description         :ÉÏµçÊÂ¼þ¼ÇÂ¼´¦Àí ¿¿E2P ¼ÇÂ¼×´Ì¬// 
+  93          
+  94          **
+  95          ** Parameters         :NONE   adr ¾íÒ³µØÖ· 
+  96          **
+  97          ** Returned value   :
+  98          **----------------------------------------------------------------------------
+  99          ** V01.01  MJ  2016-04-23
+ 100          ******************************************************************************/
+ 101          void api_even_int(void )
+ 102          {
+ 103   1      
+ 104   1          nop();
+ 105   1      }
+ 106          
+ 107          
+ 108          
+ 109          
+ 110          void api_pwl_cover_even_class_recode(uint8 even_id, uint8 type )
+ 111          {
+ 112   1         
+ 113   1              
+ 114   1        CLASS_II_UNIT  data_class2;
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 3   
+
+ 115   1        INT8U buftmp[22];
+ 116   1        ST_U32_U08 Time;
+ 117   1        uint8 i ;
+ 118   1              
+ 119   1              
+ 120   1              if(type == START)  
+ 121   1        {   
+ 122   2                       if((0x5a != gs_even_fun_var.even_fun_doingflg[even_id])&& (gs_even_fun_var.into_cnt[even_id]>2)) // Î´¿
+             -ªÊ¼
+ 123   2                      {
+ 124   3                                      gs_even_fun_var.even_fun_doingflg[even_id] = 0x5a;
+ 125   3                                mem_db_write(ADR_CLASS2FLG_START_E2P+ even_id* LEN_CLASSII_flg,&gs_even_fun_var.even_fun_doingflg[ev
+             -en_id],LEN_CLASSII_flg,MEM_E2P1 );
+ 126   3                      }
+ 127   2                      else 
+ 128   2                      {
+ 129   3                              gs_even_fun_var.esc_cnt[even_id] =0;            
+ 130   3                              if((gs_even_fun_var.into_cnt[even_id]<3)) gs_even_fun_var.into_cnt[even_id] += 1; //    if((0x5a ==gs_even
+             -_fun_var.even_fun_doingflg[even_id])&& 
+ 131   3                              return;
+ 132   3                      }
+ 133   2                      mem_read(&data_class2.u16_num.B08[0], ADR_BLOCK163_EVENII_COVER_E2P, LEN_CLASS_II_UNIT, MEM_E2P1);  
+ 134   2                      //ÒÆ¶¯Êý¾Ý //
+ 135   2                      //´ÎÊý³¬³ö²»ÔÙ¸üÐÂ//
+ 136   2                      if(data_class2.u16_num.u16<65535)  data_class2.u16_num.u16++;
+ 137   2                      for(i=9;i>0;i--)//  ¿ªÊ¼Ê±¼ä
+ 138   2                      {
+ 139   3                              Lib_Copy_Str_TwoArry(&data_class2.StartTm[i][0], &data_class2.StartTm[i-1][0], 6);//¿ªÊ¼Ê±¼ä¹ö´æ
+ 140   3                      }
+ 141   2                      data_class2.StartTm[0][0] = gs_CurDateTime.Year;
+ 142   2                      data_class2.StartTm[0][1] = gs_CurDateTime.Month;
+ 143   2                      data_class2.StartTm[0][2] = gs_CurDateTime.Day;
+ 144   2                      data_class2.StartTm[0][3] = gs_CurDateTime.Hour;
+ 145   2                      data_class2.StartTm[0][4] = gs_CurDateTime.Minute;
+ 146   2                      data_class2.StartTm[0][5] = gs_CurDateTime.Second;
+ 147   2          //½áÊøÊ±¼ä¹ö´æ
+ 148   2          for(i=9;i>0;i--)
+ 149   2                      {
+ 150   3                              Lib_Copy_Str_TwoArry(&data_class2.EndTm[i][0], &data_class2.EndTm[i-1][0], 6);//¿ªÊ¼Ê±¼ä¹ö´æ
+ 151   3                      }
+ 152   2                      CLRWDT();     
+ 153   2          //½áÊøÊ±¼äÇåÁã//
+ 154   2              Lib_Set_String(&data_class2.EndTm[0][0],0x00, 6 );// ½áÊøÊ±¼äÇåÁã       
+ 155   2          //»ñÈ¡Ð£ÑéºÍ //
+ 156   2                      data_class2.u16_csck = Lib_get_csck_int16u_num(&data_class2.u16_num.B08[0],LEN_CLASS_II_UNIT-2,CHECKWORD
+             -);
+ 157   2          //Êý¾Ý±£´æ //
+ 158   2                      mem_write(ADR_BLOCK163_EVENII_COVER_E2P, &data_class2.u16_num.B08[0], LEN_CLASS_II_UNIT, MEM_E2P1);
+ 159   2        }
+ 160   1              else 
+ 161   1              {
+ 162   2                        
+ 163   2                      if( 0x5a !=gs_even_fun_var.even_fun_doingflg[even_id])  // Î´¿ªÊ¼
+ 164   2                      {
+ 165   3                        return;  //ÒÑ¾­½áÊø
+ 166   3                      } 
+ 167   2          if(gs_even_fun_var.esc_cnt[even_id] < 3) 
+ 168   2                      {
+ 169   3                              gs_even_fun_var.into_cnt[even_id] =0;                   
+ 170   3                              gs_even_fun_var.esc_cnt[even_id]++;             // Ð´½áÊø±êÊ¶//
+ 171   3      
+ 172   3                      }       
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 4   
+
+ 173   2                      else 
+ 174   2                      {
+ 175   3                              
+ 176   3      
+ 177   3                              gs_even_fun_var.even_fun_doingflg[even_id] = 0;
+ 178   3                        mem_db_write(ADR_CLASS2FLG_START_E2P+ even_id* LEN_CLASSII_flg,&gs_even_fun_var.even_fun_doingflg[even
+             -_id],LEN_CLASSII_flg,MEM_E2P1 );
+ 179   3                        CLRWDT();     
+ 180   3                        mem_read(&data_class2.u16_num.B08[0], ADR_BLOCK163_EVENII_COVER_E2P, LEN_CLASS_II_UNIT, MEM_E2P1);  
+ 181   3                        //ÒÆ¶¯Êý¾Ý //
+ 182   3                        data_class2.EndTm[0][0] = gs_CurDateTime.Year;
+ 183   3                        data_class2.EndTm[0][1] = gs_CurDateTime.Month;
+ 184   3                        data_class2.EndTm[0][2] = gs_CurDateTime.Day;
+ 185   3                        data_class2.EndTm[0][3] = gs_CurDateTime.Hour;
+ 186   3                        data_class2.EndTm[0][4] = gs_CurDateTime.Minute;
+ 187   3                        data_class2.EndTm[0][5] = gs_CurDateTime.Second;
+ 188   3                  //¿ªÊ¼Ê±¼ä×ªÒÆ
+ 189   3                        buftmp[10] = data_class2.StartTm[0][5];  // Ãë
+ 190   3                        buftmp[11] = data_class2.StartTm[0][4];
+ 191   3                        buftmp[12] = data_class2.StartTm[0][3];
+ 192   3                        buftmp[13] = data_class2.StartTm[0][2];
+ 193   3                        buftmp[14] = data_class2.StartTm[0][1];
+ 194   3                        buftmp[15] = data_class2.StartTm[0][0]; //Äê
+ 195   3            //½áÊøÊ±¼ä×ªÒÆ
+ 196   3                        buftmp[16] = data_class2.EndTm[0][5];// Ãë
+ 197   3                        buftmp[17] = data_class2.EndTm[0][4];
+ 198   3                        buftmp[18] = data_class2.EndTm[0][3];
+ 199   3                        buftmp[19] = data_class2.EndTm[0][2];
+ 200   3                        buftmp[20] = data_class2.EndTm[0][1];
+ 201   3                        buftmp[21] = data_class2.EndTm[0][0];// Äê
+ 202   3                        //¼ÆËãÃëÊý//
+ 203   3                        GetTotalTime(&buftmp[0]);
+ 204   3                        //ÃëÊýÀÛ¼Ó//
+ 205   3                        Lib_Copy_Str_TwoArry(&Time.B08[0], &buftmp[4], 4);//¿ªÊ¼Ê±¼ä¹ö´æ
+ 206   3                  //³ÖÐøÊ±¼äÀÛ¼Ó£¬³¬³ö²»ÇåÁã//
+ 207   3                        if(0xFFFFFFFF-data_class2.accumTime.u32>Time.u32)  data_class2.accumTime.u32 += Time.u32;
+ 208   3                        //»ñÈ¡Ð£ÑéºÍ //
+ 209   3                        data_class2.u16_csck = Lib_get_csck_int16u_num(&data_class2.u16_num.B08[0],LEN_CLASS_II_UNIT-2,CHECKWO
+             -RD);
+ 210   3            CLRWDT();     
+ 211   3            //Êý¾Ý±£´æ //
+ 212   3                        mem_write(ADR_BLOCK163_EVENII_COVER_E2P, &data_class2.u16_num.B08[0], LEN_CLASS_II_UNIT, MEM_E2P1);
+ 213   3                              
+ 214   3                              gs_even_fun_var.esc_cnt[even_id] =0; 
+ 215   3                              gs_even_fun_var.into_cnt[even_id] =0;
+ 216   3                      }       
+ 217   2                      
+ 218   2              }       
+ 219   1      
+ 220   1      
+ 221   1      }
+ 222          
+ 223          
+ 224          
+ 225          /*****************************************************************************
+ 226          ** Function name    :api_measure_deal_pre_second
+ 227          **
+ 228          ** Description         :Ã¿Ãëµ÷ÓÃµÄ²âÁ¿º¯Êý
+ 229          **
+ 230          ** Parameters         :NONE   adr ¾íÒ³µØÖ· 
+ 231          **
+ 232          ** Returned value   :NONE   type ·¢ÉúÀàÐÍ   1 ¿ªÊ¼  0x55  ½øÐÐÊ±ºò  0xFF ½áÊø   
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 5   
+
+ 233          **                                      ID   Ö»ÓÐ¶þÀàÊ±¼äÓÐÐ§£¬Ç°ÆÚ´¦Àí 0 - 6
+ 234          **----------------------------------------------------------------------------
+ 235          ** V01.01  MJ  2016-04-23
+ 236          ******************************************************************************/
+ 237          void lnk_save_even_class1_recode(uint8 ID, uint16 adr , uint8 type)
+ 238          {
+ 239   1          CLASS_I_UNIT   data_class1;
+ 240   1          CLASS_II_UNIT  data_class2;
+ 241   1          INT8U buftmp[22];
+ 242   1          ST_U32_U08 Time;
+ 243   1          uint8 i ;
+ 244   1      
+ 245   1              
+ 246   1          if(adr < ADR_BLOCK_min_EVENI_E2P)  return;
+ 247   1              
+ 248   1          if(adr <=ADR_BLOCK_max_EVENI_E2P)
+ 249   1          {
+ 250   2              // Ò»ÀàÊÂ¼þ´¦Àí // 
+ 251   2          mem_read(&data_class1.u16_num.B08[0], adr, LEN_CLASS_I_UNIT, MEM_E2P1);  
+ 252   2          //ÒÆ¶¯Êý¾Ý //
+ 253   2          if(data_class1.u16_num.u16<65535) data_class1.u16_num.u16++;
+ 254   2          for(i=9;i>0;i--)
+ 255   2          {
+ 256   3              Lib_Copy_Str_TwoArry(&data_class1.dataTime[i][0], &data_class1.dataTime[i-1][0], 6);
+ 257   3          }
+ 258   2              
+ 259   2          data_class1.dataTime[0][0]=gs_CurDateTime.Year;
+ 260   2          data_class1.dataTime[0][1]=gs_CurDateTime.Month;
+ 261   2          data_class1.dataTime[0][2]=gs_CurDateTime.Day;
+ 262   2          data_class1.dataTime[0][3]=gs_CurDateTime.Hour;
+ 263   2          data_class1.dataTime[0][4]=gs_CurDateTime.Minute;
+ 264   2          data_class1.dataTime[0][5]=gs_CurDateTime.Second;
+ 265   2          //»ñÈ¡Ð£ÑéºÍ //
+ 266   2          data_class1.u16_csck = Lib_get_csck_int16u_num(&data_class1.u16_num.B08[0],LEN_CLASS_I_UNIT-2,CHECKWOR
+             -D);
+ 267   2      
+ 268   2          //Êý¾Ý±£´æ //
+ 269   2          mem_write(adr, &data_class1.u16_num.B08[0], LEN_CLASS_I_UNIT, MEM_E2P1);
+ 270   2          return ;
+ 271   2          }
+ 272   1      
+ 273   1              //  ¶þÀàÊÂ¼þ·¢Éú´¦Àí// 
+ 274   1              if((adr >=ADR_BLOCK_min_EVENII_E2P) && (adr <=ADR_BLOCK_max_EVENII_E2P))
+ 275   1              {
+ 276   2                      if(type == START)  
+ 277   2                      {
+ 278   3                              gs_even_fun_var.esc_cnt[ID]=0;  // ÊÂ¼þ±£³ÖÊ±¼ä
+ 279   3                      //  ¶ÁÈ¡ÑÓÊ±Ê±¼ä²ÎÊý¸üÐÂÀï¶ÁÈ¡//
+ 280   3      //                  if(gs_sys_globaL_var.work_mode != SLEEP_MODE)
+ 281   3                              mem_read(&gs_even_var.even_cnt[ID],ADR_CLASS2CNT_START_E2P+ ID* LEN_CLASSII_cnt,LEN_CLASSII_cnt,MEM_E2P
+             -1);
+ 282   3                              if((gs_even_fun_var.into_cnt[ID]< gs_even_var.even_cnt[ID]))//&&(gs_sys_globaL_var.work_mode != SLEEP_M
+             -ODE)
+ 283   3                              {
+ 284   4                                      gs_even_fun_var.into_cnt[ID]++;  // ÊÂ¼þ±£³ÖÊ±¼ä
+ 285   4                              }
+ 286   3                          else 
+ 287   3                              {
+ 288   4                                      gs_even_fun_var.into_cnt[ID]+=gs_even_var.even_cnt[ID];  // ÊÂ¼þ±£³ÖÊ±¼ä
+ 289   4                                      mem_read(&gs_even_fun_var.even_fun_doingflg[ID],ADR_CLASS2FLG_START_E2P+ ID* LEN_CLASSII_flg,LEN_CLASS
+             -II_flg,MEM_E2P1);
+ 290   4                                      CLRWDT();     
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 6   
+
+ 291   4                                      
+ 292   4                                      if(0x5a!=gs_even_fun_var.even_fun_doingflg[ID])  // Î´¿ªÊ¼
+ 293   4                                      {
+ 294   5                                              gs_even_fun_var.even_fun_doingflg[ID] = 0x5a;
+ 295   5                                              mem_db_write(ADR_CLASS2FLG_START_E2P+ ID* LEN_CLASSII_flg,&gs_even_fun_var.even_fun_doingflg[ID],LEN_
+             -CLASSII_flg,MEM_E2P1 );
+ 296   5                                      }
+ 297   4                                      else 
+ 298   4                                              return;  // ´¦ÓÚ·¢Éú´¬
+ 299   4      
+ 300   4                                      mem_read(&data_class2.u16_num.B08[0], adr, LEN_CLASS_II_UNIT, MEM_E2P1);  
+ 301   4                                      //ÒÆ¶¯Êý¾Ý //
+ 302   4                                      //´ÎÊý³¬³ö²»ÔÙ¸üÐÂ//
+ 303   4                                      if(data_class2.u16_num.u16<65535)  data_class2.u16_num.u16++;
+ 304   4                                      for(i=9;i>0;i--)//  ¿ªÊ¼Ê±¼ä
+ 305   4                                      {
+ 306   5                                              Lib_Copy_Str_TwoArry(&data_class2.StartTm[i][0], &data_class2.StartTm[i-1][0], 6);//¿ªÊ¼Ê±¼ä¹ö´æ
+ 307   5                                      }
+ 308   4                                      data_class2.StartTm[0][0] = gs_CurDateTime.Year;
+ 309   4                                      data_class2.StartTm[0][1] = gs_CurDateTime.Month;
+ 310   4                                      data_class2.StartTm[0][2] = gs_CurDateTime.Day;
+ 311   4                                      data_class2.StartTm[0][3] = gs_CurDateTime.Hour;
+ 312   4                                      data_class2.StartTm[0][4] = gs_CurDateTime.Minute;
+ 313   4                                      data_class2.StartTm[0][5] = gs_CurDateTime.Second;
+ 314   4                                      //½áÊøÊ±¼ä¹ö´æ
+ 315   4                                      for(i=9;i>0;i--)
+ 316   4                                      {
+ 317   5                                              Lib_Copy_Str_TwoArry(&data_class2.EndTm[i][0], &data_class2.EndTm[i-1][0], 6);//¿ªÊ¼Ê±¼ä¹ö´æ
+ 318   5                                      }
+ 319   4                                      CLRWDT();     
+ 320   4                                      
+ 321   4                                      //½áÊøÊ±¼äÇåÁã//
+ 322   4                                      Lib_Set_String(&data_class2.EndTm[0][0],0x00, 6 );// ½áÊøÊ±¼äÇåÁã       
+ 323   4                              
+ 324   4                                      
+ 325   4                                      //»ñÈ¡Ð£ÑéºÍ //
+ 326   4                                      data_class2.u16_csck = Lib_get_csck_int16u_num(&data_class2.u16_num.B08[0],LEN_CLASS_II_UNIT-2,CHECKWO
+             -RD);
+ 327   4                                      
+ 328   4                                      //Êý¾Ý±£´æ //
+ 329   4                                      mem_write(adr, &data_class2.u16_num.B08[0], LEN_CLASS_II_UNIT, MEM_E2P1);
+ 330   4                              }
+ 331   3                      }
+ 332   2                      else
+ 333   2                  {
+ 334   3                              if(gs_even_fun_var.into_cnt[ID] > gs_even_var.even_cnt[ID])
+ 335   3                              {
+ 336   4                                      if(gs_even_fun_var.esc_cnt[ID] < gs_even_var.even_cnt[ID])   gs_even_fun_var.esc_cnt[ID]++;
+ 337   4                                      else 
+ 338   4                                      {
+ 339   5                                              gs_even_fun_var.esc_cnt[ID] =0;
+ 340   5                                              gs_even_fun_var.into_cnt[ID] =0;
+ 341   5                                              //  ¶ÁÈ¡2ÀàÊý¾Ý×´Ì¬//
+ 342   5                                              // gs_even_fun_var.into_cnt[ID]+=gs_even_var.even_cnt[ID];  // ÊÂ¼þ±£³ÖÊ±¼ä
+ 343   5                                              mem_read(&gs_even_fun_var.even_fun_doingflg[ID],ADR_CLASS2FLG_START_E2P+ ID* LEN_CLASSII_flg,LEN_CLAS
+             -SII_flg,MEM_E2P1);
+ 344   5                                              if( 0 ==gs_even_fun_var.even_fun_doingflg[ID])  // Î´¿ªÊ¼
+ 345   5                                              {
+ 346   6                                                      return;  //ÒÑ¾­½áÊø
+ 347   6                                              }
+ 348   5                                              
+ 349   5                                              // Ð´½áÊø±êÊ¶//
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 7   
+
+ 350   5                                              gs_even_fun_var.even_fun_doingflg[ID] = 0;
+ 351   5                                              mem_db_write(ADR_CLASS2FLG_START_E2P+ ID* LEN_CLASSII_flg,&gs_even_fun_var.even_fun_doingflg[ID],LEN_
+             -CLASSII_flg,MEM_E2P1 );
+ 352   5                                              CLRWDT();     
+ 353   5                                              mem_read(&data_class2.u16_num.B08[0], adr, LEN_CLASS_II_UNIT, MEM_E2P1);  
+ 354   5                                              //ÒÆ¶¯Êý¾Ý //
+ 355   5                                              data_class2.EndTm[0][0] = gs_CurDateTime.Year;
+ 356   5                                              data_class2.EndTm[0][1] = gs_CurDateTime.Month;
+ 357   5                                              data_class2.EndTm[0][2] = gs_CurDateTime.Day;
+ 358   5                                              data_class2.EndTm[0][3] = gs_CurDateTime.Hour;
+ 359   5                                              data_class2.EndTm[0][4] = gs_CurDateTime.Minute;
+ 360   5                                              data_class2.EndTm[0][5] = gs_CurDateTime.Second;
+ 361   5                                              //¿ªÊ¼Ê±¼ä×ªÒÆ
+ 362   5                                              buftmp[10] = data_class2.StartTm[0][5];  // Ãë
+ 363   5                                              buftmp[11] = data_class2.StartTm[0][4];
+ 364   5                                              buftmp[12] = data_class2.StartTm[0][3];
+ 365   5                                              buftmp[13] = data_class2.StartTm[0][2];
+ 366   5                                              buftmp[14] = data_class2.StartTm[0][1];
+ 367   5                                              buftmp[15] = data_class2.StartTm[0][0]; //ê
+ 368   5                                              
+ 369   5                                              //½áÊøÊ±¼ä×ªÒÆ
+ 370   5                                              buftmp[16] = data_class2.EndTm[0][5];// Ãë
+ 371   5                                              buftmp[17] = data_class2.EndTm[0][4];
+ 372   5                                              buftmp[18] = data_class2.EndTm[0][3];
+ 373   5                                              buftmp[19] = data_class2.EndTm[0][2];
+ 374   5                                              buftmp[20] = data_class2.EndTm[0][1];
+ 375   5                                              buftmp[21] = data_class2.EndTm[0][0];// ê
+ 376   5                                              //¼ÆËãÃëÊý//
+ 377   5                                              GetTotalTime(&buftmp[0]);
+ 378   5                                              //ÃëÊýÀÛ¼Ó//
+ 379   5                                              Lib_Copy_Str_TwoArry(&Time.B08[0], &buftmp[4], 4);//¿ªÊ¼Ê±¼ä¹ö´æ
+ 380   5                                          //³ÖÐøÊ±¼äÀÛ¼Ó£¬³¬³ö²»ÇåÁã//
+ 381   5                                              if(0xFFFFFFFF-data_class2.accumTime.u32>Time.u32)  data_class2.accumTime.u32 += Time.u32;
+ 382   5                                              //»ñÈ¡Ð£ÑéºÍ //
+ 383   5                                              data_class2.u16_csck = Lib_get_csck_int16u_num(&data_class2.u16_num.B08[0],LEN_CLASS_II_UNIT-2,CHECKW
+             -ORD);
+ 384   5                      
+ 385   5                                          CLRWDT();     
+ 386   5                      
+ 387   5                                              //Êý¾Ý±£´æ //
+ 388   5                                              mem_write(adr, &data_class2.u16_num.B08[0], LEN_CLASS_II_UNIT, MEM_E2P1);
+ 389   5                                      
+ 390   5                                      }
+ 391   4                              }
+ 392   3                              else 
+ 393   3                              {
+ 394   4                                      gs_even_fun_var.esc_cnt[ID] =0;
+ 395   4                                      gs_even_fun_var.into_cnt[ID] =0;
+ 396   4                              }
+ 397   3                      }
+ 398   2                      
+ 399   2              }
+ 400   1              else  return;   // ²»´æÔÚÊÂ¼þ
+ 401   1      
+ 402   1      }
+ 403          
+ 404          
+ 405          
+ 406          /*****************************************************************************
+ 407          ** Function name    :api_measure_deal_pre_second
+ 408          **
+ 409          ** Description         :Ã¿Ãëµ÷ÓÃµÄ²âÁ¿º¯Êý
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 8   
+
+ 410          **
+ 411          ** Parameters         :NONE          
+ 412          **
+ 413          ** Returned value   :NONE
+ 414          **
+ 415          **----------------------------------------------------------------------------
+ 416          ** V01.01  MJ  2016-04-23
+ 417          ******************************************************************************/
+ 418          void api_deal_even_class_recode(uint8 even_id, uint8 type )
+ 419          {
+ 420   1          uint8 i,ID;
+ 421   1          CLASS_I_TAB  tab_class;
+ 422   1      
+ 423   1          if(even_id < ID_CLASS_I_max ) 
+ 424   1          {
+ 425   2                      for(i=0;i< ID_CLASS_I_max ; i++)
+ 426   2                      {
+ 427   3                              if(even_id==even_class_I_tab[i].id_even)  break;
+ 428   3                      }
+ 429   2                      
+ 430   2                      if(i>=ID_CLASS_I_max)   return;
+ 431   2                      
+ 432   2                      tab_class.addr_even = even_class_I_tab[i].addr_even;
+ 433   2                      ID = even_id ;        // Ò»ÀàÊÂ¼þID  0-6
+ 434   2              }
+ 435   1              else if( (even_id >= ID_CLASS_II_min)&&(even_id < ID_CLASS_II_max))     
+ 436   1              {
+ 437   2                      for(i=0;i< len_CLASSII_cnt ; i++)
+ 438   2                      {
+ 439   3                              if(even_id==even_class_I_tab[ID_CLASS_I_max+i].id_even)  break;
+ 440   3                      }
+ 441   2                      
+ 442   2                      if(i>= len_CLASSII_cnt)   return;
+ 443   2                      
+ 444   2                      tab_class.addr_even = even_class_I_tab[ID_CLASS_I_max+i].addr_even;
+ 445   2                      ID = i;              //  ¶þÀàÊÂ¼þID    0 - 6
+ 446   2              } 
+ 447   1              else   return;
+ 448   1      
+ 449   1              lnk_save_even_class1_recode(ID,tab_class.addr_even,type);
+ 450   1          
+ 451   1      }
+ 452          
+ 453          
+ 454          /*****************************************************************************
+ 455          ** Function name    :api_measure_deal_pre_second
+ 456          **
+ 457          ** Description         :Ã¿Ãëµ÷ÓÃµÄ²âÁ¿º¯Êý
+ 458          **
+ 459          ** Parameters         :NONE          
+ 460          **
+ 461          ** Returned value   :NONE
+ 462          **
+ 463          **----------------------------------------------------------------------------
+ 464          ** V01.01  MJ  2016-04-23
+ 465          ******************************************************************************/
+ 466          void api_clr_even_by_comm(void)
+ 467          {
+ 468   1          uint8 i;
+ 469   1          CLASS_I_UNIT   data_class1;
+ 470   1          CLASS_II_UNIT  data_class2;
+ 471   1      
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 9   
+
+ 472   1              Lib_Set_String(&data_class1.u16_num.B08[0], 0, LEN_CLASS_I_UNIT);
+ 473   1              Lib_Set_String(&data_class2.u16_num.B08[0], 0, LEN_CLASS_II_UNIT);
+ 474   1              gs_sys_globaL_var.sys_e2_err_flg=0;
+ 475   1              Lib_Set_String(&gs_even_fun_var.esc_cnt,0,sizeof(EVEN_FUN_VAR));
+ 476   1      
+ 477   1              mem_db_write(ADR_CLASS2FLG_START_E2P ,&gs_even_fun_var.even_fun_doingflg[0],len_CLASSII_cnt,MEM_E2P1 );  
+             - 
+ 478   1      
+ 479   1          data_class1.u16_csck = Lib_get_csck_int16u_num(&data_class1.u16_num.B08[0],LEN_CLASS_I_UNIT-2,CHECKWOR
+             -D);
+ 480   1          data_class2.u16_csck = Lib_get_csck_int16u_num(&data_class2.u16_num.B08[0],LEN_CLASS_II_UNIT-2,CHECKWO
+             -RD);
+ 481   1              
+ 482   1          for(i=0;i<(dim(even_class_I_tab)); i++)
+ 483   1          {
+ 484   2                      CLRWDT();
+ 485   2                      if(i<ID_CLASS_I_max) mem_write(even_class_I_tab[i].addr_even, &data_class1.u16_num.B08[0], LEN_CLASS_I_U
+             -NIT, MEM_E2P1);
+ 486   2                      else mem_write(even_class_I_tab[i].addr_even, &data_class2.u16_num.B08[0], LEN_CLASS_II_UNIT, MEM_E2P1);
+ 487   2                      CLRWDT();
+ 488   2          }
+ 489   1          
+ 490   1       
+ 491   1      }
+ 492          
+ 493          
+ 494          /*********************************************************************
+ 495          Ô­ÐÍ£ºGetTotalTime(uchar No,INT8U *buftmp) 
+ 496          ¹¦ÄÜ£º¼ÆËã×ÜÀÛ¼ÆÊ±¼ä
+ 497          ±¸×¢£º
+ 498          1.ÊäÈë£º 
+ 499          2.Êä³ö£º
+ 500          buftmp[4]~[7]Îª×ÜÀÛ¼ÆÊ±¼ä£¨BCD¸ÄÎªhexÀàÐÍ£©£¬ÆäËûÊý¾Ý²»¸Ä±ä
+ 501          *********************************************************************/
+ 502          void GetTotalTime(INT8U *buftmp) 
+ 503          {
+ 504   1          union Union_DWordDef temp1,temp2;
+ 505   1          //¿ªÊ¼ºÍ½áÊøµÄÔÂÈÕ¶¼²»¿ÉÄÜÎª0
+ 506   1          if( (buftmp[13] == 0) || (buftmp[14] == 0) || (buftmp[19] == 0) || (buftmp[20] == 0) )
+ 507   1          {
+ 508   2              temp2.UDWORD= 0;
+ 509   2              temp1.UDWORD = 0;
+ 510   2          }  
+ 511   1          else   
+ 512   1          {
+ 513   2              temp2.UDWORD = Lib_GetGmSec( &buftmp[10] );//¿ªÊ¼Ê±¼äµÄÃëÊý
+ 514   2              temp1.UDWORD = Lib_GetGmSec( &buftmp[16] );//½áÊøÊ±¼äµÄÃëÊý
+ 515   2              /////ÏÄÊ±ÖÆÅÐ¶Ï////////////////////////////////////////////////////////////
+ 516   2                      //
+ 517   2              /////////////////////////////////////////////////////////////////////////////
+ 518   2          }
+ 519   1              //µÃµ½´Ë´ÎµÄÀÛ¼ÆÊ±¼ä£¬·Åµ½temp1                 
+ 520   1          if( temp1.UDWORD > temp2.UDWORD )
+ 521   1          {
+ 522   2              temp1.UDWORD -= temp2.UDWORD;
+ 523   2          }
+ 524   1          else
+ 525   1          {
+ 526   2              temp1.UDWORD = 0;
+ 527   2          }
+ 528   1              
+ 529   1              Lib_Copy_Str_TwoArry(&buftmp[4], &temp1.BYTE[0], 4 );
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 10  
+
+ 530   1      }
+ 531          
+ 532          
+ 533          /*****************************************************************************
+ 534          ** Function name    :api_measure_deal_pre_second
+ 535          **
+ 536          ** Description         :Ã¿Ãëµ÷ÓÃµÄÊÂ¼þ¼ÇÂ¼É¨Ãè//
+ 537          **
+ 538          ** Parameters         :NONE          
+ 539          **
+ 540          ** Returned value   :NONE
+ 541          **
+ 542          **----------------------------------------------------------------------------
+ 543          ** V01.01  MJ  2016-04-23
+ 544          ******************************************************************************/
+ 545          void api_even_Detect_sec(void)
+ 546          {
+ 547   1           if(CheckPOWERUP()!=TRUE) return;    
+ 548   1      
+ 549   1          api_even_ee_err(); // E2´íÎóÉ¨Ãè..
+ 550   1              
+ 551   1              if(api_even_Detect_lowbattery()==TRUE)api_deal_even_class_recode(ID_CLASS_II_lowbattery,START);
+ 552   1              else  api_deal_even_class_recode(ID_CLASS_II_lowbattery,END);
+ 553   1      
+ 554   1      //      if(api_even_Detect_NOL1()==TRUE)api_deal_even_class_recode(ID_CLASS_II_NOL1,START);
+ 555   1      //      else  api_deal_even_class_recode(ID_CLASS_II_NOL1,END);
+ 556   1      
+ 557   1      //      if(api_even_Detect_NOL2()==TRUE)api_deal_even_class_recode(ID_CLASS_II_NOL2,START);
+ 558   1      //      else  api_deal_even_class_recode(ID_CLASS_II_NOL2,END);
+ 559   1      
+ 560   1      
+ 561   1              //·´ÏòÖ»×öºÏÏà¹¦ÂÊ·´ÏòÊÂ¼þ ID Ê¹ÓÃL1¶ÏÏà
+ 562   1              if(api_even_Detect_L1reverse()==TRUE)api_deal_even_class_recode(ID_CLASS_II_L1reverse,START);
+ 563   1              else  api_deal_even_class_recode(ID_CLASS_II_L1reverse,END);
+ 564   1      
+ 565   1      //      if(api_even_Detect_L2reverse()==TRUE)api_deal_even_class_recode(ID_CLASS_II_L2reverse,START);
+ 566   1      //      else  api_deal_even_class_recode(ID_CLASS_II_L2reverse,END);
+ 567   1      
+ 568   1        if(Judge_ERR_COVER_key()==TRUE)api_deal_even_class_recode(ID_CLASS_II_COVER,START);
+ 569   1        else api_deal_even_class_recode(ID_CLASS_II_COVER,END);
+ 570   1      
+ 571   1      //   Proc_Check_COVER_Pre_sec();
+ 572   1      }
+ 573          
+ 574          /*****************************************************************************
+ 575          ** Function name    :api_measure_deal_pre_second
+ 576          **
+ 577          ** Description         :Ã¿Ãëµ÷ÓÃµÄÊÂ¼þ¼ÇÂ¼É¨Ãè//
+ 578          **
+ 579          ** Parameters         :NONE          
+ 580          **
+ 581          ** Returned value   :NONE
+ 582          **
+ 583          **----------------------------------------------------------------------------
+ 584          ** V01.01  MJ  2016-04-23
+ 585          ******************************************************************************/
+ 586          
+ 587          INT8U  api_even_Detect_L2reverse(void)
+ 588          {
+ 589   1      
+ 590   1       if(gs_emu_run_var.net_flg& REV_N_ACPOWER)
+ 591   1         return TRUE;
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 11  
+
+ 592   1      
+ 593   1        else   return FALSE ;
+ 594   1        
+ 595   1      }
+ 596          
+ 597          
+ 598          /*****************************************************************************
+ 599          ** Function name    :api_measure_deal_pre_second
+ 600          **
+ 601          ** Description         :Ã¿Ãëµ÷ÓÃµÄÊÂ¼þ¼ÇÂ¼É¨Ãè//
+ 602          **
+ 603          ** Parameters         :NONE          
+ 604          **
+ 605          ** Returned value   :NONE
+ 606          **
+ 607          **----------------------------------------------------------------------------
+ 608          ** V01.01  MJ  2016-04-23
+ 609          ******************************************************************************/
+ 610          
+ 611          INT8U  api_even_Detect_L1reverse(void)
+ 612          {
+ 613   1       if(gs_emu_run_var.net_flg& REV_TT_ACPOWER)
+ 614   1         return TRUE;
+ 615   1      
+ 616   1        else   return FALSE ;
+ 617   1      }
+ 618          
+ 619          /*****************************************************************************
+ 620          ** Function name    :api_measure_deal_pre_second
+ 621          **
+ 622          ** Description         :Ã¿Ãëµ÷ÓÃµÄÊÂ¼þ¼ÇÂ¼É¨Ãè//
+ 623          **
+ 624          ** Parameters         :NONE          
+ 625          **
+ 626          ** Returned value   :NONE
+ 627          **
+ 628          **----------------------------------------------------------------------------
+ 629          ** V01.01  MJ  2016-04-23
+ 630          ******************************************************************************/
+ 631          INT8U  api_even_Detect_NOL2(void)
+ 632          {
+ 633   1      // //µçÑ¹ Ô´Êý¾ÝÎªHEX32£¬0.1VÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XV   ãÐÖµÉèÖÃ850  ÔÝ¶¨//
+ 634   1       if((gs_measure_var_data.gs_really[WIRE_L2].dw_u_val.u32< 850)) //A
+ 635   1        {
+ 636   2          //LED_L2_FAIL_ON(); 
+ 637   2              return TRUE;
+ 638   2        }
+ 639   1        else  
+ 640   1        {
+ 641   2          //LED_L2_FAIL_OFF();
+ 642   2          return FALSE ;
+ 643   2        }
+ 644   1      }
+ 645          
+ 646          /*****************************************************************************
+ 647          ** Function name    :api_measure_deal_pre_second
+ 648          **
+ 649          ** Description         :Ã¿Ãëµ÷ÓÃµÄÊÂ¼þ¼ÇÂ¼É¨Ãè//
+ 650          **
+ 651          ** Parameters         :NONE          
+ 652          **
+ 653          ** Returned value   :NONE
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 12  
+
+ 654          **
+ 655          **----------------------------------------------------------------------------
+ 656          ** V01.01  MJ  2016-04-23
+ 657          ******************************************************************************/
+ 658          INT8U api_even_Detect_NOL1(void)
+ 659          {
+ 660   1        // //µçÑ¹ Ô´Êý¾ÝÎªHEX32£¬0.1VÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XV   ãÐÖµÉèÖÃ650  ÔÝ¶¨//
+ 661   1        if((gs_measure_var_data.gs_really[WIRE_L1].dw_u_val.u32< 850)) //A
+ 662   1        {
+ 663   2        // LED_L1_FAIL_ON(); 
+ 664   2         return TRUE;
+ 665   2        }
+ 666   1        else   
+ 667   1        {
+ 668   2        // LED_L1_FAIL_OFF();  
+ 669   2         return FALSE ;
+ 670   2        }
+ 671   1      }
+ 672          /*****************************************************************************
+ 673          ** Function name    :api_measure_deal_pre_second
+ 674          **
+ 675          ** Description         :Ã¿Ãëµ÷ÓÃµÄÊÂ¼þ¼ÇÂ¼É¨Ãè//
+ 676          **
+ 677          ** Parameters         :NONE          
+ 678          **
+ 679          ** Returned value   :NONE
+ 680          **
+ 681          **----------------------------------------------------------------------------
+ 682          ** V01.01  MJ  2016-04-23
+ 683          ******************************************************************************/
+ 684          
+ 685          INT8U api_even_Detect_lowbattery(void)
+ 686          {
+ 687   1       if(gs_measure_status_judge_var.u8_status & VBAT_LOW)
+ 688   1         return TRUE;
+ 689   1      
+ 690   1        else   return FALSE ;
+ 691   1      }
+ 692          
+ 693          
+ 694          
+ 695          /*****************************************************************************
+ 696          ** Function name    :api_even_ee_err()
+ 697          **
+ 698          ** Description     :ÓÃÓÚE2´íÎóÉ¨Ãè
+ 699          **
+ 700          ** Parameters         :NONE          
+ 701          **
+ 702          ** Returned value   :NONE
+ 703          **
+ 704          **----------------------------------------------------------------------------
+ 705          ** V01.01  MJ  2016-04-23
+ 706          ******************************************************************************/
+ 707          void api_even_ee_err(void)
+ 708          {
+ 709   1        mem_read(&gs_sys_globaL_var.sys_e2_err.B08[0], ADR_METER_PARAM1_EE_ERR, 4, MEM_E2P1);    
+ 710   1      
+ 711   1        if(gs_sys_globaL_var.sys_e2_err.u32 ==0x123456)
+ 712   1        {
+ 713   2          gs_sys_globaL_var.sys_e2_err_flg=0;
+ 714   2        }
+ 715   1        
+C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 13  
+
+ 716   1        if((gs_sys_globaL_var.sys_e2_err_flg==0)&&(gs_sys_globaL_var.sys_e2_err.u32 !=0x123456))
+ 717   1        {
+ 718   2          api_deal_even_class_recode(ID_CLASS_I_EERR,START);
+ 719   2          gs_sys_globaL_var.sys_e2_err_flg=1;
+ 720   2        }
+ 721   1        else
+ 722   1        {
+ 723   2         // gs_sys_globaL_var.sys_e2_err_flg=0;
+ 724   2        }
+ 725   1      }
+ 726          
+ 727          /***************************************************************
+ 728          *    END
+ 729          ****************************************************************/
+ 730          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   3614    ----
+   CONSTANT SIZE    =     59    ----
+   XDATA SIZE       =     12     588
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

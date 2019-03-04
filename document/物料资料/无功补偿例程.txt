@@ -1,0 +1,111 @@
+uint32 CalculateSChz(int16 error,int32 LastSC)
+{
+    //计算公式更换,雷文斌，2011年7月14日
+    int16 Error;                    
+    uint16 Stemp0remd,Stemp2remd;  
+    int32 Stemp0,Stemp1,Stemp2,Stemp3;//
+    uint32 Result;
+    //公式说明 计算误差公式 S=2^31(1/(1+e)-1)+S1(1/(1+e)),如果e扩大1000倍后，
+    //化解公式得:  S=  2^31(-e/(1000+e))+S1(1000/(1000+e)=S1(1000/(1000+e)-2^31(e/(1000+e))
+    //下面计算  2^31(e/(1000+e))
+    Error=error;                                                               //计算误差值。。扩大1000
+    Stemp0=0x80000000/(1000+Error);                     //先保留整数部分 2^31/(1000+e)=0x80000000/(1000+e)
+    Stemp0remd=0x80000000%(1000+Error);                 //保留余数
+    Stemp0remd=Stemp0remd*1000/(1000+Error);            //计算小数部分，小数部分扩大1000
+    Stemp1=Stemp0*Error+(Stemp0remd*Error)/1000;        //把计算的整数和小数部分都乘以ERROR，得2^31(e/(1000+e))
+    //下面计算S1*(1000/(1000+e)
+    Stemp2=LastSC/(1000+Error);                         //计算整数部分
+    Stemp2remd=LastSC%(1000+Error);                     //计算余数部分
+    Stemp2remd=Stemp2remd*1000/(1000+Error);            //小数部分
+    Stemp3=Stemp2*1000+Stemp2remd;                      //整数部分加小数部分  
+
+    Result=Stemp3-Stemp1;                               //S=S1(1000/(1000+e)-2^31(e/(1000+e))
+    return Result;
+ 
+}
+
+
+
+/*=========================================================================================\n
+* @function_name: TimeEventProc
+* @function_file: main.c
+* @描述: 系统时间事件处理
+* 
+* @参数: 
+* @返回: 
+* @作者:   lwb (2012-05-09)
+* @备注: 
+*-------------------------------------------------------------------------------------------
+* @修改人:  
+* @修改内容: 
+===========================================================================================*/
+void TimeEventProc(void)
+{
+    static uint32 temp=0;
+    uint16 HZ;
+    if(guc_TimeEvent & flgEtTim_Second)                 // 秒处理
+    {          
+                                         //频率补偿   
+        HZ = 8192000/EnyB_ReadMeterParaACK(0x10fd);
+        if(temp != HZ) 
+        {
+            temp = HZ;
+            if(HZ > 500)
+            {
+                gs_JbPm.ul_SCQ = CalculateSChz((HZ -500)*2,gs_JbPm.ul_SCP);  //每隔0.1hz补0.2%
+                EnyB_SetMeterCfgACK(gs_JbPm.ul_SCQ,SCQ);     
+            }
+            else if(HZ < 500)
+            {
+                gs_JbPm.ul_SCQ = CalculateSChz(-(500 -HZ)*2,gs_JbPm.ul_SCP);
+                EnyB_SetMeterCfgACK(gs_JbPm.ul_SCQ,SCQ); 
+            }
+            else
+            {
+                EnyB_SetMeterCfgACK(gs_JbPm.ul_SCP,SCQ); 
+                 gs_JbPm.ul_SCQ = gs_JbPm.ul_SCP;
+            }
+        }
+            
+
+
+        TimerProc();                                    // 在停电和有电下均处理
+        EnyB_Open_Cf();
+        ShowSecondProc();
+        EnyB_Check_PowRev();                            //功率方向判断
+#ifdef FRCom
+        EventOutProc();
+#endif
+        guc_TimeEvent |= flgEtTim_SecSoft;
+        guc_TimeEvent &= ~flgEtTim_Second;              //
+    }
+    else if(guc_TimeEvent&flgEtTim_Minute)
+    {
+         Data_MinProc();
+         guc_TimeEvent&=~flgEtTim_Minute;
+    }                                                   //
+    else if(guc_TimeEvent & flgEtTim_Hour)              // 小时事件
+    {                                                   //
+        Data_HourProc();
+        guc_TimeEvent &= ~flgEtTim_Hour;                //
+    }else if(guc_TimeEvent & flgEtTim_Day)
+    {
+        Data_DayProc();
+        guc_TimeEvent &=~flgEtTim_Day;
+    }
+    else if(guc_TimeEvent & flgEtTim_SecSoft)
+    {
+        BgCtrFun();
+        MChannelCal();                                  // 测试M
+        CoverKeyScan();
+        if(guc_TinyPWCnt != 0xFF)
+        {
+            gui_RefreshEvent |= flgEtPara_ADKCal_31;
+        }
+        guc_TimeEvent &= ~flgEtTim_SecSoft;
+    }
+    else                                                //
+    {                                                   //
+        guc_TimeEvent = 0;                              //  
+    }
+}

@@ -1,0 +1,967 @@
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE RF_COMM
+OBJECT MODULE PLACED IN .\RF_comm.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S4_ApiUser\RF_comm.c LARGE BROWSE INCDIR(..\C_Source\S0_System;
+                    -..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiProtocol;..\
+                    -C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_HardDrv\E2P_24
+                    -CXXX) DEBUG OBJECTEXTEND PRINT(.\RF_comm.lst) OBJECT(.\RF_comm.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name: RF_comm.c
+   6          **Author: maji
+   7          **date: 
+   8          **description: c code for lora RF communicate
+   9          **note: memer type  DI03B
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2017-09-06   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          #include <MyIncludes_H.h>
+  18          /*#include "..\myInclude\myInclude.h"
+  19          #include "..\hardDriver\hardDriver.h"
+  20          #include "..\myLib\myLib.h"
+  21          #include "data.h"*/
+  22          
+  23          
+  24          RF_DRV_VAR gs_rf_drv_var;
+  25          uint8 *P_DL645_07_BUFF;    //Í¨Ñ¶»º³åÇøÖ¸Õë //
+  26          DLT645_07_VAR gs_dlt645_07_var;
+  27          
+  28          
+  29          
+  30          code INT8U Super_mima_DLT[4] ={0X00,0X23,0X61,0X45};  //³¬¼¶ÃÜÂë£¬00¼¶£¬456123 //
+  31          
+  32          
+  33          
+  34          /*********************************************************************************************************
+             -***
+  35          * DL/T 645-2007  ²¿·Ö´úÂë
+  36          **********************************************************************************************************
+             -***/
+  37          /*******************************************************************
+  38          * uchar MeteIDCheck():
+  39          ********************************************************************/
+  40          INT8U MeteIDCheck(INT8U *ptr)
+  41          {
+  42   1               register INT8U i;
+  43   1               INT8U adr[6];
+  44   1      
+  45   1               //  //
+  46   1               mem_read(&adr[0], ADR_METER_PARAM1_RF_COMM_ID, 6, MEM_E2P1);
+  47   1      
+  48   1               //
+  49   1               for(i=6; i>0; i--)
+  50   1               {
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 2   
+
+  51   2                       if( *(ptr-i) !=0x99)  break;
+  52   2               }
+  53   1               if(i==0)               return(TRUE); 
+  54   1       
+  55   1               //
+  56   1               for(i=6; i>0; i--)
+  57   1               {
+  58   2                      if( ( *(ptr-i) != 0xaa ) && ( *(ptr-i) != adr[6-i] ) ) 
+  59   2                      {
+  60   3                              return(FALSE);
+  61   3                      } 
+  62   2               }       
+  63   1               return(TRUE); 
+  64   1      }
+  65          
+  66          /*****************************************************************
+  67          ÃÜÂë¼ì²é
+  68          *****************************************************************/
+  69          INT8U DLT_SecurityCK(INT8U *ptr)
+  70          {
+  71   1          INT8U ary[4];
+  72   1              
+  73   1          mem_read(&ary[0], ADR_METER_PARAM1_PW1, 4, MEM_E2P1);  //get level 1 password   //
+  74   1              if ( Lib_Cmp_TwoArry( ptr+DLT_MIMAPAPtr, &ary[0], 4) ==0)  return (mmok);
+  75   1              if ( Lib_Cmp_TwoArry( ptr+DLT_MIMAPAPtr, &Super_mima_DLT[0], 4) ==0)  return (mmok);
+  76   1              return(mmerr);
+  77   1      }
+  78          
+  79          /*****************************************************************
+  80          DLT645 C=0X11 ¶ÁÃüÁî£¬·µ»Ø³É¹¦½á¹ûÊÇÊý¾ÝÓòÒÑ¾­ÌîÐ´ºÃ·µ»ØÊý¾Ý
+  81          *****************************************************************/
+  82          INT8U DLT645_07_CTL0X11_read(INT8U *ptr)
+  83          {
+  84   1              INT8U u8_returnLen,mem_type;
+  85   1              INT8U i;
+  86   1              INT8U  *ptr_adr;
+  87   1              INT8U  data_buff[70],profile_adr[9];
+  88   1              ST_U32_U08      long_tmp;
+  89   1              INT16U ctmp1;
+  90   1              //Êý¾Ý¿ØÖÆID,´«ÊäÎªµØÎ»ÔÚÇ°£¬C51          U32ÀàÐÍÎª´ó¶ËÄ£Ê½  //
+  91   1              gs_dlt645_07_var.u32_DI.BYTE[0] = ptr[DLT_CmdDI3Ptr];
+  92   1              gs_dlt645_07_var.u32_DI.BYTE[1] = ptr[DLT_CmdDI2Ptr];
+  93   1              gs_dlt645_07_var.u32_DI.BYTE[2] = ptr[DLT_CmdDI1Ptr];
+  94   1              gs_dlt645_07_var.u32_DI.BYTE[3] = ptr[DLT_CmdDI0Ptr];
+  95   1              
+  96   1         if(get_IEC_comm_var(gs_dlt645_07_var.u32_DI.UDWORD) == 0 )  return(RS_State_IVID);
+  97   1         if( ( comm_data.Info.u16& EN_R) == 0 )  return(RS_State_IVData);
+  98   1         //  »ñÈ¡Êý¾ÝµÄ´æ´¢ÀàÐÍ //
+  99   1         mem_type = (comm_data.Info.B08[0]>>3)&0x07;     
+ 100   1          //Êý¾ÝÓòÇåÁã²¢ÉèÖÃ·¢ËÍ³¤¶È
+ 101   1         // Lib_Set_String((sptr+2), '0', comm_data.len_asc);  
+ 102   1          ptr_adr = comm_data.addr;
+ 103   1      
+ 104   1              //²»ÔÚ±í¸ñÄÚID´¦Àí µ¥Ìõ¸ººÉID 
+ 105   1              if((gs_dlt645_07_var.u32_DI.UDWORD>=0x06010001)&&(gs_dlt645_07_var.u32_DI.UDWORD<=0x06010168))
+ 106   1              {
+ 107   2                      ctmp1 = (INT16U)(gs_dlt645_07_var.u32_DI.UDWORD - 0x06010001);
+ 108   2                      if(ctmp1 < LPRunPa.Num[0])      // ¶ÁÈ¡ID Ð¡ÓÚÓÚÒÑ¼ÇÂ¼Êý
+ 109   2                      {
+ 110   3                              comm_data.len = LPRec_Read_1(&profile_adr[0], ctmp1);
+ 111   3                              comm_data.len_asc = 2*comm_data.len;    
+ 112   3                              Lib_Asc_BCDA( &data_buff[0], &profile_adr[0], comm_data.len_asc);  
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 3   
+
+ 113   3                              for(i=0;i<comm_data.len;i++)
+ 114   3                              {
+ 115   4                                      ptr[DLT_ReadDataPtr+i]=data_buff[comm_data.len-1-i];
+ 116   4                              }
+ 117   3                              u8_returnLen =comm_data.len;            
+ 118   3                      }
+ 119   2                      else
+ 120   2                      {
+ 121   3                              comm_data.len = LPRec_Read_1(profile_adr, ctmp1);
+ 122   3                              comm_data.len_asc = 2*comm_data.len;    
+ 123   3                              for(i=0;i<comm_data.len;i++)
+ 124   3                              {
+ 125   4                                      ptr[DLT_ReadDataPtr+i]=0xFF;
+ 126   4                              }
+ 127   3                              u8_returnLen =comm_data.len;            
+ 128   3                      }
+ 129   2      
+ 130   2                      //²Ù×÷³É¹¦ºóÊý¾Ý´¦Àí  //        
+ 131   2                      gs_dlt645_07_var.u8_lenOfData =u8_returnLen;            //·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 132   2                      ptr[DLT_CtlPtr] += 0X80;
+ 133   2                      ptr[DLT_LenPtr] =gs_dlt645_07_var.u8_lenOfData+4;        //4Îª¹Ì¶¨IDÊý¾Ý //             
+ 134   2                      return(RS_State_OK);    
+ 135   2              }
+ 136   1              
+ 137   1              switch (gs_dlt645_07_var.u32_DI.UDWORD)
+ 138   1              {       
+ 139   2                      case 0x02010000:        //µçÑ¹ Ô´Êý¾ÝÎªHEX32£¬0.1VÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XV //
+ 140   2                      case 0x02010100:        //µçÑ¹ Ô´Êý¾ÝÎªHEX32£¬0.1VÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XV //
+ 141   2                              Lib_long_bcd4(&long_tmp.B08[0],gs_measure_var_data.gs_really[0].dw_u_val.u32);
+ 142   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[2], 2);
+ 143   2                              ptr[DLT_ReadDataPtr] = data_buff[1];
+ 144   2                              ptr[DLT_ReadDataPtr+1] = data_buff[0];
+ 145   2                              u8_returnLen =2;                
+ 146   2                              break;
+ 147   2                              
+ 148   2                      case 0x02020000:        //µçÁ÷ Ô´Êý¾ÝÎªHEX32£¬0.0001AÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XXXA //
+ 149   2                      case 0x02020100:        //µçÁ÷ Ô´Êý¾ÝÎªHEX32£¬0.0001AÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XXXA //
+ 150   2                              Lib_long_bcd4(&long_tmp.B08[0],(gs_measure_var_data.gs_really[0].dw_i_val.u32));
+ 151   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[1], 3);
+ 152   2                              ptr[DLT_ReadDataPtr] = data_buff[2];
+ 153   2                              ptr[DLT_ReadDataPtr+1] = data_buff[1];
+ 154   2                              ptr[DLT_ReadDataPtr+2] = data_buff[0];
+ 155   2                              u8_returnLen =3;                        
+ 156   2                              break;
+ 157   2      
+ 158   2                      case 0x02800001:        //ÁãÏßµçÁ÷ Ô´Êý¾ÝÎªHEX32£¬0.0001AÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XXX.XXXA //
+ 159   2                              Lib_long_bcd4(&long_tmp.B08[0],(gs_measure_var_data.dw_i_n_val.u32));
+ 160   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[1], 3);
+ 161   2                              ptr[DLT_ReadDataPtr] = data_buff[2];
+ 162   2                              ptr[DLT_ReadDataPtr+1] = data_buff[1];
+ 163   2                              ptr[DLT_ReadDataPtr+2] = data_buff[0];
+ 164   2                              u8_returnLen =3;                        
+ 165   2                              break;
+ 166   2      
+ 167   2                      case 0x02030000:        //¹¦ÂÊÔ´Êý¾ÝÎªHEX32£¬0.0001KWÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XX.XXXXkW //
+ 168   2                      case 0x02030100:        //¹¦ÂÊÔ´Êý¾ÝÎªHEX32£¬0.0001KWÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XX.XXXXkW //
+ 169   2                              Lib_long_bcd4(&long_tmp.B08[0],(gs_measure_var_data.gs_really[0].dw_p_val.u32));
+ 170   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[1], 3);
+ 171   2                              ptr[DLT_ReadDataPtr] = data_buff[2];
+ 172   2                              ptr[DLT_ReadDataPtr+1] = data_buff[1];
+ 173   2                              ptr[DLT_ReadDataPtr+2] = data_buff[0];
+ 174   2                              u8_returnLen =3;
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 4   
+
+ 175   2                              break;
+ 176   2                              
+ 177   2                      case 0x02030200:        //N¹¦ÂÊÔ´Êý¾ÝÎªHEX32£¬0.0001KWÁ¿¸Ù£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½,XX.XXXXkW //
+ 178   2                              Lib_long_bcd4(&long_tmp.B08[0],(gs_measure_var_data.dw_p_n_val.u32));
+ 179   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[1], 3);
+ 180   2                              ptr[DLT_ReadDataPtr] = data_buff[2];
+ 181   2                              ptr[DLT_ReadDataPtr+1] = data_buff[1];
+ 182   2                              ptr[DLT_ReadDataPtr+2] = data_buff[0];
+ 183   2                              break;
+ 184   2                              
+ 185   2                      case 0x02060000:        //¹¦ÂÊÒòÊýÊý¾ÝÎªHEX16£¬0.001£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½0.001 //
+ 186   2                      case 0x02060100:        //¹¦ÂÊÒòÊýÊý¾ÝÎªHEX16£¬0.001£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½0.001 //
+ 187   2                              Lib_word_bcd2(&long_tmp.B08[0],(gs_measure_var_data.gs_really[0].dw_pf_val.u16));
+ 188   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[0], 2);
+ 189   2                              ptr[DLT_ReadDataPtr] = data_buff[1];
+ 190   2                              ptr[DLT_ReadDataPtr+1] = data_buff[0];
+ 191   2                              u8_returnLen =2;                        
+ 192   2                              break;
+ 193   2      
+ 194   2                      case 0x02800002:        //µçÍøÆµÂÊÊý¾ÝÎªHEX16£¬0.01Hz£¬ÐèÒª×ª»»ÎªBCDÂë¸ñÊ½xx.xx //
+ 195   2                              Lib_word_bcd2(&long_tmp.B08[0],(gs_measure_var_data.gs_really[0].w_freq_val.u16));
+ 196   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &long_tmp.B08[0], 2);
+ 197   2                              ptr[DLT_ReadDataPtr] = data_buff[1];
+ 198   2                              ptr[DLT_ReadDataPtr+1] = data_buff[0];
+ 199   2                              u8_returnLen =2;                        
+ 200   2                              break;
+ 201   2      
+ 202   2                      case 0x04000100://ÈÕÆÚ¼°ÐÇÆÚ(ÆäÖÐ0´ú±íÐÇÆÚÌì)YYMMDDWWhhmmss
+ 203   2                              Lib_Copy_Str_TwoArry(&data_buff[0], ptr_adr, comm_data.len);
+ 204   2                              data_buff[7] = data_buff[0];    //ww
+ 205   2                              data_buff[0] = data_buff[1];    //YY
+ 206   2                              data_buff[1] = data_buff[2];    //MM
+ 207   2                              data_buff[2] = data_buff[3];    //DD
+ 208   2                              data_buff[3] = data_buff[7];    //WW
+ 209   2                              data_buff[4] = data_buff[4];    //hh
+ 210   2                              data_buff[5] = data_buff[5];    //mm
+ 211   2                              data_buff[6] = data_buff[6];    //ss
+ 212   2                              ptr[DLT_ReadDataPtr] = data_buff[6];
+ 213   2                              ptr[DLT_ReadDataPtr+1] = data_buff[5];
+ 214   2                              ptr[DLT_ReadDataPtr+2] = data_buff[4];
+ 215   2                              ptr[DLT_ReadDataPtr+3] = data_buff[3];
+ 216   2                              ptr[DLT_ReadDataPtr+4] = data_buff[2];
+ 217   2                              ptr[DLT_ReadDataPtr+5] = data_buff[1];
+ 218   2                              ptr[DLT_ReadDataPtr+6] = data_buff[0];
+ 219   2                              u8_returnLen =7;                        
+ 220   2                              break;
+ 221   2      
+ 222   2                      case 0x04000401://±íµØÖ· ±íºÅ NNNNNNNNNNNN
+ 223   2                              mem_read(&data_buff[0], (INT16U)comm_data.addr,  comm_data.len,  mem_type );
+ 224   2                              comm_data.len_asc = get_meter_id_asclen(&data_buff[0], 16);
+ 225   2                              comm_data.len = comm_data.len_asc/2;
+ 226   2                              for(i=0;i<comm_data.len;i++)
+ 227   2                              {
+ 228   3                                      ptr[DLT_ReadDataPtr+i]=data_buff[comm_data.len-1-i];
+ 229   3                              }
+ 230   2                              u8_returnLen =comm_data.len;                    
+ 231   2                              break;
+ 232   2      
+ 233   2                      case 0x04800001: //Èí¼þ°æ±¾ºÅ ÒÑÊÇASCÂë
+ 234   2                              Lib_Copy_Str_TwoArry(&data_buff[0], ptr_adr, comm_data.len);
+ 235   2                              for(i=0;i<comm_data.len;i++)
+ 236   2                              {
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 5   
+
+ 237   3                                      ptr[DLT_ReadDataPtr+i]=data_buff[comm_data.len-1-i];
+ 238   3                              }
+ 239   2                              u8_returnLen =comm_data.len;                    
+ 240   2                              break;          
+ 241   2                      case 0x80805001:        //µ±Ç°ÔÂ×ÜµçÁ¿+¼ÌµçÆ÷×´Ì¬+±í¼ÆÈÕÆÚÊ±¼ä //
+ 242   2                              //µ±Ç°ÔÂ×ÜµçÁ¿
+ 243   2                              mem_read(&data_buff[10], (INT16U)&gs_energy_user_data.us_val[0][0].buf[0], LEN_EC_UNIT, MEM_RAM);         //»
+             -ñÈ¡µ±Ç°Êý¾Ý //
+ 244   2                              api_get_energy_LCD(&data_buff[10], 0x62,&data_buff[0]);
+ 245   2                              for(i=0;i<4;i++)
+ 246   2                              {
+ 247   3                                      ptr[DLT_ReadDataPtr+i]=data_buff[4-1-i];
+ 248   3                              }
+ 249   2                              //¼ÌµçÆ÷×´Ì¬
+ 250   2                              mem_read(&data_buff[0], (INT16U)ADR_METER_PARAM1_RELAY_CMD, 2, MEM_E2P1);         //»ñÈ¡µ±Ç°Êý¾Ý //
+ 251   2                              for(i=0;i<2;i++)
+ 252   2                              {
+ 253   3                                      ptr[DLT_ReadDataPtr+i+4]=data_buff[2-1-i];
+ 254   3                              }
+ 255   2                              Lib_Copy_Str_TwoArry(&data_buff[0], &gs_CurDateTime.Year, 6);
+ 256   2                              for(i=0;i<6;i++)
+ 257   2                              {
+ 258   3                                      ptr[DLT_ReadDataPtr+i+4+2]=data_buff[6-1-i];
+ 259   3                              }
+ 260   2                              u8_returnLen =comm_data.len;                    
+ 261   2                      break;
+ 262   2                      default:
+ 263   2      ////////////////µçÄÜÁ¿ÌØÊâ´¦Àí/////////////////////////////
+ 264   2                              if(gs_dlt645_07_var.u32_DI.BYTE[0]==0x00)
+ 265   2                              {
+ 266   3                                      comm_data.len = LEN_EC_UNIT;   // ÐÞ¸Ä»ñÈ¡³¤¶È//
+ 267   3                              }
+ 268   2      ///////////////////////////////////////////////////////////////////
+ 269   2      
+ 270   2                              if((comm_data.Info.u16&CM_ALL) == CM_BILL)
+ 271   2                              {
+ 272   3                                      mem_read(&data_buff[0], api_get_bill_record_addr((INT16U)comm_data.addr), comm_data.len,  mem_type );
+ 273   3                              }
+ 274   2                              else 
+ 275   2                              {
+ 276   3                                      if(mem_type==MEM_RAM)
+ 277   3                                      {
+ 278   4                                              Lib_Copy_Str_TwoArry(&data_buff[0], ptr_adr, comm_data.len);
+ 279   4                                      }
+ 280   3                                      else
+ 281   3                                      {
+ 282   4                                              mem_read(&data_buff[0], (INT16U)comm_data.addr, comm_data.len, mem_type );
+ 283   4                                      }
+ 284   3                              }
+ 285   2      
+ 286   2      ////////////////µçÄÜÁ¿ÌØÊâ´¦Àí/////////////////////////////
+ 287   2                              if(gs_dlt645_07_var.u32_DI.BYTE[0]==0x00)
+ 288   2                              {
+ 289   3                                      Lib_Copy_Str_TwoArry(&data_buff[10], &data_buff[0], LEN_EC_UNIT);
+ 290   3                                      api_get_energy_LCD(&data_buff[10], 0x62, &data_buff[0]) ;
+ 291   3                                      comm_data.len=4;
+ 292   3                              }
+ 293   2      ///////////////////////////////////////////////////////////////////
+ 294   2      
+ 295   2      ////////////////×î´óÐèÁ¿ÌØÊâ´¦Àí/////////////////////////////
+ 296   2                              if(gs_dlt645_07_var.u32_DI.BYTE[0]==0x01)
+ 297   2                              {  
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 6   
+
+ 298   3                                      Lib_Copy_Str_TwoArry(&long_tmp.B08[0], &data_buff[0], 4);
+ 299   3                                      Lib_long_bcd4(&data_buff[0],long_tmp.u32);
+ 300   3                              }
+ 301   2      ///////////////////////////////////////////////////////////////////                
+ 302   2                              for(i=0;i<comm_data.len;i++)
+ 303   2                              {
+ 304   3                                      ptr[DLT_ReadDataPtr+i]=data_buff[comm_data.len-1-i];
+ 305   3                              }
+ 306   2                              u8_returnLen =comm_data.len;                    
+ 307   2                              break;  
+ 308   2              }
+ 309   1      
+ 310   1      
+ 311   1              //²Ù×÷³É¹¦ºóÊý¾Ý´¦Àí  //        
+ 312   1              gs_dlt645_07_var.u8_lenOfData =u8_returnLen;        //·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 313   1              ptr[DLT_CtlPtr] += 0X80;
+ 314   1              ptr[DLT_LenPtr] =gs_dlt645_07_var.u8_lenOfData+4;    //4Îª¹Ì¶¨IDÊý¾Ý //         
+ 315   1              return(RS_State_OK);    
+ 316   1      }
+ 317          
+ 318          /*****************************************************************
+ 319          DLT645 C=0X14 ¶ÁÃüÁî£¬·µ»Ø³É¹¦½á¹ûÊÇÊý¾ÝÓòÒÑ¾­ÌîÐ´ºÃ·µ»ØÊý¾Ý
+ 320          *****************************************************************/
+ 321          INT8U DLT645_07_CTL0X14_write(INT8U *ptr)
+ 322          {
+ 323   1              //INT8U u8_returnLen;
+ 324   1              INT8U i,MeterID_LenTmp;
+ 325   1              INT8U mem_type;
+ 326   1              INT8U u8_buff[100];
+ 327   1      
+ 328   1              // 0  ÃÜÂë¼ì²éÅÐ¶Ï´¦Àí          //
+ 329   1              if(DLT_SecurityCK(ptr) != mmok )  
+ 330   1              {
+ 331   2                      //ÃÜÂë´íÎó  //
+ 332   2                      gs_dlt645_07_var.u8_lenOfData =1;               //·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 333   2                      return(RS_State_PswE);          
+ 334   2              }
+ 335   1      
+ 336   1              // 1 Êý¾Ý¿ØÖÆID,´«ÊäÎªµØÎ»ÔÚÇ°£¬C51               U32ÀàÐÍÎª´ó¶ÎÄ£Ê½     //
+ 337   1              gs_dlt645_07_var.u32_DI.BYTE[0] = ptr[DLT_CmdDI3Ptr];
+ 338   1              gs_dlt645_07_var.u32_DI.BYTE[1] = ptr[DLT_CmdDI2Ptr];
+ 339   1              gs_dlt645_07_var.u32_DI.BYTE[2] = ptr[DLT_CmdDI1Ptr];
+ 340   1              gs_dlt645_07_var.u32_DI.BYTE[3] = ptr[DLT_CmdDI0Ptr];
+ 341   1              
+ 342   1              if(get_IEC_comm_var(gs_dlt645_07_var.u32_DI.UDWORD) == 0 )      return(RS_State_IVID);
+ 343   1              if( ( comm_data.Info.u16& EN_W) == 0 )  return(RS_State_IVData);
+ 344   1              //      »ñÈ¡Êý¾ÝµÄ´æ´¢ÀàÐÍ //
+ 345   1              mem_type = (comm_data.Info.B08[0]>>3)&0x07;     
+ 346   1          //Êý¾ÝÓòÇåÁã²¢¼ì²é½ÓÊÕµÄÊý¾Ý³¤¶ÈºÏ·¨ÐÔ //
+ 347   1          Lib_Set_String(&u8_buff[0], 0x00, comm_data.len); 
+ 348   1          if(gs_dlt645_07_var.u32_DI.UDWORD== 0x04000401) //³ýÉèÖÃ±íºÅÍâ.¶¼ÐèÒª¶Ô±ÈÊý¾Ý³¤¶È
+ 349   1          {
+ 350   2              if((ptr[DLT_LenPtr] > (12+comm_data.len))||(ptr[DLT_LenPtr] < 12))         
+ 351   2                      {
+ 352   3                              //Êý¾ÝºÏ·¨ÐÔÅÐ¶Ï  //
+ 353   3                              gs_dlt645_07_var.u8_lenOfData =1;               //·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 354   3                              return(RS_State_IVData); 
+ 355   3                      }
+ 356   2          }
+ 357   1          else
+ 358   1          {
+ 359   2              if(ptr[DLT_LenPtr] != (12+comm_data.len))          
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 7   
+
+ 360   2                      {
+ 361   3                              //Êý¾ÝºÏ·¨ÐÔÅÐ¶Ï  //
+ 362   3                              gs_dlt645_07_var.u8_lenOfData =1;               //·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 363   3                              return(RS_State_IVData); 
+ 364   3                      }
+ 365   2          }
+ 366   1              // 2 Ð´ÈëÊý¾ÝÅÐ¶Ï´¦Àí          //       
+ 367   1              switch (gs_dlt645_07_var.u32_DI.UDWORD)
+ 368   1                      {
+ 369   2                              case 0x04800003:
+ 370   2                                      //ÐÞ¸Ä¼ÌµçÆ÷×´Ì¬£¬²Ù×÷¼ÌµçÆ÷À­ºÏÕ¢ //
+ 371   2                                      for(i=0;i<comm_data.len;i++)
+ 372   2                                      {
+ 373   3                                              u8_buff[i]=ptr[DLT_WriteDataPtr+i];
+ 374   3                                      }
+ 375   2                                      if(Drv_relay_COMM_CMD_operating(&u8_buff[0])==FALSE)  
+ 376   2                                      {
+ 377   3                                              //Êý¾ÝºÏ·¨ÐÔÅÐ¶Ï  //
+ 378   3                                              gs_dlt645_07_var.u8_lenOfData =1;               //·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 379   3                                              return(RS_State_IVData); 
+ 380   3                                      }
+ 381   2                                      break;
+ 382   2      
+ 383   2                              case 0x04000100://ÈÕÆÚ¼°ÐÇÆÚ(ÆäÖÐ0´ú±íÐÇÆÚÌì)YYMMDDWWhhmmss  
+ 384   2                                      gs_CurDateTime.Year= ptr[DLT_WriteDataPtr];
+ 385   2                                      gs_CurDateTime.Month= ptr[DLT_WriteDataPtr+1];
+ 386   2                                      gs_CurDateTime.Day= ptr[DLT_WriteDataPtr+2];
+ 387   2                                      gs_CurDateTime.Week= ptr[DLT_WriteDataPtr+3];
+ 388   2                                      gs_CurDateTime.Hour= ptr[DLT_WriteDataPtr+4];
+ 389   2                                      gs_CurDateTime.Minute= ptr[DLT_WriteDataPtr+5];
+ 390   2                                      gs_CurDateTime.Second= ptr[DLT_WriteDataPtr+6];
+ 391   2                                      EA=0;
+ 392   2                                      Set_RTCTime(&gs_CurDateTime);
+ 393   2                                      EA=1;
+ 394   2                                      mem_db_write((INT16U)ADR_METER_VAR_RTC, &gs_CurDateTime.Week, 7, MEM_E2P1);
+ 395   2                                      api_init_md_data_ram();
+ 396   2                                      #if (TARIFF_MAX_NUM>0)
+                                              api_update_triffNo_pre_minute();
+                                              #endif
+ 399   2                                      break;
+ 400   2      
+ 401   2                              //±íºÅÌØÊâ´¦Àí
+ 402   2                              case 0x04000401://±íµØÖ· ±íºÅ 16¸ö×Ö½Ú ×ÔÊÊÓ¦,ÈçÉèÆæÊý£¬ÔòÇ°²¹0
+ 403   2                                      MeterID_LenTmp = (ptr[DLT_LenPtr]-12);  //ÓÐÐ§±íºÅ      ³¤¶È
+ 404   2                                      Lib_Set_String(&u8_buff[0], 0xFF, 16);
+ 405   2                                      for(i=0;i<MeterID_LenTmp;i++)
+ 406   2                                      {
+ 407   3                                              u8_buff[i]=ptr[DLT_WriteDataPtr+i];
+ 408   3                                      }
+ 409   2                                      mem_db_write((INT16U)comm_data.addr, &u8_buff[0], comm_data.len, mem_type);             //Ð´ÈëÓ¦¸ÃÊÇ16×Ö½Ú£¬¶ø²»Ê
+             -ÇÉèÖÃµÄ³¤¶È
+ 410   2                                      break;
+ 411   2      
+ 412   2                              case 0x04000B01://½áËãÈÕDDHH 4
+ 413   2                                              for(i=0;i<comm_data.len;i++)
+ 414   2                                              {
+ 415   3                                                      u8_buff[i]=ptr[DLT_WriteDataPtr+i];
+ 416   3                                              }
+ 417   2                                              if((u8_buff[0]<0x01)||(u8_buff[0]>0x28)||(u8_buff[1]>0x23))             //´íÎóÅÐ¶Ï
+ 418   2                                              {
+ 419   3                                                      return(RS_State_IVData);
+ 420   3                                              }
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 8   
+
+ 421   2                                              mem_db_write((INT16U)comm_data.addr, &u8_buff[0], comm_data.len, mem_type);
+ 422   2                                              break;
+ 423   2                                              
+ 424   2                              case 0x04000103://ÐèÁ¿²ÎÊý PERIOD : SLID   4  //ÐÞ¸ÄºóÐèÁ¿ÖØÐÂ¼ÆËã //
+ 425   2                                              for(i=0;i<comm_data.len;i++)
+ 426   2                                              {
+ 427   3                                                      u8_buff[i]=ptr[DLT_WriteDataPtr+i];
+ 428   3                                              }
+ 429   2                                              if(((u8_buff[0]%u8_buff[1]) !=0)||(u8_buff[0]>30)||(u8_buff[0]==0)||(u8_buff[1]==0))            //´íÎóÅÐ¶Ï//
+ 430   2                                              {
+ 431   3                                                      return(RS_State_IVData);
+ 432   3                                              }
+ 433   2                                              mem_db_write((INT16U)comm_data.addr, &u8_buff[0], comm_data.len, mem_type);
+ 434   2                                              api_init_md_data_ram();
+ 435   2                                              break;
+ 436   2      
+ 437   2                              case 0x08020200://NN=00£¬Çå³ýËùÓÐÍ¨µÀ£»//
+ 438   2                                      for(i=0;i<comm_data.len;i++)
+ 439   2                                      {
+ 440   3                                              u8_buff[i]=ptr[DLT_WriteDataPtr+i];
+ 441   3                                      }
+ 442   2                                      if(u8_buff[0]==0x00)
+ 443   2                                      {
+ 444   3                                              api_clr_even_by_comm(); 
+ 445   3                                              CLRWDT();
+ 446   3                                      }
+ 447   2                                      else
+ 448   2                                      {
+ 449   3                                              return(RS_State_IVData);
+ 450   3                                      }
+ 451   2                                      break;
+ 452   2                                      
+ 453   2                              case 0x08020100://Ö»Çåµ±Ç°ÐèÁ¿ÇåÁã//
+ 454   2                                      for(i=0;i<comm_data.len;i++)
+ 455   2                                      {
+ 456   3                                              u8_buff[i]=ptr[DLT_WriteDataPtr+i];
+ 457   3                                      }
+ 458   2                                      if(u8_buff[0]!=0)
+ 459   2                                      return(RS_State_IVData);
+ 460   2                                      api_clr_current_MD_data();
+ 461   2                                      CLRWDT();
+ 462   2                              break;
+ 463   2                              
+ 464   2                      case 0x08020300:
+ 465   2                              for(i=0;i<comm_data.len;i++)
+ 466   2                              {
+ 467   3                                      u8_buff[i]=ptr[DLT_WriteDataPtr+i];
+ 468   3                              }
+ 469   2                              if(u8_buff[0]==0x00)
+ 470   2                              {
+ 471   3                                      LoadProRst();
+ 472   3                                      CLRWDT();
+ 473   3                              }
+ 474   2                              else
+ 475   2                              {
+ 476   3                                      return(RS_State_IVData);
+ 477   3                              }
+ 478   2                              break;
+ 479   2                      case 0x08020400://µçÁ¿ÇåÁã(µç±í×ÜÇå(µçÁ¿+ÐèÁ¿)) //
+ 480   2                              for(i=0;i<comm_data.len;i++)
+ 481   2                              {
+ 482   3                                      u8_buff[i]=ptr[DLT_WriteDataPtr+i];
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 9   
+
+ 483   3                              }
+ 484   2                              if((u8_buff[0]!=0)||(u8_buff[1]!=0)||(u8_buff[2]!=0)||(u8_buff[3]!=0))
+ 485   2                                      return(RS_State_IVData);
+ 486   2                              api_clr_current_energy_data();
+ 487   2                              CLRWDT();
+ 488   2                              api_clr_current_MD_data();
+ 489   2                              CLRWDT();
+ 490   2      #if (BILL_MAX_NUM>0)
+ 491   2                              api_clr_bill_data();
+ 492   2      #endif
+ 493   2                              CLRWDT();
+ 494   2                              LoadProRst();
+ 495   2                              CLRWDT();
+ 496   2                              api_clr_even_by_comm(); 
+ 497   2                              CLRWDT();
+ 498   2                              api_chg_LCDDisplay_adj_item(DIS_DATA_CLR);       // Òº¾§ÏÔÊ¾ //
+ 499   2                              break;
+ 500   2                      default:
+ 501   2                              for(i=0;i<comm_data.len;i++)
+ 502   2                              {
+ 503   3                                      u8_buff[i]=ptr[DLT_WriteDataPtr+i];
+ 504   3                              }
+ 505   2                              
+ 506   2                               if(mem_type == MEM_RAM)
+ 507   2                               {
+ 508   3                                         mem_write((INT16U)comm_data.addr,&u8_buff[0], comm_data.len, mem_type);
+ 509   3                               }
+ 510   2                               else
+ 511   2                               {
+ 512   3                                         mem_db_write((INT16U)comm_data.addr, &u8_buff[0], comm_data.len, mem_type);
+ 513   3                               }
+ 514   2                               
+ 515   2                              break;  
+ 516   2                      }
+ 517   1              /////////////////ÉèÖÃÏÔÊ¾²ÎÊýºóÐèÒª¸üÐÂ///////
+ 518   1                      if((gs_dlt645_07_var.u32_DI.UDWORD == 0x04000302)||(gs_dlt645_07_var.u32_DI.UDWORD == 0x04000303)||(gs_d
+             -lt645_07_var.u32_DI.UDWORD == 0x04040100))
+ 519   1                      {
+ 520   2                              mem_read(&gs_dis_param.auto_sec, ADR_BLOCK21_DIS_PARAM_E2P, LEN_BLOCK21_DIS_PARAM_E2P, MEM_E2P1);
+ 521   2                      }       
+ 522   1              //²Ù×÷³É¹¦ºóÊý¾Ý´¦Àí  //        
+ 523   1              gs_dlt645_07_var.u8_lenOfData =0;               //²Ù×÷³É¹¦·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 524   1              ptr[DLT_CtlPtr] += 0X80;
+ 525   1              ptr[DLT_LenPtr] =gs_dlt645_07_var.u8_lenOfData;         
+ 526   1              return(RS_State_OK); 
+ 527   1      }
+ 528          
+ 529          /*****************************************************************
+ 530          DLT645 C=0X18 ÃÜÂëÐÞ¸ÄÃüÁî,·µ»Ø³É¹¦½á¹ûÊÇÊý¾ÝÓòÒÑ¾­ÌîÐ´ºÃ·µ»ØÊý¾Ý
+ 531          *****************************************************************/
+ 532          INT8U DLT645_07_CTL0X18_chgMIMA(INT8U *ptr)
+ 533          {
+ 534   1              INT8U i;
+ 535   1              
+ 536   1              // 0  ÃÜÂë¼ì²éÅÐ¶Ï´¦Àí          //
+ 537   1              if(DLT_SecurityCK(ptr) != mmok )  
+ 538   1              {
+ 539   2                      //ÃÜÂë´íÎó  //
+ 540   2                      gs_dlt645_07_var.u8_lenOfData =1;               //·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 541   2                      return(RS_State_PswE);          
+ 542   2              }
+ 543   1      
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 10  
+
+ 544   1              // 1 Êý¾Ý¿ØÖÆID,´«ÊäÎªµØÎ»ÔÚÇ°£¬C51               U32ÀàÐÍÎª´ó¶ËÄ£Ê½     //
+ 545   1              gs_dlt645_07_var.u32_DI.BYTE[0] = ptr[DLT_CmdDI3Ptr];
+ 546   1              gs_dlt645_07_var.u32_DI.BYTE[1] = ptr[DLT_CmdDI2Ptr];
+ 547   1              gs_dlt645_07_var.u32_DI.BYTE[2] = ptr[DLT_CmdDI1Ptr];
+ 548   1              gs_dlt645_07_var.u32_DI.BYTE[3] = ptr[DLT_CmdDI0Ptr];
+ 549   1      
+ 550   1              // 2  IDÅÐ¶Ï´¦Àí  //
+ 551   1              if((gs_dlt645_07_var.u32_DI.UDWORD<0X04000C01) || (gs_dlt645_07_var.u32_DI.UDWORD >0X04000C02) )
+ 552   1              {
+ 553   2                      return(RS_State_IVID);
+ 554   2              }
+ 555   1      
+ 556   1              // 3  Êý¾Ý³¤¶ÈºÏ·¨ÐÔÅÐ¶Ï´¦Àí  //
+ 557   1              if(ptr[DLT_LenPtr] != 12 )           //12Îª¹Ì¶¨³¤¶È£¬4ID£¬4ÀÏÃÜÂë£¬4ÐÂÃÜÂë  //
+ 558   1              {
+ 559   2                      //Êý¾ÝºÏ·¨ÐÔÅÐ¶Ï  //
+ 560   2                      gs_dlt645_07_var.u8_lenOfData =1;               //·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 561   2                      return(RS_State_IVData); 
+ 562   2              }       
+ 563   1      
+ 564   1              //IDÕýÈ·ºóµÄÃÜÂëÐÞ¸Ä´¦Àí  //    
+ 565   1              mem_db_write(ADR_METER_PARAM1_PW1, &ptr[DLT_WriterC0Ptr], 4, MEM_E2P1);
+ 566   1      
+ 567   1              //²Ù×÷³É¹¦ºóÊý¾Ý´¦Àí  //        
+ 568   1              gs_dlt645_07_var.u8_lenOfData =4;               //²Ù×÷³É¹¦·µ»ØÊý¾Ý³¤¶È¶¨Òå¸³Öµ  //
+ 569   1              ptr[DLT_CtlPtr] += 0X80;
+ 570   1              ptr[DLT_LenPtr] =gs_dlt645_07_var.u8_lenOfData;
+ 571   1              for(i=0;i<gs_dlt645_07_var.u8_lenOfData;i++)
+ 572   1              {
+ 573   2                      ptr[DLT_Cmd+i] = ptr[DLT_WriterC0Ptr+i];
+ 574   2              }       
+ 575   1              return(RS_State_OK); 
+ 576   1      }
+ 577          
+ 578          
+ 579          /*****************************************************************************
+ 580          ** Function name    :INT8U Lnk_SX127X_rx_data(INT8U *rx_ptr)
+ 581          **
+ 582          ** Description          :ÅÐ¶Ï²¢»ñÈ¡RFÄ£Ê½½ÓÊÕÊý¾Ý²¢´æ·ÅÔÚRAMÇø
+ 583          **
+ 584          ** Parameters           :NONE
+ 585          **
+ 586          ** Returned value       :INT8U  ½ÓÊÕ·µ»Ø³¤¶È£¬0´ú±íÎ´½ÓÊÕµ½Êý¾Ý
+ 587          **
+ 588          ** Note                 :
+ 589          **
+ 590          **----------------------------------------------------------------------------
+ 591          ** V01.01  MJ  2016-12-07
+ 592          ******************************************************************************/
+ 593          void api_DLT645_07_protocol_analysis(void)
+ 594          {
+ 595   1              INT8U start_index;
+ 596   1              INT8U i;
+ 597   1              INT8U result_analysis;
+ 598   1              INT8U offset_cs;
+ 599   1      
+ 600   1          //Ç°µ¼×Ö½ÚºÍ Ö¡Í·ÅÐ¶Ï´¦Àí//
+ 601   1          for(start_index=0;start_index<5;start_index++)
+ 602   1          {
+ 603   2              if((P_DL645_07_BUFF[start_index]==0X68)&&(P_DL645_07_BUFF[start_index+DLT_Head0Ptr]==0X68))  break
+             -;
+ 604   2          } 
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 11  
+
+ 605   1          if(start_index>4)
+ 606   1          {
+ 607   2              //½ÓÊÕµÄÊý¾ÝÖ¡´íÎó£¬¸´Î»´¦Àí      //
+ 608   2              api_RF_commRAM_RESET();
+ 609   2              return;
+ 610   2          }
+ 611   1      
+ 612   1          //CSÐ£ÑéºÍ´¦Àí//
+ 613   1          offset_cs = DLT_Cmd+P_DL645_07_BUFF[start_index+DLT_LenPtr];
+ 614   1          if(P_DL645_07_BUFF[start_index+offset_cs] !=(INT8U)( Lib_get_csck_int16u_num( &(P_DL645_07_BUFF[start_
+             -index]), (INT8U)(offset_cs),0 )))
+ 615   1          { 
+ 616   2              //½ÓÊÕµÄÊý¾ÝÖ¡´íÎó£¬¸´Î»´¦Àí      //
+ 617   2              api_RF_commRAM_RESET();
+ 618   2              return;
+ 619   2          } 
+ 620   1      
+ 621   1          //½áÊø×Ö·û´¦Àí//
+ 622   1          if(P_DL645_07_BUFF[start_index+offset_cs+1] !=0x16)
+ 623   1          { 
+ 624   2              //½ÓÊÕµÄÊý¾ÝÖ¡´íÎó£¬¸´Î»´¦Àí      //
+ 625   2              api_RF_commRAM_RESET();
+ 626   2              return;
+ 627   2          } 
+ 628   1      
+ 629   1          //±íºÅ¼ì²éÅÐ¶Ï//
+ 630   1          if(MeteIDCheck(&P_DL645_07_BUFF[start_index+DLT_Head0Ptr])!=TRUE )
+ 631   1          { 
+ 632   2              //½ÓÊÕµÄÊý¾ÝÖ¡´íÎó£¬¸´Î»´¦Àí      //
+ 633   2              api_RF_commRAM_RESET();
+ 634   2              return;
+ 635   2          } 
+ 636   1      
+ 637   1              //data  subtract 0x33 process   //
+ 638   1          for(i=0; i<P_DL645_07_BUFF[start_index+DLT_LenPtr]; i++ )
+ 639   1          {
+ 640   2              P_DL645_07_BUFF[start_index+DLT_Cmd+i] -= 0x33;
+ 641   2          }
+ 642   1      
+ 643   1              //¿ØÖÆÂëC·ÖÖ§´¦Àí  //
+ 644   1              switch (P_DL645_07_BUFF[start_index+DLT_CtlPtr]& 0x1F)
+ 645   1              {
+ 646   2                      case DLT_CTL_Read:
+ 647   2                              result_analysis = DLT645_07_CTL0X11_read(&P_DL645_07_BUFF[start_index] );
+ 648   2                              break;
+ 649   2      
+ 650   2                      case DLT_CTL_Write:
+ 651   2                              result_analysis = DLT645_07_CTL0X14_write(&P_DL645_07_BUFF[start_index] );
+ 652   2                              break;
+ 653   2      
+ 654   2                      case DLT_CTL_ChgPswd:
+ 655   2                              result_analysis = DLT645_07_CTL0X18_chgMIMA(&P_DL645_07_BUFF[start_index] );
+ 656   2                              break;
+ 657   2      
+ 658   2                      case DLT_CTL_Broadcast:
+ 659   2                              result_analysis = RS_State_Broadcast;
+ 660   2                              break;
+ 661   2                              
+ 662   2                      default:
+ 663   2                              //½ÓÊÕ¿ØÖÆÂë´íÎó£¬²»Ó¦´ð//
+ 664   2                              api_RF_commRAM_RESET();
+ 665   2                              return;
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 12  
+
+ 666   2              }
+ 667   1              //Õë¶Ô·µ»Ø½á¹ûµÄ·ÖÖ§´¦Àí //
+ 668   1              if(result_analysis==RS_State_OK)
+ 669   1                      {               
+ 670   2                      }
+ 671   1              else if((result_analysis==RS_State_IVData)||(result_analysis==RS_State_IVID))
+ 672   1                      {
+ 673   2                              P_DL645_07_BUFF[start_index+DLT_CtlPtr] +=0XC0;
+ 674   2                              P_DL645_07_BUFF[start_index+DLT_LenPtr] =1;
+ 675   2                              P_DL645_07_BUFF[start_index+DLT_Cmd] =BIT0;
+ 676   2                      }       
+ 677   1              else if(result_analysis==RS_State_PswE)
+ 678   1                      {
+ 679   2                              P_DL645_07_BUFF[start_index+DLT_CtlPtr] +=0XC0;
+ 680   2                              P_DL645_07_BUFF[start_index+DLT_LenPtr] =1;
+ 681   2                              P_DL645_07_BUFF[start_index+DLT_Cmd] =BIT2;
+ 682   2                      }
+ 683   1              else if(result_analysis==RS_State_Broadcast)
+ 684   1                      {
+ 685   2                              api_chg_LCDDisplay_adj_item(DIS_DATA_BROADCAST);   // Òº¾§ÏÔÊ¾ //
+ 686   2                              //Ö±½Ó¸´Î»RFÍ¨Ñ¶½Ó¿Ú£¬ÎÞ·µ»ØÊý¾Ý  //
+ 687   2                              api_RF_commRAM_RESET();
+ 688   2                              return;
+ 689   2                      }
+ 690   1              else
+ 691   1                      {
+ 692   2                              //Ö±½Ó¸´Î»RFÍ¨Ñ¶½Ó¿Ú£¬ÎÞ·µ»ØÊý¾Ý        //
+ 693   2                              api_RF_commRAM_RESET();
+ 694   2                              return;
+ 695   2                      }
+ 696   1      
+ 697   1      
+ 698   1              /////////////////////////////////////////////////////////
+ 699   1              //·¢ËÍÊý¾Ý×éÖ¡
+ 700   1              ////////////////////////////////////////////////////////
+ 701   1      
+ 702   1              // 1 »ñÈ¡±íºÅÊý¾Ý  //
+ 703   1              mem_read(&P_DL645_07_BUFF[start_index+DLT_AddrPtr], ADR_METER_PARAM1_RF_COMM_ID, 6, MEM_E2P1);
+ 704   1      
+ 705   1              // 2 data  add 0x33 process   //
+ 706   1          for(i=0; i<P_DL645_07_BUFF[start_index+DLT_LenPtr]; i++ )
+ 707   1          {
+ 708   2              P_DL645_07_BUFF[start_index+DLT_Cmd+i] += 0x33;
+ 709   2          }
+ 710   1      
+ 711   1              // 3 CS Ð£ÑéºÍ»ñÈ¡ //
+ 712   1          offset_cs = DLT_Cmd+P_DL645_07_BUFF[start_index+DLT_LenPtr];
+ 713   1          P_DL645_07_BUFF[start_index+offset_cs] =(INT8U)( Lib_get_csck_int16u_num( &(P_DL645_07_BUFF[start_inde
+             -x]), (INT8U)(offset_cs),0 )); 
+ 714   1      
+ 715   1              // 4 ½áÊø·û»ñÈ¡ //
+ 716   1              P_DL645_07_BUFF[start_index+offset_cs+1] =0x16;
+ 717   1      
+ 718   1      
+ 719   1              /////////////////////////////////////////////////////////
+ 720   1              //ÅäÖÃ·¢ËÍÇ°×¼±¸
+ 721   1              ////////////////////////////////////////////////////////
+ 722   1              gs_dlt645_07_var.start_index = start_index;
+ 723   1              gs_dlt645_07_var.tx_frame_len= start_index+12+P_DL645_07_BUFF[start_index+DLT_LenPtr];   // »ñÈ¡Êý¾Ý·¢ËÍÖ
+             -¡×Ü³¤¶È //
+ 724   1              gs_dlt645_07_var.tx_delay_flg = TRUE;
+ 725   1              gs_dlt645_07_var.tx_ready_10ms =8;         //ÑÓÊ±80ms //
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 13  
+
+ 726   1      
+ 727   1      }
+ 728          
+ 729          
+ 730          /*****************************************************************************
+ 731          ** Function name    :INT8U Lnk_SX127X_rx_data(INT8U *rx_ptr)
+ 732          **
+ 733          ** Description          :ÅÐ¶Ï²¢»ñÈ¡RFÄ£Ê½½ÓÊÕÊý¾Ý²¢´æ·ÅÔÚRAMÇø
+ 734          **
+ 735          ** Parameters           :NONE
+ 736          **
+ 737          ** Returned value       :INT8U  ½ÓÊÕ·µ»Ø³¤¶È£¬0´ú±íÎ´½ÓÊÕµ½Êý¾Ý
+ 738          **
+ 739          ** Note                 :
+ 740          **
+ 741          **----------------------------------------------------------------------------
+ 742          ** V01.01  MJ  2016-12-07
+ 743          ******************************************************************************/
+ 744          void api_RF_tx_data(INT8U *txbuf,INT8U tx_len)
+ 745          {
+ 746   1          if(tx_len==0)   return;
+ 747   1          G_LoRaConfig.PayloadLength= tx_len;   
+ 748   1          SX1276_TxPacket(txbuf);
+ 749   1          gs_rf_drv_var.status = RF_STATUS_TX;   
+ 750   1          gs_rf_drv_var.tmr_tx_max_wait = 0;
+ 751   1      }
+ 752          
+ 753          
+ 754          /*****************************************************************************
+ 755          ** Function name    :INT8U Lnk_SX127X_rx_data(INT8U *rx_ptr)
+ 756          **
+ 757          ** Description          :ÅÐ¶Ï²¢»ñÈ¡RFÄ£Ê½½ÓÊÕÊý¾Ý²¢´æ·ÅÔÚRAMÇø
+ 758          **
+ 759          ** Parameters           :NONE
+ 760          **
+ 761          ** Returned value       :INT8U  ½ÓÊÕ·µ»Ø³¤¶È£¬0´ú±íÎ´½ÓÊÕµ½Êý¾Ý
+ 762          **
+ 763          ** Note                 :
+ 764          **
+ 765          **----------------------------------------------------------------------------
+ 766          ** V01.01  MJ  2016-12-07
+ 767          ******************************************************************************/
+ 768          void api_RF_commRAM_RESET(void)
+ 769          {
+ 770   1              gs_rf_drv_var.status = RF_STATUS_RX;
+ 771   1              gs_rf_drv_var.data_len = 0;
+ 772   1              Lib_Clr_String(&gs_rf_drv_var.buff[0],RF_BUFF_MAX_SIZE);
+ 773   1              gs_rf_drv_var.tmr_tx_max_wait = 0;
+ 774   1              Lib_Clr_String(&gs_dlt645_07_var.u8_result,sizeof(DLT645_07_VAR));
+ 775   1              
+ 776   1              Lnk_SX2176_Intilize();  
+ 777   1      }
+ 778          
+ 779          /*****************************************************************************
+ 780          ** Function name    :INT8U Lnk_SX127X_rx_data(INT8U *rx_ptr)
+ 781          **
+ 782          ** Description          :ÅÐ¶Ï²¢»ñÈ¡RFÄ£Ê½½ÓÊÕÊý¾Ý²¢´æ·ÅÔÚRAMÇø
+ 783          **
+ 784          ** Parameters           :NONE
+ 785          **
+ 786          ** Returned value       :INT8U  ½ÓÊÕ·µ»Ø³¤¶È£¬0´ú±íÎ´½ÓÊÕµ½Êý¾Ý
+ 787          **
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 14  
+
+ 788          ** Note                 :
+ 789          **
+ 790          **----------------------------------------------------------------------------
+ 791          ** V01.01  MJ  2016-12-07
+ 792          ******************************************************************************/
+ 793          INT8U api_RF_judge_rx(INT8U **p_buf)
+ 794          {
+ 795   1          if(gs_rf_drv_var.status == RF_STATUS_TX)   return(0);       //·¢ËÍ×´Ì¬²»´¦Àí½ÓÊÕ //
+ 796   1          
+ 797   1          // ·µ»Ø»º³åÇøµØÖ· //
+ 798   1          *p_buf = &gs_rf_drv_var.buff[0] ;
+ 799   1              // RF Í¨µÀÊÇ·ñ½ÓÊÕµ½Êý¾Ý //
+ 800   1              gs_rf_drv_var.data_len = Lnk_sx1276_rx_data(&gs_rf_drv_var.buff[0]);
+ 801   1      
+ 802   1              return (gs_rf_drv_var.data_len);
+ 803   1      }
+ 804          
+ 805          
+ 806          /*****************************************************************************
+ 807          ** Function name    :INT8U Lnk_SX127X_rx_data(INT8U *rx_ptr)
+ 808          **
+ 809          ** Description          :ÅÐ¶Ï²¢»ñÈ¡RFÄ£Ê½½ÓÊÕÊý¾Ý²¢´æ·ÅÔÚRAMÇø
+ 810          **
+ 811          ** Parameters           :NONE
+ 812          **
+ 813          ** Returned value       :INT8U  ½ÓÊÕ·µ»Ø³¤¶È£¬0´ú±íÎ´½ÓÊÕµ½Êý¾Ý
+ 814          **
+ 815          ** Note                 :
+ 816          **
+ 817          **----------------------------------------------------------------------------
+ 818          ** V01.01  MJ  2016-12-07
+ 819          ******************************************************************************/
+ 820          void api_RF_judge_tx(void)
+ 821          {
+ 822   1              if((gs_dlt645_07_var.tx_ready_10ms ==0)&&(gs_dlt645_07_var.tx_delay_flg ==TRUE))
+ 823   1                      {
+ 824   2              P_DL645_07_BUFF = &gs_rf_drv_var.buff[0];
+ 825   2              api_RF_tx_data(&P_DL645_07_BUFF[0], gs_dlt645_07_var.tx_frame_len);   // Êý¾Ý·¢ËÍ£¬´øÇ°µ¼ //   
+ 826   2              gs_dlt645_07_var.tx_delay_flg =FALSE;
+ 827   2                      }
+ 828   1      }
+ 829          
+ 830          /*****************************************************************************
+ 831          ** Function name    :INT8U Lnk_SX127X_rx_data(INT8U *rx_ptr)
+ 832          **
+ 833          ** Description          :ÅÐ¶Ï²¢»ñÈ¡RFÄ£Ê½½ÓÊÕÊý¾Ý²¢´æ·ÅÔÚRAMÇø
+ 834          **
+ 835          ** Parameters           :NONE
+ 836          **
+ 837          ** Returned value       :INT8U  ½ÓÊÕ·µ»Ø³¤¶È£¬0´ú±íÎ´½ÓÊÕµ½Êý¾Ý
+ 838          **
+ 839          ** Note                 :
+ 840          **
+ 841          **----------------------------------------------------------------------------
+ 842          ** V01.01  MJ  2016-12-07
+ 843          ******************************************************************************/
+ 844          void api_RF_judge_tx_over_delay(void)
+ 845          {
+ 846   1          if(gs_rf_drv_var.status != RF_STATUS_TX)    return ;           //²»ÊÇ·¢ËÍ×´Ì¬£¬ÍË³ö //
+ 847   1      
+ 848   1              //RFÄ£¿é·¢ËÍ³¬Ê±£¬·µ»ØTRUE,ÓÃÀ´¸´Î»Õû¸öÍ¨Ñ¶Í¨µÀ //
+ 849   1          if((gs_rf_drv_var.tmr_tx_max_wait>=RF_TX_WAIT_MAX_TRM))
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 15  
+
+ 850   1          {      
+ 851   2                      api_RF_commRAM_RESET();                 
+ 852   2                      return; 
+ 853   2          }
+ 854   1      
+ 855   1              // RF Í¨µÀÊÇ·ñ·¢ËÍÍêÊý¾Ý //
+ 856   1         if(LSD_RF_READ_DIO0()==0) return;
+ 857   1         Lib_Delay_2us(5);
+ 858   1         if(LSD_RF_READ_DIO0() ==0) return ;   
+ 859   1      
+ 860   1         api_RF_commRAM_RESET();                 
+ 861   1         return; 
+ 862   1      }
+ 863          
+ 864          
+ 865          /*****************************************************************************
+ 866          ** Function name    :INT8U Lnk_SX127X_rx_data(INT8U *rx_ptr)
+ 867          **
+ 868          ** Description          :ÅÐ¶Ï²¢»ñÈ¡RFÄ£Ê½½ÓÊÕÊý¾Ý²¢´æ·ÅÔÚRAMÇø
+ 869          **
+ 870          ** Parameters           :NONE
+ 871          **
+ 872          ** Returned value       :INT8U  ½ÓÊÕ·µ»Ø³¤¶È£¬0´ú±íÎ´½ÓÊÕµ½Êý¾Ý
+ 873          **
+ 874          ** Note                 :
+ 875          **
+ 876          **----------------------------------------------------------------------------
+ 877          ** V01.01  MJ  2016-12-07
+ 878          ******************************************************************************/
+ 879          void api_RF_comm_deal(void)
+ 880          {
+ 881   1              INT8U buff_size;
+ 882   1      
+ 883   1          if(gs_rf_drv_var.status == RF_STATUS_TX)   return;       //·¢ËÍ×´Ì¬²»´¦Àí½ÓÊÕ //
+ 884   1              CLRWDT();       // Çå¿´ÃÅ¹·//
+ 885   1              buff_size = api_RF_judge_rx(&P_DL645_07_BUFF); 
+ 886   1      
+ 887   1          if(buff_size==0) return;    // Ã¿¸öÑ­»·»ñÈ¡Ò»´Î½ÓÊÕÊý¾Ý³¤¶È£¬=0£¬ÍË³ö //    
+ 888   1      
+ 889   1              gs_rf_drv_var.data_len = buff_size;
+ 890   1              CLRWDT();       // Çå¿´ÃÅ¹·//
+ 891   1              api_DLT645_07_protocol_analysis();
+ 892   1      
+ 893   1      }
+ 894          
+ 895          
+ 896          
+ 897          /*******************************************************************
+ 898          *
+ 899          *  end of file                                    
+ 900          *
+ 901          *******************************************************************/
+ 902          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   5508    ----
+   CONSTANT SIZE    =      4    ----
+   XDATA SIZE       =    116     228
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+C51 COMPILER V9.01   RF_COMM                                                               11/27/2018 16:49:01 PAGE 16  
+
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

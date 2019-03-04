@@ -1,0 +1,110 @@
+C51 COMPILER V9.01   LNK_2X817N10                                                          11/15/2016 18:55:43 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE LNK_2X817N10
+OBJECT MODULE PLACED IN .\Lnk_2X817N10.obj
+COMPILER INVOKED BY: D:\Keil\C51\BIN\C51.EXE ..\C_Source\S1_HardDrv\RF_2X817N10\Lnk_2X817N10.c BROWSE INCDIR(..\C_Source
+                    -\S0_System;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiP
+                    -rotocol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_Har
+                    -dDrv\E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\Lnk_2X817N10.lst) OBJECT(.\Lnk_2X817N10.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name: Lnk_Rn8302B.c
+   6          **Author: maji
+   7          **date: 
+   8          **description: c code for  link code of measure chip RN8302B
+   9          **note: memer type  SD03A
+  10          **--------------------Version History -------------------------------------
+  11          ** Date        Rev    By     Description 
+  12          **============================================================================
+  13          **
+  14          ** 1/21/2013  0.1  sosomj   1. frist .                             
+  15          **
+  16          **============================================================================ 
+  17          */
+  18          
+  19          #include <MyIncludes_H.h>
+  20          
+  21          
+  22          RF_BUFF_STRUCT gs_RxbufferFromRF;                  //接收无线数据缓存
+*** ERROR C129 IN LINE 22 OF ..\C_SOURCE\S1_HARDDRV\RF_2X817N10\LNK_2X817N10.C: missing ';' before 'gs_RxbufferFromRF'
+  23          INT16U RXCont=0;
+  24          const INT8U PN9_Tab2[]={  
+  25              0xFF,0x83,0xDF,0x17,0x32,0x09,0x4E,0xD1,
+  26              0xE7,0xCD,0x8A,0x91,0xC6,0xD5,0xC4,0xC4,
+  27              0x40,0x21,0x18,0x4E,0x55,0x86,0xF4,0xDC,
+  28              0x8A,0x15,0xA7,0xEC,0x92,0xDF,0x93,0x53,
+  29              0x30,0x18,0xCA,0x34,0xBF,0xA2,0xC7,0x59,
+  30              0x67,0x8F,0xBA,0x0D,0x6D,0xD8,0x2D,0x7D,
+  31              0x54,0x0A,0x57,0x97,0x70,0x39,0xD2,0x7A,
+  32              0xEA,0x24,0x33,0x85,0xED,0x9A,0x1D,0xE0
+  33          };  // 定义一个发送数据包
+  34          
+  35          
+  36          
+  37          /****************************************************************
+  38          Function:               INT8U Lnk_2X817N10_Intilize(void)       
+  39          Description: 
+  40          Input:
+  41          Parameters:     
+  42          Returns:                                
+  43          Others:         
+  44          ****************************************************************/
+  45          INT8U Lnk_2X817N10_Intilize(void)
+  46          {
+  47                  if(LSD_RF_InitRF()==1) return FALSE;
+  48                   CLRWDT();
+  49                  LSD_RF_RXmode();                     //进入RX,准备接受数据//
+  50                  return TRUE;
+  51          
+C51 COMPILER V9.01   LNK_2X817N10                                                          11/15/2016 18:55:43 PAGE 2   
+
+  52          }
+  53          
+  54          /****************************************************************
+  55          Function:               INT8U Lnk_2X817N10_Intilize(void)       
+  56          Description: 
+  57          Input:
+  58          Parameters:     
+  59          Returns:                                
+  60          Others:         
+  61          ****************************************************************/
+  62          /*void Proc_2X817N10_rx_data(void)
+  63          {
+  64              if(LSD4RF_SPI_SET_DIO0_DIR_IN() ==0) return;
+  65              Lib_Delay_Nop(20);
+  66              if(LSD4RF_SPI_SET_DIO0_DIR_IN() ==0) return;   
+  67          
+  68              //DIO0 =high, mean RFmodule had receievd data  //   
+  69              LSD_RF_RxPacket(gs_RxbufferFromRF.data_buffer,&gs_RxbufferFromRF.data_len);     //接收数据//
+  70              if(Lib_Cmp_TwoArry(&gs_RxbufferFromRF.data_buffer,PN9_Tab2, gs_RxbufferFromRF.data_len) ==0)
+  71              {
+  72                //  LED_L1_LOSS_ON();
+  73                  RXCont++;
+  74                  if(RXCont>99)  //防止LCD屏幕显示溢出
+  75                  {
+  76                      RXCont=1; 
+  77                  }
+  78                  LSD_RF_SendPacket(gs_RxbufferFromRF.data_buffer,gs_RxbufferFromRF.data_len);      //发送数据
+  79                 // LED_L1_LOSS_OFF();                   //LED2点亮 
+  80              }
+  81              do
+  82              {
+  83                  NOP();
+  84              } while(LSD4RF_READ_DIO0() !=0);
+  85          
+  86              LSD_RF_RXmode();                     //进入RX,准备接受数据//
+  87          }
+  88          
+  89                   */
+  90          
+  91          /***************************************************************
+  92          *    END
+  93          ****************************************************************/
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  1 ERROR(S)

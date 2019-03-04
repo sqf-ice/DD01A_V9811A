@@ -1,0 +1,469 @@
+C51 COMPILER V9.01   LSD_RF_SX1276                                                         11/27/2018 16:48:54 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE LSD_RF_SX1276
+OBJECT MODULE PLACED IN .\LSD_RF_SX1276.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S1_HardDrv\RF_2F917N10_LORA\LSD_RF_SX1276.c LARGE BROWSE INCDIR
+                    -(..\C_Source\S0_System;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_So
+                    -urce\S5_ApiProtocol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_S
+                    -ource\S1_HardDrv\E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\LSD_RF_SX1276.lst) OBJECT(.\LSD_RF_SX1276.obj)
+
+line level    source
+
+   1          ////////////////////////////////////////////////////////////////////////////////
+   2          // 版权:     利尔达科技集团股份有限公司
+   3          // 文件名:   
+   4          // 版本：   
+   5          // 工作环境:
+   6          // 作者:     
+   7          // 生成日期: 
+   8          // 功能:      
+   9          // 相关文件: 
+  10          // 修改日志：
+  11          //      见更新说明
+  12          ////////////////////////////////////////////////////////////////////////////////
+  13          
+  14          #include <MyIncludes_H.h>
+  15          
+  16          
+  17          
+  18          
+  19          
+  20          //===================================定义变量===================================================
+  21          float G_BandWidthKHz;//本地计算Symbol周期使用
+  22          float G_TsXms;
+  23          S_LoRaConfig G_LoRaConfig;//在main中初始化
+  24          
+  25          
+  26          
+  27          
+  28          
+  29          INT8U Lnk_SX2176_Intilize(void)
+  30          {
+  31   1           if(SX127x_init() != NORMAL) return FALSE;
+  32   1           Rx_mode();                        //进入RX,准备接受数据//
+  33   1           return TRUE;
+  34   1      }
+  35          
+  36          
+  37          //**********************************************************************************
+  38          // 功能描述 : spi读写寄存器
+  39          // 输入参数 : unsigned char addr地址 unsigned char val数据
+  40          // 返回参数 : 
+  41          // 说明     : Note: don't call it directely use macro SpiWriteReg and SpiWriteReg  to call this routine
+  42          //**********************************************************************************
+  43          unsigned char LSD_RF_SpiRW_Reg (unsigned char addr, unsigned char val) 
+  44          {
+  45   1          unsigned char rc;
+  46   1          SX1276SPISetup();
+  47   1          SPI_CS_LOW()  ;  
+  48   1          LSD_RF_SpiInOut(addr);
+  49   1          rc = LSD_RF_SpiInOut(val);
+  50   1          SPI_CS_HIGH() ;
+  51   1          return rc;
+  52   1      }
+C51 COMPILER V9.01   LSD_RF_SX1276                                                         11/27/2018 16:48:54 PAGE 2   
+
+  53          
+  54          ////////////////////////////////////////////////////////////////////////////////
+  55          // 功能描述 : RF  向寄存器地址写1字节数据
+  56          // 输入参数 : uint8_t addr,寄存器地址 uint8_t data数据
+  57          // 返回参数 : 
+  58          // 说明     :
+  59          ////////////////////////////////////////////////////////////////////////////////
+  60          void SX1276Write( uint8 addr, uint8 temp )    
+  61          {
+  62   1        LSD_RF_SpiRW_Reg(addr|0x80,temp);
+  63   1      }
+  64          ////////////////////////////////////////////////////////////////////////////////
+  65          // 功能描述 : RF  向寄存器地址读1字节数据
+  66          // 输入参数 : uint8_t addr,寄存器地址 uint8_t *data读数据存储地址
+  67          // 返回参数 : 
+  68          // 说明     :
+  69          ////////////////////////////////////////////////////////////////////////////////
+  70          #define SX1276Read(addr)               LSD_RF_SpiRW_Reg(addr&0x7F, 0);
+  71          ////////////////////////////////////////////////////////////////////////////////
+  72          // 功能描述 : RF  向FIFO读数据
+  73          // 输入参数 : uint8_t *buffer,数组指针 uint8_t size长度
+  74          // 返回参数 : uint8_t *buffer 存储读取内容
+  75          // 说明     :
+  76          ////////////////////////////////////////////////////////////////////////////////
+  77          void  SX1276ReadFifo( uint8 *buffer, uint8 size ) 
+  78          {
+  79   1         SX1276ReadBuffer( 0, buffer, size );
+  80   1      }
+  81          ////////////////////////////////////////////////////////////////////////////////
+  82          // 功能描述 : RF  向寄存器地址连续发送数据
+  83          // 输入参数 : uint8_t addr,寄存器地址 uint8_t *buffer,发送数组指针 uint8_t size指针长度
+  84          // 返回参数 : 无
+  85          // 说明     :
+  86          ////////////////////////////////////////////////////////////////////////////////
+  87            void SX1276WriteBuffer( uint8 addr, uint8 *buffer, uint8 size )
+  88          {
+  89   1          uint8 i;  
+  90   1        // LSD_RF_SpiInOut((addr | 0x80));
+  91   1          for( i = 0; i < size; i++ )
+  92   1          { 
+  93   2              SX1276Write(addr ,buffer[i]);                // Send data
+  94   2          }
+  95   1      
+  96   1      }
+  97          
+  98          
+  99          ////////////////////////////////////////////////////////////////////////////////
+ 100          // 功能描述 : RF  向寄存器地址连续读数据
+ 101          // 输入参数 : uint8_t addr,寄存器地址 uint8_t *buffer,存储数组指针 uint8_t size要读的长度
+ 102          // 返回参数 : 数据返回到*buffer中
+ 103          // 说明     :
+ 104          ////////////////////////////////////////////////////////////////////////////////
+ 105          void SX1276ReadBuffer( uint8 addr, uint8 *buffer, uint8 size )
+ 106          {   
+ 107   1          uint8 i;  
+ 108   1         // SX1276Read((addr));
+ 109   1          for( i = 0; i < size; i++ )
+ 110   1          { 
+ 111   2              buffer[i] = SX1276Read(addr);                // Send data
+ 112   2          }
+ 113   1      }
+ 114          
+C51 COMPILER V9.01   LSD_RF_SX1276                                                         11/27/2018 16:48:54 PAGE 3   
+
+ 115          
+ 116          BOOL LoRaConfig_Check()
+ 117          {
+ 118   1          if((G_LoRaConfig.LoRa_Freq<410000000)||(G_LoRaConfig.LoRa_Freq>1020000000))
+ 119   1              return FALSE;
+ 120   1          if((G_LoRaConfig.LoRa_Freq>525000000)&&(G_LoRaConfig.LoRa_Freq<862000000))
+ 121   1              return FALSE;
+ 122   1          G_LoRaConfig.BandWidth = (t_BandWidth)(G_LoRaConfig.BandWidth&0xF0);
+ 123   1          if(G_LoRaConfig.BandWidth>BW500KHZ)
+ 124   1              return FALSE;
+ 125   1          //计算BandWidth
+ 126   1          switch(G_LoRaConfig.BandWidth){
+ 127   2          case BW500KHZ:G_BandWidthKHz = 500.0;break;
+ 128   2          case BW250KHZ:G_BandWidthKHz = 250.0;break;
+ 129   2          case BW125KHZ:G_BandWidthKHz = 125.0;break;
+ 130   2          case BW62_50KHZ:G_BandWidthKHz = 62.5;break;
+ 131   2          case BW41_66KHZ:G_BandWidthKHz = 41.66;break;
+ 132   2          case BW31_25KHZ:G_BandWidthKHz = 31.25;break;
+ 133   2          case BW20_83KHZ:G_BandWidthKHz = 20.83;break;
+ 134   2          case BW15_62KHZ:G_BandWidthKHz = 15.62;break;
+ 135   2          case BW10_41KHZ:G_BandWidthKHz = 10.41;break;
+ 136   2          case BW7_81KHZ:G_BandWidthKHz = 7.81;break;
+ 137   2          }
+ 138   1          G_LoRaConfig.SpreadingFactor = (t_SpreadingFactor)(G_LoRaConfig.SpreadingFactor&0xF0);
+ 139   1          if((G_LoRaConfig.SpreadingFactor>SF12)||(G_LoRaConfig.SpreadingFactor<SF06))
+ 140   1              return FALSE;
+ 141   1          //计算LoRa码元周期，单位ms
+ 142   1          G_TsXms = (2<<((G_LoRaConfig.SpreadingFactor>>4)-1))/G_BandWidthKHz;
+ 143   1          
+ 144   1          G_LoRaConfig.CodingRate = (t_CodingRate)(G_LoRaConfig.CodingRate&0x0E);
+ 145   1          if((G_LoRaConfig.CodingRate>CR_4_8)||(G_LoRaConfig.CodingRate<CR_4_5))
+ 146   1              return FALSE;
+ 147   1          if(G_LoRaConfig.PowerCfig>15)
+ 148   1              return FALSE;
+ 149   1          if(G_LoRaConfig.PayloadLength>127)
+ 150   1              return FALSE;
+ 151   1          return TRUE;
+ 152   1      }
+ 153          //===================================子函数===================================================
+ 154          ////////////////////////////////////////////////////////////////////////////////
+ 155          // 功能描述 : RF初始化
+ 156          // 输入参数 : tSX127xInitPara initPara  输入速率Init_LoRa_0_8K, Init_LoRa_4_8K , Init_LoRa_10k,
+ 157          // 返回参数 : tSX127xError              错误枚举内容
+ 158          // 说明     :  初始化时，信道初始化默认为0信道
+ 159          ////////////////////////////////////////////////////////////////////////////////
+ 160          
+ 161          tSX127xError SX127x_init()
+ 162          {     
+ 163   1           uint8 test = 0;
+ 164   1            //RF 模块//
+ 165   1          //配置各个参数
+ 166   1          G_LoRaConfig.LoRa_Freq = 915000000;   //中心频点470MHz
+ 167   1          G_LoRaConfig.BandWidth = BW500KHZ;    //BW = 125KHz
+ 168   1          G_LoRaConfig.SpreadingFactor = SF07;  //SF = 9
+ 169   1          G_LoRaConfig.CodingRate = CR_4_8;     //CR = 4/6
+ 170   1          G_LoRaConfig.PowerCfig = 15;          //19±dBm
+ 171   1          G_LoRaConfig.MaxPowerOn = TRUE;       
+ 172   1          G_LoRaConfig.CRCON = TRUE;            //CRC开启
+ 173   1          G_LoRaConfig.ExplicitHeaderOn = TRUE; //Header开启
+ 174   1          G_LoRaConfig.PayloadLength = 64;      //数据包长度
+ 175   1      
+ 176   1      
+C51 COMPILER V9.01   LSD_RF_SX1276                                                         11/27/2018 16:48:54 PAGE 4   
+
+ 177   1          if(FALSE==LoRaConfig_Check())   //如果输入参数错误
+ 178   1          {
+ 179   2              return PARAMETER_INVALID;  //报错输入
+ 180   2          }
+ 181   1          SX1276InitIo();                // PAIO口初始化            
+ 182   1          SX1276Reset();                 //复位RF
+ 183   1          SX1276SPISetup();              //SPI初始化
+ 184   1      
+ 185   1          //切换到LoRamode，standby状态
+ 186   1           SX1276Write( REG_LR_OPMODE, RFLR_OPMODE_SLEEP);            
+ 187   1           SX1276Write( REG_LR_OPMODE, 0x80|RFLR_OPMODE_SLEEP );       
+ 188   1           SX1276Write( REG_LR_OPMODE, 0x80|RFLR_OPMODE_STANDBY );
+ 189   1          /*------------------------------------------------
+ 190   1          SPI 验证                   */  
+ 191   1          test = 0;
+ 192   1          SX1276Write( REG_LR_HOPPERIOD,0x91 );//选一个用不到的寄存器来做验证
+ 193   1           test = SX1276Read( REG_LR_HOPPERIOD);
+ 194   1          if( test != 0x91)
+ 195   1              return SPI_READCHECK_WRONG;           
+ 196   1      
+ 197   1          //Frequency Configuration 
+ 198   1          LSD_RF_FreqSet();    //设置频率
+ 199   1          
+ 200   1          //PA Configuration  
+ 201   1          LSD_RF_PoutSet();
+ 202   1          SX1276Write( REG_LR_PARAMP,RFLR_PARAMP_0250_US);  
+ 203   1          //  ↑PA Ramp的时间，如果用户LDO不能快速输出大电流（泵能力），适当增加PA Ramp时间
+ 204   1          //  ↑如果Ramp时间过短超过了LDO的能力时，会出现进入TX后，系统电流为发射电流，但是RF信号不出现的现象
+ 205   1          SX1276Write( REG_LR_OCP,0x20|RFLR_OCP_TRIM_240_MA);//电流过载保护 Over Current Protection
+ 206   1          
+ 207   1          //PayloadLength 初始化             
+ 208   1          SX1276Write( REG_LR_PAYLOADLENGTH,G_LoRaConfig.PayloadLength); 
+ 209   1          //注意，无头模式（Implicit Header）时，必须提前规定好收发双方的PL
+ 210   1              
+ 211   1          //BW、CR、Header有无，初始化   0x90 0x08 0x01     
+ 212   1          SX1276Write( REG_LR_MODEMCONFIG1,\
+ 213   1              (((uint8)G_LoRaConfig.BandWidth)|((uint8)G_LoRaConfig.CodingRate))|(\
+ 214   1                  (TRUE==G_LoRaConfig.ExplicitHeaderOn)?0x00:0x01));
+ 215   1          
+ 216   1          //SF、CRC初始化   0x74               
+ 217   1       /*   SX1276Write( REG_LR_MODEMCONFIG2,\
+ 218   1              ((uint8)G_LoRaConfig.SpreadingFactor)|(\
+ 219   1                  (TRUE==G_LoRaConfig.CRCON)?0x04:0x00));
+ 220   1      */
+ 221   1              SX1276Write( REG_LR_MODEMCONFIG2,\
+ 222   1          ((uint8)G_LoRaConfig.SpreadingFactor)|(\
+ 223   1              (TRUE==G_LoRaConfig.CRCON)?0x04:0x00)|0x03);
+ 224   1      
+ 225   1      
+ 226   1          if(SF06==G_LoRaConfig.SpreadingFactor){   //慎用SF = 6，需要的配置很特殊
+ 227   2              uint8 temp = 0;
+ 228   2              temp = SX1276Read( 0x31);
+ 229   2              SX1276Write(  0x31,(temp& 0xF8)|0x05);
+ 230   2              SX1276Write(  0x37,0x0C); 
+ 231   2         }
+ 232   1      //      SX1276Write(REG_LR_MODEMCONFIG1, ((9<<4)+(0x04<<1)+0x01));//Implicit Enable CRC Enable(0x02) & Error Co
+             -ding rate 4/5(0x01), 4/6(0x02), 4/7(0x03), 4/8(0x04)
+ 233   1      //      SX1276Write(REG_LR_MODEMCONFIG2, ((7<<4)+(0x01<<2)+0x03));
+ 234   1      
+ 235   1      //   低速率优化功能是否开启、AutoAGC默认开启  
+ 236   1           SX1276Write( REG_LR_MODEMCONFIG3,0x0c);
+ 237   1      
+C51 COMPILER V9.01   LSD_RF_SX1276                                                         11/27/2018 16:48:54 PAGE 5   
+
+ 238   1      
+ 239   1      /*    SX1276Write( REG_LR_MODEMCONFIG3,((G_TsXms>16.0)?\
+ 240   1            RFLR_MODEMCONFIG3_LOWDATARATEOPTIMIZE_ON:RFLR_MODEMCONFIG3_LOWDATARATEOPTIMIZE_OFF\
+ 241   1                )|RFLR_MODEMCONFIG3_AGCAUTO_ON);
+ 242   1       */ 
+ 243   1          return NORMAL;
+ 244   1      }
+ 245          ////////////////////////////////////////////////////////////////////////////////
+ 246          // 功能描述 : RF发送数据包
+ 247          // 输入参数 : uint8 *data：发送数据指针
+ 248          // 返回参数 : 无
+ 249          // 说明     : 设置为发送是， preamble改回默认值
+ 250          ////////////////////////////////////////////////////////////////////////////////
+ 251          void SX1276_TxPacket(uint8 *temp)
+ 252          {
+ 253   1         unsigned long int j=16777215;// 超时时间。调试..
+ 254   1      //   ExInt4IFG&=(~BIT2);
+ 255   1      //   EIE&=~BIT2;              //int2 发送前关闭中断   // 不使用中断
+ 256   1      //   ExInt4IE&=~BIT2;
+ 257   1          SX1276Write( REG_LR_OPMODE, 0x80|RFLR_OPMODE_STANDBY );      
+ 258   1          SX1276Write( REG_LR_PREAMBLEMSB,0);
+ 259   1          SX1276Write( REG_LR_PREAMBLELSB,8);
+ 260   1          SX1276Write( REG_LR_PAYLOADLENGTH,G_LoRaConfig.PayloadLength);                    
+ 261   1          SX1276WriteRxTx(TRUE);                                      
+ 262   1          SX1276Write( REG_LR_FIFOADDRPTR,0x80);                      
+ 263   1          SX1276WriteBuffer(REG_LR_FIFO,temp,G_LoRaConfig.PayloadLength);  
+ 264   1          SX1276Write(REG_LR_IRQFLAGS,0xff);                          
+ 265   1          SX1276Write( REG_LR_IRQFLAGSMASK, ~(RFLR_IRQFLAGS_TXDONE)); 
+ 266   1          SX1276Write( REG_LR_DIOMAPPING1, RFLR_DIOMAPPING1_DIO0_01 );
+ 267   1          SX1276Write( REG_LR_OPMODE, 0x80|RFLR_OPMODE_TRANSMITTER );   
+ 268   1          // while((!LSD4RF_READ_DIO0())&&j)j--;         // packet sent        
+ 269   1          while((!LSD_RF_READ_DIO0())&&j)j--;         // packet sent   
+ 270   1               
+ 271   1      //     while ((RF_send())&&j) j--;   //表端//
+ 272   1        //  while( ExInt4IFG&BIT2);
+ 273   1       //   P1OE|=(BIT1);        //INT 禁止输出
+ 274   1       //   P1IE|=(BIT1);        //INT 允许输入
+ 275   1        //  P11FS=0x04;         //   INT
+ 276   1         // ExInt4IFG&=(~BIT2);
+ 277   1       //   EIE|=BIT2;              //int2中断
+ 278   1      //    ExInt4IE|=BIT2;
+ 279   1      }
+ 280          ////////////////////////////////////////////////////////////////////////////////
+ 281          // 功能描述 : RF进入接收状态
+ 282          // 输入参数 : 
+ 283          // 返回参数 : 无
+ 284          // 说明     : 进入接收后preamble设置回默认值为
+ 285          ////////////////////////////////////////////////////////////////////////////////
+ 286          void Rx_mode()
+ 287          { 
+ 288   1          SX1276Write( REG_LR_OPMODE, 0x80|RFLR_OPMODE_STANDBY );      
+ 289   1          SX1276Write( REG_LR_PREAMBLEMSB,0);
+ 290   1          SX1276Write( REG_LR_PREAMBLELSB,8);
+ 291   1          SX1276Write( REG_LR_PAYLOADLENGTH,G_LoRaConfig.PayloadLength);
+ 292   1          SX1276Write( REG_LR_IRQFLAGSMASK, ~(RFLR_IRQFLAGS_RXDONE)); 
+ 293   1          SX1276Write( REG_LR_DIOMAPPING1, RFLR_DIOMAPPING1_DIO0_00 );
+ 294   1          SX1276WriteRxTx(FALSE);                                     
+ 295   1          SX1276Write( REG_LR_FIFOADDRPTR,0x00);                      
+ 296   1          SX1276Write(REG_LR_IRQFLAGS,0xff);                          
+ 297   1          SX1276Write( REG_LR_OPMODE, 0x80|RFLR_OPMODE_RECEIVER ); 
+ 298   1      //    P1OE|=(BIT1);        //INT 禁止输出
+ 299   1      //    P1IE|=(BIT1);        //INT 允许输入
+C51 COMPILER V9.01   LSD_RF_SX1276                                                         11/27/2018 16:48:54 PAGE 6   
+
+ 300   1      //    P11FS=0x04;         //   INT
+ 301   1      //    ExInt4IFG&=(~BIT2);
+ 302   1      //    EIE|=BIT2;              //int2中断
+ 303   1      //    ExInt4IE|=BIT2;
+ 304   1      }
+ 305          ////////////////////////////////////////////////////////////////////////////////
+ 306          // 功能描述 : RF接收数据包
+ 307          // 输入参数 : uint8*cbuf接收数组指针
+ 308          // 返回参数 : 无
+ 309          // 说明     : 
+ 310          ////////////////////////////////////////////////////////////////////////////////
+ 311          void LSD_RF_RxPacket(uint8 *cbuf)
+ 312          {
+ 313   1         // if(true==G_LoRaConfig.ExplicitHeaderOn){
+ 314   1              //有头那么从寄存器中读，否则按照G_LoRaConfig设置长度读取FIFO
+ 315   1            
+ 316   1               G_LoRaConfig.PayloadLength = SX1276Read(REG_LR_NBRXBYTES);
+ 317   1                SX1276Write( REG_LR_FIFOADDRPTR,0x00);
+ 318   1        //  }
+ 319   1          SX1276ReadFifo(cbuf,G_LoRaConfig.PayloadLength);   
+ 320   1          SX1276Write(REG_LR_IRQFLAGS,0xff);        
+ 321   1      }
+ 322          ////////////////////////////////////////////////////////////////////////////////
+ 323          // 功能描述 : RF进入SLEEP状态
+ 324          // 输入参数 : 无
+ 325          // 返回参数 : 无
+ 326          // 说明     : 
+ 327          ////////////////////////////////////////////////////////////////////////////////
+ 328          void LSD_RF_SleepMode(void)
+ 329          {
+ 330   1          SX1276Write( REG_LR_OPMODE, 0x80|RFLR_OPMODE_STANDBY );      
+ 331   1          SX1276Write( REG_LR_OPMODE, 0x80|RFLR_OPMODE_SLEEP );     
+ 332   1      }
+ 333          ////////////////////////////////////////////////////////////////////////////////
+ 334          // 功能描述 : RF进入standby状态
+ 335          // 输入参数 : 无
+ 336          // 返回参数 : 无
+ 337          // 说明     : 
+ 338          ////////////////////////////////////////////////////////////////////////////////
+ 339          void LSD_RF_StandbyMode(void)
+ 340          {
+ 341   1          SX1276Write( REG_LR_OPMODE, 0x80|RFLR_OPMODE_STANDBY );       
+ 342   1      }
+ 343          ////////////////////////////////////////////////////////////////////////////////
+ 344          // 功能描述 : RF配置频率
+ 345          // 输入参数 : 无
+ 346          // 返回参数 : 无
+ 347          // 说明     : 
+ 348          ////////////////////////////////////////////////////////////////////////////////
+ 349          tSX127xError LSD_RF_FreqSet()
+ 350          {
+ 351   1          uint32 freq_reg;
+ 352   1              uint8  test_FRFMSB,test_FRFMID,test_FRFLSB;
+ 353   1          if((G_LoRaConfig.LoRa_Freq<410000000)||(G_LoRaConfig.LoRa_Freq>1020000000))
+ 354   1              return FALSE;
+ 355   1          if((G_LoRaConfig.LoRa_Freq>525000000)&&(G_LoRaConfig.LoRa_Freq<862000000))
+ 356   1              return FALSE;
+ 357   1           freq_reg = (uint32)(G_LoRaConfig.LoRa_Freq/FREQ_STEP);
+ 358   1           test_FRFMSB = 0;
+ 359   1               test_FRFMID=0;
+ 360   1               test_FRFLSB=0;
+ 361   1          LSD_RF_StandbyMode();
+C51 COMPILER V9.01   LSD_RF_SX1276                                                         11/27/2018 16:48:54 PAGE 7   
+
+ 362   1          // FREQ = 474.6MHz
+ 363   1          SX1276Write( REG_LR_FRFMSB, (uint8 )(freq_reg>>16));//Carrier Freq 470M
+ 364   1          SX1276Write( REG_LR_FRFMID, (uint8 )(freq_reg>>8) );
+ 365   1          SX1276Write( REG_LR_FRFLSB, (uint8 )(freq_reg) );
+ 366   1          
+ 367   1          test_FRFMSB = SX1276Read(REG_LR_FRFMSB);
+ 368   1          test_FRFMID = SX1276Read(REG_LR_FRFMID);
+ 369   1          test_FRFLSB = SX1276Read(REG_LR_FRFLSB);
+ 370   1          
+ 371   1          if(test_FRFMSB != (uint8 )(freq_reg>>16))
+ 372   1              return SPI_READCHECK_WRONG;
+ 373   1          if(test_FRFMID != (uint8 )(freq_reg>>8))
+ 374   1              return SPI_READCHECK_WRONG;
+ 375   1          if(test_FRFLSB != (uint8 )(freq_reg))
+ 376   1              return SPI_READCHECK_WRONG;
+ 377   1          return NORMAL;
+ 378   1      }
+ 379          ////////////////////////////////////////////////////////////////////////////////
+ 380          // 功能描述 : RF配置功率
+ 381          // 输入参数 : 无
+ 382          // 返回参数 : 无
+ 383          // 说明     : 
+ 384          ////////////////////////////////////////////////////////////////////////////////
+ 385          tSX127xError LSD_RF_PoutSet()
+ 386          {
+ 387   1      uint8 test;
+ 388   1          if(G_LoRaConfig.PowerCfig>15)
+ 389   1              return PARAMETER_INVALID;
+ 390   1          LSD_RF_StandbyMode();
+ 391   1          SX1276Write( REG_LR_PACONFIG, 0xf0|G_LoRaConfig.PowerCfig);
+ 392   1          test = 0;
+ 393   1          test = SX1276Read(REG_LR_PACONFIG);
+ 394   1          if((0xf0|G_LoRaConfig.PowerCfig)!=test)
+ 395   1              return SPI_READCHECK_WRONG;
+ 396   1          if(TRUE==G_LoRaConfig.MaxPowerOn)
+ 397   1              SX1276Write( REG_LR_PADAC, 0x80|RFLR_PADAC_20DBM_ON );  
+ 398   1          if (TRUE !=G_LoRaConfig.MaxPowerOn)
+ 399   1              SX1276Write( REG_LR_PADAC, 0x80|RFLR_PADAC_20DBM_OFF );
+ 400   1         
+ 401   1          return NORMAL;
+ 402   1      }
+ 403          
+ 404          
+ 405          
+ 406          
+ 407          /****************************************************************
+ 408          Function:               INT8U Lnk_2X817N10_Intilize(void)       
+ 409          Description: 
+ 410          Input:
+ 411          Parameters:     
+ 412          Returns:                                
+ 413          Others:         
+ 414          ****************************************************************/
+ 415          
+ 416          INT8U Lnk_sx1276_rx_data(INT8U *rx_ptr)
+ 417          {
+ 418   1       // RF 通道是否接收到数据 //
+ 419   1          if(LSD_RF_READ_DIO0()==0) return 0;
+ 420   1          Lib_Delay_Nop(20);
+ 421   1          if(LSD_RF_READ_DIO0() ==0) return 0;   
+ 422   1              CLRWDT();       // 清看门狗//
+ 423   1          // 接收到数据后的处理 //
+C51 COMPILER V9.01   LSD_RF_SX1276                                                         11/27/2018 16:48:54 PAGE 8   
+
+ 424   1          //DIO0 =high, mean RFmodule had receievd data  //   
+ 425   1          LSD_RF_RxPacket(rx_ptr);     //接收数据//
+ 426   1      
+ 427   1          return (G_LoRaConfig.PayloadLength);
+ 428   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1689    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     20      35
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

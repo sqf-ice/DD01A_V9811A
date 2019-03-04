@@ -1,0 +1,584 @@
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE PROC_SYSTEM_INITIALIZE
+OBJECT MODULE PLACED IN .\Proc_System_Initialize.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S0_System\Proc_System_Initialize.c LARGE BROWSE INCDIR(..\C_Sou
+                    -rce\S0_System;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_A
+                    -piProtocol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_
+                    -HardDrv\E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\Proc_System_Initialize.lst) OBJECT(.\Proc_System_Initialize.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : Proc_System_Initialize.c
+   6          **Author                : maji
+   7          **date                  : 2016-04-20
+   8          **description   : ÏµÍ³¸´Î»³õÊ¼»¯´¦ÀíÏà¹ØC´úÂë
+   9          **note                  : V9811A £¬MERTER FOR DL03C
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2016-04-26   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          
+  18          #include <MyIncludes_H.h>
+  19          
+  20          
+  21          
+  22          /****************************************************************
+  23          Function:           Proc_Initialize_systerm_normal_mode 
+  24          Description:            ÏµÍ³ÉÏµç/¸´Î»³õÊ¼»¯º¯Êý 
+  25          Input:                  no
+  26          Parameters:             no
+  27          Returns:                        no                        
+  28          Others:         
+  29          ****************************************************************/
+  30          void Proc_handle_when_systerm_reset(void)
+  31          {
+  32   1         #if(MCU_TYPE == MCU_G80F92X)   // ÖÐÓ±Ð¾Æ¬ //
+                      IEN0=0x00;
+                      IEN1=0x00;
+                      gs_sys_globaL_var.reset_status = RSTSTAT;
+                      Switch_Clk_4P096M();
+                 #endif
+  38   1      
+  39   1         #if(MCU_TYPE == MCU_V98XX)   //Íò¹¤Ð¾Æ¬ //
+  40   1         gs_sys_globaL_var.reset_status = Systate;
+  41   1               #ifndef _RTC_CAL    //²»ÐèÒªÎÂ²¹²Ù×÷Ê±Ö´ÐÐÏÂÃæÄÚÈÝ //
+  42   1                  if((RTCCH != 0) | (RTCCL != 0))
+  43   1                  {
+  44   2                      RTCPEN = 0x96;
+  45   2                      RTCPWD = 0x57;
+  46   2                      RTCCH = 0x00;
+  47   2                      RTCCL = 0x00;
+  48   2                      RTCPEN = 0x96;
+  49   2                      RTCPWD = 0x56;
+  50   2                  }
+  51   1                  NOP();
+  52   1                #endif
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 2   
+
+  53   1      
+  54   1          SPCFNC=1;           //µ÷ÕûFLASH¹¦ºÄ
+  55   1          XBYTE[0x0402]=0x86;
+  56   1          SPCFNC=0;
+  57   1          CBANK=0X01;
+  58   1          Set_McuClock(FSYSCLK);   //SetMCUPLL();  6Mhz
+  59   1         #endif
+  60   1      
+  61   1      
+  62   1          Init_GPIO_sleep();
+  63   1          E2p_IIC_Initail();
+  64   1          E2p_Stop_i2c();
+  65   1      
+  66   1      }
+  67          
+  68          
+  69          /****************************************************************
+  70          Function:               Proc_Initialize_INRam
+  71          Description:            ÉÏµç³õÊ¼»¯RAMÏà¹Ø
+  72          Input:                  no
+  73          Parameters:             no
+  74          Returns:                        no                        
+  75          Others:         
+  76          ****************************************************************/
+  77          void Proc_Initialize_INRam(void)
+  78          {
+  79   1      //      uint8 Bill_Data;
+  80   1      //      uint8 i;
+  81   1      //      ST_U16_U08 u16_month_A,u16_month_B;
+  82   1      //      ST_U16_U08 u16_day_A,u16_day_B;
+  83   1      //      uint8 last_rec_dateTime[6];//×î½üÒ»´Î¶³½áÊ±¼ä
+  84   1      //      uint8 max_dateTime;
+  85   1      
+  86   1      
+  87   1              INT8U eeprom_flg[3];
+  88   1              //////////dubge   ½«E2P³õÊ¼»¯////////////
+  89   1              //mem_db_clr(0XA5);
+  90   1              ////////////////////////
+  91   1              ////¶ÁÈ¡EEPROMÊÇ·ñÊ×´ÎÉÏµç±êÖ¾Î»£¬Èôflg=0x653412ÎªÒÑ¾­ÉÏ¹ýµçµÄ±í¼Æ£¬///////
+  92   1              ////·´Ö®£¬¸Ã±í¼Æ´ÓÎ´ÉÏ¹ýµç£¬½«µ¥±¸·ÝÇøÇåÁã Ë«Ð£ÑéÇøÐ£ÑéÎ»ÇåÁã yang 2017-12-29////
+  93   1              mem_read(&eeprom_flg[0], ADR_METER_PARAM1_EEPROM_Flag, 3, MEM_E2P1);
+  94   1              if((eeprom_flg[0]!=0x65)||(eeprom_flg[1]!=0x34)||(eeprom_flg[2]!=0x12))
+  95   1              {
+  96   2                      d_flag = 1;
+  97   2                      api_freeze_energy_pre_day(); //ÉÏµçÊ±½«ÈÕ¶³½áEEPÇøµÄÊý¾ÝÇåÁã
+  98   2                      mem_fill(ADR_BLOCK101_BILL1_DATA_E2P, 0x1000, 0x00, MEM_E2P1);//
+  99   2                      mem_db_clr(0XA5);//½«Ë«±¸·ÝÈ¥Ð£ÑéÇåÁã
+ 100   2                      CLRWDT();
+ 101   2              }
+ 102   1      
+ 103   1      //      d_flag = 1;
+ 104   1      //      api_freeze_energy_pre_day(); //ÉÏµçÊ±½«ÈÕ¶³½áEEPÇøµÄÊý¾ÝÇåÁã
+ 105   1      
+ 106   1              if(gs_sys_globaL_var.work_mode == NORMAL_MODE)
+ 107   1              {
+ 108   2                      mem_db_check();  //Êý¾ÝÐ£Ñé¼ì²é //
+ 109   2                      CLRWDT();
+ 110   2              }
+ 111   1              ////////////////////////////////////////////////
+ 112   1              //  S0_System ÇøÏà¹ØRAM³õÊ¼»¯
+ 113   1              ////////////////////////////////////////////////
+ 114   1              Proc_sys_data_init();
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 3   
+
+ 115   1              Proc_init_Check_var();
+ 116   1              CLRWDT();
+ 117   1              ////////////////////////////////////////////////
+ 118   1              //  S1_HardDrv ÇøÏà¹ØRAM³õÊ¼»¯
+ 119   1              ////////////////////////////////////////////////
+ 120   1              mem_read((uint8 *)&gs_adj_emu_param, ADR_BLOCK70_EMU_PARAM_E2P, LEN_BLOCK70_EMU_PARAM_E2P, MEM_E2P1);
+ 121   1              Init_EMU_RAM();    
+ 122   1              Proc_init_tou_var();
+ 123   1      
+ 124   1              ////////////////////////////////////////////////
+ 125   1              //  S3_ApiPlat ÇøÏà¹ØRAM³õÊ¼»¯
+ 126   1              ////////////////////////////////////////////////
+ 127   1              Init_LoadPro_param();
+ 128   1              CLRWDT();
+ 129   1              api_init_md_data_ram();
+ 130   1              api_init_current_energy_data_ram();
+ 131   1              api_Measure_ram_INIT();
+ 132   1              api_measure_VBAT_pre_min();
+ 133   1              api_measure_temperature_pre_min();   
+ 134   1              CLRWDT();
+ 135   1      #ifdef _RTC_CAL    //²»ÐèÒªÎÂ²¹²Ù×÷Ê±Ö´ÐÐÏÂÃædÄÚÈÝ //
+                      Handl_RTC_Adj_per_minu();
+              #endif
+ 138   1      
+ 139   1      #if (TARIFF_MAX_NUM>1)
+ 140   1              api_update_triffNo_pre_minute();  
+ 141   1              CLRWDT();
+ 142   1      #endif
+ 143   1      //mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E
+             -2P1);
+ 144   1      //if(Bill_Data == 0x30)
+ 145   1      //{
+ 146   1      //#if (BILL_MAX_NUM>1)
+ 147   1      //      CLRWDT();
+ 148   1      //      mem_read(&last_rec_dateTime[0],ADR_BLOCK161_EVENII_PWN_E2P+6,5,MEM_E2P1);//ÄêÔÂÈÕÊ±·Ö
+ 149   1      //      u16_month_A.u16 = Lib_bcd_byte(last_rec_dateTime[0])*12 + Lib_bcd_byte(last_rec_dateTime[1]);       //×î½
+             -ü1´Î½áËãµÄÔÂµ¥Î»Êý¾Ý //
+ 150   1      //    u16_month_B.u16 = Lib_bcd_byte(gs_CurDateTime.Year)*12 + Lib_bcd_byte(gs_CurDateTime.Month);
+ 151   1      //      if(u16_month_B.u16 - u16_month_A.u16 > 6)
+ 152   1      //      {
+ 153   1      //              max_dateTime = 6;
+ 154   1      //      }
+ 155   1      //      else
+ 156   1      //      {
+ 157   1      //              max_dateTime = u16_month_B.u16 - u16_month_A.u16;
+ 158   1      //      }
+ 159   1      //      for(i=0;i<max_dateTime ;i++)
+ 160   1      //      {
+ 161   1      //              CLRWDT();
+ 162   1      //              api_handl_settle_per_minute();
+ 163   1      //              CLRWDT();
+ 164   1      //      }
+ 165   1      //      //api_handl_settle_when_powerUp();   
+ 166   1      //#endif
+ 167   1      //}
+ 168   1              ////////////////////////////////////////////////
+ 169   1              //  S4_ApiUser ÇøÏà¹ØRAM³õÊ¼»¯
+ 170   1              ////////////////////////////////////////////////
+ 171   1              api_init_display();
+ 172   1      }
+ 173          
+ 174          
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 4   
+
+ 175          /****************************************************************
+ 176          Function:               void SysInitialize(void)  
+ 177          Description:            ÏµÍ³ÉÏµç/¸´Î»³õÊ¼»¯º¯Êý 
+ 178          Input:                  no
+ 179          Parameters:             no
+ 180          Returns:                        no                        
+ 181          Others:         
+ 182          ****************************************************************/
+ 183          void Proc_sleep_when_reset(void)
+ 184          {
+ 185   1         uint8 volatile  check_cnt;
+ 186   1         uint8 volatile  check_cnt2;
+ 187   1        
+ 188   1          check_cnt=0;
+ 189   1          check_cnt2 = 0;
+ 190   1      
+ 191   1         CLRWDT(); 
+ 192   1      #if(MCU_TYPE == MCU_G80F92X)   // ÖÐÓ±Ð¾Æ¬ //
+               
+                 EMUIE=0x00;  
+                 EMUSR=0x00;  
+                 LDOCON=0x00;
+                 CLRWDT();     
+                 Init_GPIO_sleep();
+                // Config_CpuReg_Sleep();  
+                 IEN0=0x00;
+                 IEN1=0x00;                       
+                 TPCON=0x00;
+                 Close_SecOut(); 
+              /////////////////////////////////////
+                  gs_sys_globaL_var.work_mode = SLEEP_MODE;
+                  api_Measure_ram_INIT();          //Çå³ýË²Ê±Á¿ //
+                  api_check_current_energy_data();            //  ³õÊ¼»¯µçÁ¿//
+                  //³õÊ¼»¯¿ª¸Ç×´Ì¬ºÍ¹¤³§×´Ì¬µÄÈ«¾Ö±äÁ¿´úÂë//
+                  mem_read(&gs_sys_globaL_var.open_cover_status, ADR_METER_VAR_OPENED, 1, MEM_E2P1);
+                  mem_read(&gs_sys_globaL_var.meter_factory_status, ADR_METER_PARAM1_FC_CFG, 1, MEM_E2P1);   //Êý¾Ý0=0X5
+             -A ´ú±í¹¤³§×´Ì¬ // 
+                  Init_LCD();
+                  Init_RTC();
+                  gs_dis_ctl_var.item=0x03;
+                  Link_Get_DisTab_Var(gs_dis_ctl_var.item) ;                  // »ñÈ¡ÏÔÊ¾ÏîÄ¿ÐÅÏ¢  //
+                  api_updated_LCDDisplayPixel_per_second();
+              ///////////////////////////////////////////////// 
+                 CLRWDT();
+              
+                 CLKCON=Bin(00000000);       //½µËÙµ½32K  
+                 IT21=0;
+                 IT20=1;                    //Íâ²¿ÖÐ¶Ï2ÏÂ½µÑØ´¥·¢
+                 IEN1|=Bin(10000000);       //ÔÊÐíLPDÖÐ¶Ï  
+                 IEN1|=Bin(00000010);       //ÔÊÐíÍâ²¿ÖÐ¶Ï2
+                 IEN1|=Bin(00001000);       //ÔÊÐíRTCÖÐ¶Ï
+                 EA=1;
+              
+              
+                  while( 1 )
+                  {           
+                     CLRWDT();                
+                      Enter_PwrDwnMode();         // ½øÈëÐÝÃß×´Ì¬ //
+                      CLRWDT();                          //»½ÐÑºóµÄ´¦Àí //
+              
+                      if(gs_sys_run.back_fg&BIT1_BACK_FG_RTC)
+                      {
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 5   
+
+                          gs_sys_run.back_fg &= ~BIT1_BACK_FG_RTC;    
+                          //ÏÂµç×´Ì¬ÏÂµÄ¿ª±íÉÏ¸Ç¼ì²â //         
+                          api_handl_dis_sleep();
+                      }   
+              
+                      if(CheckPOWERUP()== TRUE)               //ÊÐµçÅÐ¶Ï  //
+                      {
+                          Feed_WDT(0x02);        //ÀûÓÃ¿´ÃÅ¹·¸´Î»£¬±£Ö¤¿É¿¿ÔËÐÐ //
+                          while(1);   
+                      }
+              
+                      if(Check_LX_mode()== TRUE)              //PTµçÔ´ÅÐ¶Ï  //
+                      {
+                          Feed_WDT(0x02);        //ÀûÓÃ¿´ÃÅ¹·¸´Î»£¬±£Ö¤¿É¿¿ÔËÐÐ //
+                          while(1);   
+                      }
+              
+                 } 
+              
+              #endif
+ 256   1      
+ 257   1      
+ 258   1      #if(MCU_TYPE == MCU_V98XX)   //Íò¹¤Ð¾Æ¬ //
+ 259   1          CLRWDT();     
+ 260   1          api_Measure_ram_INIT();          //Çå³ýË²Ê±Á¿ //
+ 261   1              api_init_current_energy_data_ram();//  ³õÊ¼»¯µçÁ¿//
+ 262   1          //api_check_current_energy_data();          //  ³õÊ¼»¯µçÁ¿//
+ 263   1          Init_LCD();
+ 264   1              api_handl_dis_sleep();
+ 265   1              Init_GPIO_sleep();
+ 266   1              SetExtRTC(0x01,0x02);// Ð¡Ê±»½ÐÑ
+ 267   1          //SetExtRTC(0x01,0x01);// ·ÖÖÓ»½ÐÑ//
+ 268   1              IOWK|=BIT0;
+ 269   1        Set_McuSleep();
+ 270   1              if((Systate&BIT0)==0x01)  //ÐÝÃßÒÔºóÈË¹¤ÉÏµçÈ«ÆÁ×Ô¼ì
+ 271   1        {   
+ 272   2           sys_err();   //Èç¹ûÉÏµçÔòÐÝÃß´¦Àí //
+ 273   2        }
+ 274   1      #endif
+ 275   1      }
+ 276                  
+ 277          
+ 278          
+ 279          
+ 280          
+ 281          
+ 282          /****************************************************************
+ 283          Function:           Proc_Initialize_systerm_normal_mode 
+ 284          Description:            ÏµÍ³ÉÏµç/¸´Î»³õÊ¼»¯º¯Êý 
+ 285          Input:                  no
+ 286          Parameters:             no
+ 287          Returns:                        no                        
+ 288          Others:         
+ 289          ****************************************************************/
+ 290          void Proc_Initialize_systerm_normal_mode(void)
+ 291          {
+ 292   1              Set_McuClock(FSYSCLK_3M2);   //SetMCUPLL();  6Mhz
+ 293   1              Init_GPIO_run();
+ 294   1              Init_LCD();
+ 295   1              Full_SEG(0xFF);
+ 296   1              CLRWDT();
+ 297   1              Proc_Initialize_INRam();  //³õÊ¼»¯RAMÇø //
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 6   
+
+ 298   1      //      Drv_relay_powerup_check();       //¼ÌµçÆ÷³õÊ¼»¯¼ì²é´¦Àí  //
+ 299   1      //      Lnk_SX2176_Intilize();  //LORA//
+ 300   1              Init_Timer();   //¶¨Ê±Æ÷
+ 301   1              api_handl_COMM_FRAME_ERROR(UART_CH0_IR);        //TTL Í¨Ñ¶Ó²¼þ³õÊ¼»¯
+ 302   1              Init_RTC();
+ 303   1              Init_EMU(NORMAL_MODE);
+ 304   1              Check_EMU_AdjParam();
+ 305   1              Lib_Set_String( &LPReadPara.Original_Ptr, 0, 5) ;       
+*** WARNING C182 IN LINE 305 OF ..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C: pointer to different objects
+ 306   1              gs_even_fun_var.into_cnt[ID_CLASS_II_PWN-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä ¶þÀàÊÂ¼þÐòºÅ
+ 307   1              gs_even_fun_var.esc_cnt[ID_CLASS_II_PWN-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä
+ 308   1              api_deal_even_class_recode(ID_CLASS_II_PWN,END);        
+ 309   1              Lib_Set_String(&gs_even_fun_var.esc_cnt,0,sizeof(EVEN_FUN_VAR));
+ 310   1              KEY_ERR_COVER_INITLIZE() ;
+ 311   1      }
+ 312          
+ 313          
+ 314          
+ 315          /****************************************************************
+ 316          Function:          Proc_Initialize_systerm_reset
+ 317          Description:        ÏµÍ³ÉÏµç/¸´Î»³õÊ¼»¯º¯Êý 
+ 318          Input:                  no
+ 319          Parameters:             no
+ 320          Returns:                        no                        
+ 321          Others:         
+ 322          ****************************************************************/
+ 323          void Proc_Initialize_systerm_reset(void)
+ 324          {
+ 325   1      
+ 326   1              Proc_handle_when_systerm_reset();   // ÏµÍ³¸´Î»µÄ´¦Àíº¯Êý£¬×¢ÒâMCU²»Í¬Ê±ÐèÒª½øÐÐÐÞ¸Äº¯ÊýÄÚÈÝ //
+ 327   1              if(CheckPOWERUP()== FALSE)              //
+ 328   1              {
+ 329   2                      Lib_Delay_ms(300);
+ 330   2              }
+ 331   1              if(CheckPOWERUP()== FALSE)              //
+ 332   1              {
+ 333   2                      gs_sys_globaL_var.work_mode = SLEEP_MODE;  
+ 334   2              }
+ 335   1              else
+ 336   1              {
+ 337   2                      gs_sys_globaL_var.work_mode = NORMAL_MODE;
+ 338   2              }
+ 339   1      
+ 340   1              if(gs_sys_globaL_var.work_mode == SLEEP_MODE)
+ 341   1              {
+ 342   2                      Proc_sleep_when_reset();                                   // ÐÝÃß³õÊ¼»¯//
+ 343   2              }
+ 344   1              else
+ 345   1              {
+ 346   2                      Proc_Initialize_systerm_normal_mode();    //  ÊÐµç¹©Ó¦Çé¿öÏÂµÄ³õÊ¼»¯//
+ 347   2              }
+ 348   1      }
+ 349          
+ 350          void Proc_display_Power_down_process(void)
+ 351          {
+ 352   1               //ÏÂµçÏÔÊ¾
+ 353   1      
+ 354   1                      //¼ì²â°´¼ü
+ 355   1      
+ 356   1      
+ 357   1                      if(Judge_PG_DN_key() == TRUE )//&& button_delay == 0)
+*** WARNING C206 IN LINE 357 OF ..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C: 'Judge_PG_DN_key': missing function-prot
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 7   
+
+             -otype
+ 358   1                      {
+ 359   2                              button_flag = 1;
+ 360   2      //                      button_delay = 1;
+ 361   2                      //      api_updated_LCDDisplayItem_per_second();
+ 362   2                      }
+ 363   1      //              if(Judge_PG_DN_key() == FALSE)
+ 364   1      //              {
+ 365   1      //                      button_delay = 0;
+ 366   1      //              }
+ 367   1      ///////////////////////////
+ 368   1      
+ 369   1                      if(button_flag  == 1)
+ 370   1                      {
+ 371   2                              button_flag = 0;
+ 372   2                              if(dis_num_char == 5)
+ 373   2                              {
+ 374   3                                      dis_num_char = 0;
+ 375   3                              }
+ 376   2                              else
+ 377   2                              {
+ 378   3                                      dis_num_char ++;
+ 379   3                              }
+ 380   2                              api_updated_LCDDisplayPixel_per_second();
+ 381   2                              gs_dis_ctl_var.keep_sec[0] = 6; //ÂÖÏÔ³ÖÐøÊ±¼ä//
+ 382   2                      }
+ 383   1                      else
+ 384   1                      {
+ 385   2                              if(gs_dis_ctl_var.keep_sec[0] > 0)
+ 386   2                                      gs_dis_ctl_var.keep_sec[0]--;
+ 387   2                      }
+ 388   1                      if(gs_dis_ctl_var.keep_sec[0] == 0)
+ 389   1                      {
+ 390   2                              dis_num_char = 0;
+ 391   2                              api_updated_LCDDisplayPixel_per_second();
+ 392   2                      }
+ 393   1      
+ 394   1      }
+ 395          
+ 396          /****************************************************************
+ 397          Function:           Proc_judge_Power_down_process
+ 398          Description:       ÔËÐÐ¹ý³ÌÖÐµÄµôµç¼ì²éº¯Êý
+ 399          Input:                  no
+ 400          Parameters:             no
+ 401          Returns:                        no                        
+ 402          Others:         
+ 403          ****************************************************************/
+ 404          void Proc_judge_Power_down_process(void)
+ 405          {
+ 406   1              RTC_TYPE rtc_data_tmp;
+ 407   1      
+ 408   1              if(CheckPOWERUP()==FALSE)
+ 409   1              {
+ 410   2                      PMG=1;                  //¹Ø±Õ¼ÆÁ¿Ê±ÖÓ
+ 411   2                      DisableINT();                                   // disable interrupt function  //
+ 412   2                      api_accum_current_energy_data_pre_second();
+ 413   2                      mem_db_write(ADR_BLOCK00_EC_L0_E2P,&gs_energy_user_data.us_val[0][0].buf[0],LEN_EC_CURRENT,MEM_E2P1);
+ 414   2                      
+ 415   2      //              d_flag = 1;
+ 416   2      //              api_freeze_energy_pre_day(); //ÉÏµçÊ±½«ÈÕ¶³½áEEPÇøµÄÊý¾ÝÐ´ÈëEEP
+ 417   2                      gs_sys_globaL_var.work_mode = SLEEP_MODE;
+ 418   2      //              mem_db_write( ADR_METER_PARAM1_LOAD_PTR, (INT8U*)&LPRunPa.Ptr[0], LP_RunPara_Len,MEM_E2P1); //¸ººÉ¼ÇÂ¼
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 8   
+
+             -ÔËÐÐ²ÎÊý 
+ 419   2                      mem_db_write(ADR_METER_VAR_RTC, &gs_CurDateTime.Week,7,MEM_E2P1);       
+ 420   2                      
+ 421   2                      gs_even_fun_var.into_cnt[ID_CLASS_II_PWN-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä´«ÈËID - 0-6
+ 422   2                      api_deal_even_class_recode(ID_CLASS_II_PWN,START);      
+ 423   2              //µçÍøÀàÊÂ¼þ½áÊø
+ 424   2                      //      gs_even_fun_var.into_cnt[ID_CLASS_II_NOL1-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä ¶þÀàÊÂ¼þÐòºÅ
+ 425   2                      //      gs_even_fun_var.esc_cnt[ID_CLASS_II_NOL1-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä
+ 426   2                      //      api_deal_even_class_recode(ID_CLASS_II_NOL1,END);
+ 427   2                      //      gs_even_fun_var.into_cnt[ID_CLASS_II_NOL2-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä ¶þÀàÊÂ¼þÐòºÅ
+ 428   2                      //      gs_even_fun_var.esc_cnt[ID_CLASS_II_NOL2-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä
+ 429   2                      //      api_deal_even_class_recode(ID_CLASS_II_NOL2,END);
+ 430   2                      gs_even_fun_var.into_cnt[ID_CLASS_II_L1reverse-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä ¶þÀàÊÂ¼þÐòºÅ
+ 431   2                      gs_even_fun_var.esc_cnt[ID_CLASS_II_L1reverse-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä
+ 432   2                      api_deal_even_class_recode(ID_CLASS_II_L1reverse,END);
+ 433   2                      //      gs_even_fun_var.into_cnt[ID_CLASS_II_L2reverse-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä ¶þÀàÊÂ¼þÐòºÅ
+ 434   2                      //      gs_even_fun_var.esc_cnt[ID_CLASS_II_L2reverse-ID_CLASS_II_min]=4;  // ÊÂ¼þ±£³ÖÊ±¼ä
+ 435   2                      //      api_deal_even_class_recode(ID_CLASS_II_L2reverse,END);
+ 436   2      
+ 437   2                      mem_read(&gs_even_fun_var.even_fun_doingflg[ID_CLASS_II_COVER-ID_CLASS_II_min],ADR_CLASS2FLG_START_E2P+ 
+             -(ID_CLASS_II_COVER-ID_CLASS_II_min)* LEN_CLASSII_flg,LEN_CLASSII_flg,MEM_E2P1);       
+ 438   2      //EEP²Ù×÷ÔÚ¹Ø±ÕIICÖ®Ç°
+ 439   2                      api_check_current_energy_data();                //  ³õÊ¼»¯µçÁ¿//
+ 440   2                      api_handl_dis_sleep();
+ 441   2                              
+ 442   2                      Init_GPIO_sleep();
+ 443   2      
+ 444   2                      //ÏÂ·­°´¼ü      2019-01-18
+ 445   2                      P14FS = 0x00;
+ 446   2                      P1IE |= BIT4;//ÊäÈëÊ¹ÄÜ
+ 447   2                
+ 448   2                      E2p_IIC_Initail();
+ 449   2                      E2p_Stop_i2c();
+ 450   2                      api_Measure_ram_INIT();          //Çå³ýË²Ê±Á¿ //
+ 451   2                      
+ 452   2                      KEY_ERR_COVER_INITLIZE() ;              
+ 453   2                      gs_even_fun_var.esc_cnt[ID_CLASS_II_COVER-ID_CLASS_II_min] =0; 
+ 454   2                      gs_even_fun_var.into_cnt[ID_CLASS_II_COVER-ID_CLASS_II_min] =0;
+ 455   2      
+ 456   2                      gs_dis_ctl_var.keep_sec[0] = 0;//2019-01-18             cxy
+ 457   2                      d_flag = 0;
+ 458   2                      while(1)
+ 459   2                      {
+ 460   3                              CLRWDT();
+ 461   3                              SetExtRTC(0x01,0x00);//Ãë»½ÐÑ
+ 462   3                              IOWK|=BIT0;
+ 463   3                              Init_RTC();  
+ 464   3                              Set_McuSleep();
+ 465   3                              
+ 466   3                              //              
+ 467   3                              CLRWDT();
+ 468   3                              Set_McuClock(FSYSCLK_3M2); 
+ 469   3      //                      Proc_get_clock();
+ 470   3                              
+ 471   3                              //»ñÈ¡µ±Ç°Ê±¼äÊý¾ÝÊý¾Ý   //
+ 472   3                      Get_RTCTime(&rtc_data_tmp);
+ 473   3                              Lib_Copy_Str_TwoArry(&gs_CurDateTime.Week, &rtc_data_tmp.Week, 7);
+ 474   3                              if(Judge_ERR_COVER_key()==TRUE)
+ 475   3                                      api_pwl_cover_even_class_recode(ID_CLASS_II_COVER-ID_CLASS_II_min,START);
+ 476   3                              else 
+ 477   3                                      api_pwl_cover_even_class_recode(ID_CLASS_II_COVER-ID_CLASS_II_min,END);
+ 478   3                              
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 9   
+
+ 479   3                              if((Systate&BIT0)==0x01)  
+ 480   3                              {
+ 481   4                                      Init_GPIO_run();
+ 482   4                                      E2p_IIC_Initail();
+ 483   4                                      E2p_Start_i2c();
+ 484   4                                      ////
+ 485   4                                      mem_write(ADR_BLOCK_4Energy_L0_E2P, &energy_data_array[0].buf[0], 5*LEN_EC_UNIT,MEM_E2P1);
+ 486   4                                      mem_write(ADR_BLOCK_4MMD_L0_E2P,&st_mmd_unit_array[0].buf[0],5*LEN_NEW_MMD_UNIT,MEM_E2P1);
+ 487   4                                      mem_write(ADR_BLOCK_4MMD_sum_L0_E2P,&sum_st_mmd_unit_array[0].buf[0],5*LEN_SUM_MMD_UNIT,MEM_E2P1);              
+ 488   4                              
+ 489   4      //                              mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, M
+             -EM_E2P1);
+ 490   4                                      /////
+ 491   4                              //      api_freeze_energy_pre_day();  
+ 492   4                                      sys_err();        //Èç¹ûÉÏµç //  
+ 493   4                              }
+ 494   3                              api_freeze_energy_Ram_pre_day();
+ 495   3                              
+ 496   3                              Proc_display_Power_down_process();                 
+ 497   3              }
+ 498   2              }
+ 499   1              else
+ 500   1              {
+ 501   2                      return;
+ 502   2              }
+ 503   1      }
+ 504          
+ 505          
+ 506          /****************************************************************
+ 507          Function:               void sys_err(void)
+ 508          Description:            ÏµÍ³´íÎóºóµÄ¿´ÃÅ¹·¸´Î»´¦Àí
+ 509          Input:                  no
+ 510          Parameters:             no
+ 511          Returns:                        no                        
+ 512          Others:         
+ 513          ****************************************************************/
+ 514          void sys_err(void)
+ 515          {  
+ 516   1          CLRWDT();
+ 517   1      
+ 518   1          while(1)
+ 519   1          {
+ 520   2                      NOP();
+ 521   2                      NOP();
+ 522   2                      NOP();
+ 523   2          }  
+ 524   1      }
+ 525          
+ 526          
+ 527          
+ 528          /***************************************************************
+ 529          *    END
+ 530          ****************************************************************/
+ 531          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1043    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      12
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+C51 COMPILER V9.01   PROC_SYSTEM_INITIALIZE                                                02/16/2019 09:12:27 PAGE 10  
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  2 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,153 @@
+C51 COMPILER V9.01   LSD_RF_SX1276_SPI                                                     11/27/2018 16:48:54 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE LSD_RF_SX1276_SPI
+OBJECT MODULE PLACED IN .\LSD_RF_SX1276_Spi.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S1_HardDrv\RF_2F917N10_LORA\LSD_RF_SX1276_Spi.c LARGE BROWSE IN
+                    -CDIR(..\C_Source\S0_System;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\
+                    -C_Source\S5_ApiProtocol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..
+                    -\C_Source\S1_HardDrv\E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\LSD_RF_SX1276_Spi.lst) OBJECT(.\LSD_RF_SX1276_Spi.obj)
+
+line level    source
+
+   1          
+   2          #include <MyIncludes_H.h>
+   3          
+   4          
+   5          ////////////////////////////////////////////////////////////////////////////////
+   6          // 功能描述 :  20个NOP延时
+   7          // 输入参数 : 无
+   8          // 返回参数 : 无
+   9          // 说明     : 
+  10          ////////////////////////////////////////////////////////////////////////////////
+  11          
+  12          void HOLD_SPI_CLK (void)
+  13          {
+  14   1         Lib_Delay_Nop(4);
+  15   1      }
+  16          
+  17          
+  18          
+  19          ////////////////////////////////////////////////////////////////////////////////
+  20          // 功能描述 : RF初始化IO口
+  21          // 输入参数 : 无
+  22          // 返回参数 : 无
+  23          // 说明     : 
+  24          ////////////////////////////////////////////////////////////////////////////////
+  25          void SX1276InitIo( void )
+  26          {
+  27   1       //   PA_TX_DIR = 1;           //PA_TX 作为输出
+  28   1       //   PA_RX_DIR = 1;           //PA_RX 作为输出
+  29   1       //   PA_RX_OUT = 0;           //PA_RX 初始化输出为0
+  30   1       //   PA_TX_OUT = 1;           //PA_TX 初始化输出为1
+  31   1       //   SXRESET_SET = 1;
+  32   1               LORA_RF_SPI_INITLIZE();
+  33   1      }
+  34          ////////////////////////////////////////////////////////////////////////////////
+  35          // 功能描述 : RF  SPI设置初始化
+  36          // 输入参数 : 无
+  37          // 返回参数 : 无
+  38          // 说明     : 此初始化为430硬件SPI初始化
+  39          ////////////////////////////////////////////////////////////////////////////////
+  40          void SX1276SPISetup(void)
+  41          {
+  42   1          SPI_D0_HIGH();
+  43   1          SPI_CLK_LOW();
+  44   1          SPI_DI_Enable() ;
+  45   1          SPI_CS_HIGH();
+  46   1      }
+  47          ////////////////////////////////////////////////////////////////////////////////
+  48          // 功能描述 : RF   复位
+  49          // 输入参数 : 无
+  50          // 返回参数 : 无
+  51          // 说明     :
+  52          ////////////////////////////////////////////////////////////////////////////////
+C51 COMPILER V9.01   LSD_RF_SX1276_SPI                                                     11/27/2018 16:48:54 PAGE 2   
+
+  53          void SX1276Reset()
+  54          {
+  55   1          LSD_RF_SXRESET_LOW()  ;   //复位引脚输出低电平
+  56   1          Lib_Delay_ms(1);
+  57   1          LSD_RF_SXRESET_HIGH() ;  //复位引脚输出高电平
+  58   1          Lib_Delay_ms(15);
+  59   1      }
+  60          
+  61          
+  62          //**********************************************************************************
+  63          // 功能描述 : spi发送or接收1字节
+  64          // 输入参数 : unsigned char mosi
+  65          // 返回参数 : unsigned char
+  66          // 说明     : 
+  67          //**********************************************************************************
+  68          unsigned char LSD_RF_SpiInOut (unsigned char mosi) 
+  69          { 
+  70   1          unsigned char i;
+  71   1          unsigned char onebyte;
+  72   1          onebyte = mosi;
+  73   1          for(i = 8; i > 0; i--) 
+  74   1          {
+  75   2              HOLD_SPI_CLK();
+  76   2              if(onebyte & 0x80) 
+  77   2              {
+  78   3                 SPI_D0_HIGH();
+  79   3              }
+  80   2              else 
+  81   2              {
+  82   3                 SPI_D0_LOW();
+  83   3      
+  84   3              }
+  85   2      
+  86   2              HOLD_SPI_CLK();
+  87   2              SPI_CLK_HIGH();
+  88   2              onebyte <<= 1;      // next bit
+  89   2      //      SPI_DI_Enable();
+  90   2              if(SPI_DI_JUDGE) 
+  91   2              {
+  92   3                  onebyte++;      // 1 found on MISO
+  93   3              }
+  94   2              HOLD_SPI_CLK();
+  95   2              SPI_CLK_LOW();
+  96   2              }
+  97   1          return onebyte;         // mosi now becomes the value of miso
+  98   1      }
+  99          
+ 100          
+ 101          ////////////////////////////////////////////////////////////////////////////////
+ 102          // 功能描述 : RF  TX/RX的PA切换
+ 103          // 输入参数 :  bool txEnable  切换逻辑
+ 104          // 返回参数 : 无
+ 105          // 说明     :真：作为TX。假：作为RX   为硬件两个PA控制IO口 LORA模块无效
+ 106          ////////////////////////////////////////////////////////////////////////////////
+ 107          void SX1276WriteRxTx( BOOL txEnable )
+ 108          {
+ 109   1          if( txEnable != 0 )       //如果为真，为TX
+ 110   1          {
+ 111   2           //   PA_RX_OUT = 0;        //PA_RX为0
+ 112   2          //    PA_TX_OUT = 1;        //PA_TX为1
+ 113   2          }
+ 114   1          else  //为假，为RX
+C51 COMPILER V9.01   LSD_RF_SX1276_SPI                                                     11/27/2018 16:48:54 PAGE 3   
+
+ 115   1          {
+ 116   2         //     PA_RX_OUT = 1;        //PA_RX为1
+ 117   2        //      PA_TX_OUT = 0;         //PA_TX为0
+ 118   2          }
+ 119   1      }
+ 120          ////////////////////////////////////////////////////////////////////////////////
+ 121          
+ 122          
+ 123          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    274    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       3
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

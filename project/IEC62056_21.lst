@@ -1,0 +1,325 @@
+C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE IEC62056_21
+OBJECT MODULE PLACED IN .\IEC62056_21.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S5_ApiProtocol\IEC62056_21.c LARGE BROWSE INCDIR(..\C_Source\S0
+                    -_System;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiProt
+                    -ocol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_HardDr
+                    -v\E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\IEC62056_21.lst) OBJECT(.\IEC62056_21.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : IEC62056_21.c
+   6          **Author                : maji
+   7          **date                  : 2016-04-21 
+   8          **description   : IEC62056-21通讯协议相关函数程序C文件
+   9          **note                  : 通用程序
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2016-04-21   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          
+  18          
+  19          #include <MyIncludes_H.h>
+  20          
+  21          
+  22          
+  23          
+  24          //-------------------------------------------------------------------------------//
+  25          //  Function:             void dl645_data_encrypt(INT8U* sptr,INT8U len )
+  26          //  Description:          DL645的数据域加密函数
+  27          //  Parameters:          unsigned char* sptr: 需要加密数据的首地址
+  28          //                            INT8U len:   需要加密数据的长度
+  29          //  Returns:               无
+  30          //  Others:                1适用于DL/T645-1997/2007
+  31          //                            2 
+  32          //  author:                 sosomj         2009.02.16      V01.00
+  33          //-------------------------------------------------------------------------------//
+  34          INT8U IEC_Comm_Request_Cmd_Judge(INT8U* sptr,INT8U len,INT8U* id_ptr,INT8U meter_id_lenth)
+  35          {
+  36   1              INT8U i;
+  37   1      
+  38   1              if(len == IEC_START_LENTH05 )
+  39   1              {
+  40   2                      if( (*(sptr+0)) !=  '/' )    return FALSE;
+  41   2                      if( (*(sptr+1)) !=  '?' )     return FALSE;
+  42   2                      if( (*(sptr+2)) !=  '!' )     return FALSE;
+  43   2                      if( (*(sptr+3)) !=  CR )     return FALSE;
+  44   2                      if( (*(sptr+4)) !=  LF )     return FALSE;
+  45   2                      return TRUE;
+  46   2              }
+  47   1               else
+  48   1               {
+  49   2                      if( (*(sptr+0)) !=  '/' )    return FALSE;
+  50   2                      if( (*(sptr+1)) !=  '?' )     return FALSE;
+  51   2                      for(i=0;i<meter_id_lenth;i++)           //表号对比
+  52   2                      {
+C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 2   
+
+  53   3                              if( (*(sptr+2+i)) !=  (*(id_ptr+i) ))    
+  54   3                              {
+  55   4                                      return FALSE;
+  56   4                              }
+  57   3                      }
+  58   2                      if( (*(sptr+2+meter_id_lenth)) !=  '!' )                return FALSE;
+  59   2                      if( (*(sptr+3+meter_id_lenth)) !=  CR )         return FALSE;
+  60   2                      if( (*(sptr+4+meter_id_lenth)) !=       LF )            return FALSE;
+  61   2      
+  62   2                      return TRUE;
+  63   2               }
+  64   1      
+  65   1              return FALSE;    
+  66   1               
+  67   1      }
+  68          
+  69          
+  70          
+  71          //-------------------------------------------------------------------------------//
+  72          //  Function:             void dl645_data_encrypt(INT8U* sptr,INT8U len )
+  73          //  Description:          DL645的数据域加密函数
+  74          //  Parameters:          unsigned char* sptr: 需要加密数据的首地址
+  75          //                            INT8U len:   需要加密数据的长度
+  76          //  Returns:               无
+  77          //  Others:                1适用于DL/T645-1997/2007
+  78          //                            2 
+  79          //  author:                 sosomj         2009.02.16      V01.00
+  80          //-------------------------------------------------------------------------------//
+  81          INT8U IEC_Comm_Acknowledgement_Cmd_Judge(INT8U* sptr,INT8U len)
+  82          {
+  83   1           if(len != 6 )  return FALSE;
+  84   1      
+  85   1           if( (*(sptr+0)) != ACKCOM )    return FALSE;
+  86   1           if( (*(sptr+1)) !=  '0' )     return FALSE;
+  87   1           if( ((*(sptr+2))  > 0x36) ||((*(sptr+2))  < 0x30))     return FALSE;   // '0' ~'6' ,300bps ~19200bps 
+             -//
+  88   1           if( (*(sptr+3) !=  '1' )&&(*(sptr+3) !=  '0' ))     return FALSE;
+  89   1           if( (*(sptr+4)) !=  CR )     return FALSE;
+  90   1           if( (*(sptr+5)) !=  LF )     return FALSE;
+  91   1      
+  92   1           return TRUE;
+  93   1               
+  94   1      }
+  95          
+  96          
+  97          //-------------------------------------------------------------------------------//
+  98          //  Function:             INT8U IEC_Comm_Command_Cmd_Judge(INT8U* sptr,INT8U len)
+  99          //  Description:          IEC的操作命令解析函数
+ 100          //  Parameters:          unsigned char* sptr: 通讯缓存区首地址
+ 101          //                            INT8U len:   有效数据长度
+ 102          //  Returns:               成功 or 失败
+ 103          //  Others:                1
+ 104          //                            2 
+ 105          //  author:                 sosomj         
+ 106          //-------------------------------------------------------------------------------//
+ 107          INT8U IEC_Comm_Command_Cmd_Judge(INT8U* sptr,INT8U len)
+ 108          {
+ 109   1       INT8U  u8_a[9];
+ 110   1      //  int i;
+ 111   1           if( (*(sptr+0)) != SOH)         return FALSE;
+ 112   1           if( (*(sptr+len-2)) != ETX)    return FALSE;
+ 113   1      
+C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 3   
+
+ 114   1           if( (*(sptr+len-1)) != Get_Bcc_Chk(sptr, 1, len-2))    return FALSE;
+ 115   1      
+ 116   1      
+ 117   1              u8_a[0] =*(sptr+1);
+ 118   1               u8_a[1] =*(sptr+2);
+ 119   1               u8_a[2] =*(sptr+3);
+ 120   1               u8_a[3] =*(sptr+4);
+ 121   1               u8_a[4] =*(sptr+5);
+ 122   1               u8_a[5] =*(sptr+6);
+ 123   1               u8_a[6] =*(sptr+7);
+ 124   1               u8_a[7] =*(sptr+8);
+ 125   1               u8_a[8] =*(sptr+9);
+ 126   1               
+ 127   1           switch(*(sptr+1))
+ 128   1           {
+ 129   2               case 'P' :                      //  密码指令 //
+ 130   2                       return(IEC_Cmd_Password_Deal(sptr));
+ 131   2                       break;
+ 132   2      
+ 133   2               case 'R' :                    // 读指令 //
+ 134   2      //                        i = IEC_Cmd_Read_Deal(sptr);
+ 135   2                    return(IEC_Cmd_Read_Deal(sptr));
+ 136   2                       break;         
+ 137   2      
+ 138   2               case 'W' :                   //  写指令 //
+ 139   2                    return(IEC_Cmd_Write_Deal(sptr,len));
+ 140   2                       break; 
+ 141   2                       
+ 142   2               
+ 143   2               case 'B' :                   //  终止指令 //
+ 144   2                    //return(IEC_Cmd_Break_Deal(sptr));
+ 145   2                    gs_uart_iec_app_var[g_ch_comm].err_flg |= FRAME_ERROR;   //终止数据帧不应答，直接复位所有层 
+             - //        
+ 146   2                     return FALSE;
+ 147   2                       break; 
+ 148   2      
+ 149   2               //case 'E' :                   //  执行指令 //
+ 150   2              //              return(IEC_Execute_Deal(sptr));
+ 151   2              //       break; 
+ 152   2      
+ 153   2               default:
+ 154   2                       gs_uart_iec_app_var[g_ch_comm].err_flg |= FRAME_ERROR;   //帧错误，需要复位  //        
+ 155   2                    return FALSE;
+ 156   2                       break; 
+ 157   2                       
+ 158   2           }
+ 159   1               
+ 160   1           return TRUE;
+ 161   1               
+ 162   1      }
+ 163          
+ 164                  
+ 165          //-------------------------------------------------------------------------------//
+ 166          //  Function:            void Get_Start_Cmd_Answer(INT8U* sptr,INT8U len,INT8U* info_ptr)
+ 167          //  Description:           起始握手命名成功应答数据处理
+ 168          //  Parameters:          INT8U* sptr : 回复帧首地址
+ 169          //                            INT8U len  :表计INFO数据长度
+ 170          //                            INT8U* info_ptr: 表计INFO数据首地址
+ 171          //  Returns:               无
+ 172          //  Others:                1
+ 173          //                            2 
+ 174          //  author:                 sosomj         2009.02.16      V01.00
+C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 4   
+
+ 175          //-------------------------------------------------------------------------------//
+ 176          void Get_IEC_Comm_Request_Cmd_Answer(INT8U* sptr,INT8U len,INT8U* info_ptr)
+ 177          {
+ 178   1        INT8U i;
+ 179   1        
+ 180   1            (*(sptr+0)) =  '/' ;
+ 181   1                      
+ 182   1            for(i=0;i<len;i++)
+ 183   1            {
+ 184   2                 (*(sptr+i+1)) =   (*(info_ptr+i));  
+ 185   2            }
+ 186   1                
+ 187   1            *(sptr+1+len)=  CR ;   
+ 188   1            *(sptr+1+len+1) =  LF;
+ 189   1               
+ 190   1      }
+ 191          
+ 192          //-------------------------------------------------------------------------------//
+ 193          //  Function:            void Get_IEC_Comm_Operand_Answer(INT8U* sptr,INT8U len,INT8U* info_ptr)
+ 194          //  Description:           起始握手命名成功应答数据处理
+ 195          //  Parameters:          INT8U* sptr : 回复帧首地址
+ 196          //                            INT8U len  :表计INFO数据长度
+ 197          //                            INT8U* info_ptr: 表计INFO数据首地址
+ 198          //  Returns:               无
+ 199          //  Others:                1
+ 200          //                            2 
+ 201          //  author:                 sosomj         2009.02.16      V01.00
+ 202          //-------------------------------------------------------------------------------//
+ 203          void Get_IEC_Comm_Operand_Answer(INT8U* sptr,INT8U len,INT8U* info_ptr)
+ 204          {
+ 205   1        INT8U i;
+ 206   1        
+ 207   1          (*(sptr+0)) =  SOH;
+ 208   1              (*(sptr+1)) =  'P' ;      
+ 209   1              (*(sptr+2)) =  '0' ;
+ 210   1              (*(sptr+3)) =  STX;  
+ 211   1                      
+ 212   1            for(i=0;i<len;i++)
+ 213   1            {
+ 214   2                 (*(sptr+i+4)) =   (*(info_ptr+i));  
+ 215   2            }
+ 216   1                
+ 217   1            *(sptr+len+4)=  ETX;   
+ 218   1            *(sptr+len+5) =  Get_Bcc_Chk(sptr,1, (len+4));    // BCC check get //
+ 219   1               
+ 220   1      }
+ 221          
+ 222          
+ 223          //-------------------------------------------------------------------------------//
+ 224          //  Function:             void Get_Error_Answer(INT8U* sptr)
+ 225          //  Description:          
+ 226          //  Parameters:          unsigned char* sptr: 需要加密数据的首地址
+ 227          //                            
+ 228          //  Returns:               无
+ 229          //  Others:                1
+ 230          //                            2 
+ 231          //  author:                 sosomj         
+ 232          //-------------------------------------------------------------------------------//
+ 233          void Get_Error_Answer(INT8U* sptr)
+ 234          {
+ 235   1            (*(sptr+0)) =  NAK;
+ 236   1      }
+C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 5   
+
+ 237          
+ 238          
+ 239          
+ 240          //-------------------------------------------------------------------------------//
+ 241          //  Function:             void Get_ACK_Answer(INT8U* sptr)
+ 242          //  Description:          
+ 243          //  Parameters:          unsigned char* sptr: 需要加密数据的首地址
+ 244          //                            
+ 245          //  Returns:               无
+ 246          //  Others:                1
+ 247          //                            2 
+ 248          //  author:                 sosomj         
+ 249          //-------------------------------------------------------------------------------//
+ 250          void Get_ACK_Answer(INT8U* sptr)
+ 251          {
+ 252   1            (*(sptr+0)) = ACKCOM;
+ 253   1      }
+ 254          
+ 255          
+ 256          //-------------------------------------------------------------------------------//
+ 257          //  Function:             INT8U Get_Bcc_Chk(INT8U* yourBuf, INT8U StartID, INT8U EndID)
+ 258          //  Description:          IEC 规约的BCC校验
+ 259          //  Parameters:          INT8U* yourBuf  通讯缓存数组首地址
+ 260          //                            
+ 261          //  Returns:               无
+ 262          //  Others:                1适用于DL/T645-1997/2007
+ 263          //                            2 
+ 264          //  author:                 sosomj         2009.02.16      V01.00
+ 265          //-------------------------------------------------------------------------------//
+ 266          INT8U Get_Bcc_Chk(INT8U* yourBuf, INT8U StartID, INT8U EndID)
+ 267          {
+ 268   1          INT8U i;
+ 269   1          INT8U tmp;
+ 270   1      
+ 271   1          tmp=0x00;
+ 272   1          for(i=StartID;i<=EndID;i++)
+ 273   1          {
+ 274   2              tmp ^= *(yourBuf+i);
+ 275   2          }
+ 276   1          return tmp;
+ 277   1      }
+ 278          
+ 279          
+ 280          
+ 281          
+ 282          
+ 283          
+ 284          /***************************************************************
+ 285          *    END
+ 286          ****************************************************************/
+ 287          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1109    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----      40
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 6   
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

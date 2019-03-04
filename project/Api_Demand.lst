@@ -1,0 +1,385 @@
+C51 COMPILER V9.01   API_DEMAND                                                            02/14/2019 10:20:40 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE API_DEMAND
+OBJECT MODULE PLACED IN .\Api_Demand.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S3_ApiPlat\Api_Demand.c LARGE BROWSE INCDIR(..\C_Source\S0_Syst
+                    -em;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiProtocol;
+                    -..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_HardDrv\E2P
+                    -_24CXXX) DEBUG OBJECTEXTEND PRINT(.\Api_Demand.lst) OBJECT(.\Api_Demand.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : Api_Demand.C
+   6          **Author                : maji
+   7          **date                  : 2016-04-20 
+   8          **description   : ÐèÁ¿´¦ÀíÓ¦ÓÃ²ãÏà¹Øº¯Êý³ÌÐòCÎÄ¼þ
+   9          **note                  : MERTER FOR DL06A
+  10          **                         µ±Ç°×î´óÐèÁ¿ÓÃ»§Êý¾Ý¾ù´æ´¢ÔÚÍâ²¿E2PÄÚ
+  11          **--------------------Version History -------------------------------------
+  12          ** NO. Date         Ver      By         Description 
+  13          **==============================================================
+  14          ** 1   2016-04-20   v01.00   sosomj     1. frist version                             
+  15          **
+  16          **==============================================================
+  17          */
+  18          
+  19          #include <MyIncludes_H.h>
+  20          
+  21          
+  22          MD_VAR gs_md_var;           // ×î´óÐèÁ¿¼ÆËã±äÁ¿RAMÇøÊý¾Ý //
+  23          MD_PARAM gs_md_param;  // ×î´óÐèÁ¿¼ÆËã²ÎÊýRAMÇøÊý¾Ý //
+  24          
+  25          /*****************************************************************************
+  26          ** Function name    :api_check_Demand_para
+  27          **
+  28          ** Description         :¼ì²éÐèÁ¿²ÎÊýºÏ·¨ÐÔ     
+  29          **
+  30          ** Parameters         :*u8_data ÐèÁ¿²ÎÊýÊý×éÊ×µØÖ·      
+  31          **
+  32          ** Returned value   :flg=TRUE ºÏ·¨£»flg=FALSE ·Ç·¨
+  33          **
+  34          **----------------------------------------------------------------------------
+  35          ** V01.01  MJ  2016-04-23
+  36          ******************************************************************************/
+  37          uint8 api_check_Demand_para(MD_PARAM *s_para)
+  38          {
+  39   1       uint8 flg=FALSE;
+  40   1       uint8 u8_period,u8_slid;
+  41   1          
+  42   1          u8_period = s_para->u8_period;
+  43   1          u8_slid = s_para->u8_slid;
+  44   1      
+  45   1          if((u8_period>0)&&(u8_slid>0))  
+  46   1          {
+  47   2              if((u8_period<=30)&&(u8_slid<=30))  
+  48   2              {
+  49   3                  if(u8_slid <= u8_period)
+  50   3                  {
+  51   4                      if((u8_period%u8_slid)==0)
+  52   4                      {
+C51 COMPILER V9.01   API_DEMAND                                                            02/14/2019 10:20:40 PAGE 2   
+
+  53   5                          flg=TRUE;
+  54   5                      }
+  55   4                  }            
+  56   3              }
+  57   2          }
+  58   1      
+  59   1          return(flg);
+  60   1          
+  61   1      }
+  62          
+  63          
+  64          /*****************************************************************************
+  65          ** Function name    :api_init_md_data_ram
+  66          **
+  67          ** Description         :³õÊ¼»¯µ±Ç°ÐèÁ¿¼ÆËãRAMÇøÊý¾Ý£¬³ÌÐò¸´Î»³õÊ¼»¯µ÷ÓÃ        
+  68          **
+  69          ** Parameters         :NONE          
+  70          **
+  71          ** Returned value   :NONE
+  72          **
+  73          **----------------------------------------------------------------------------
+  74          ** V01.01  MJ  2016-04-23
+  75          ******************************************************************************/
+  76          void api_init_md_data_ram(void)
+  77          {
+  78   1      
+  79   1          //»ñÈ¡×î´óÐèÁ¿¼ÆËã²ÎÊý //
+  80   1          mem_read(&gs_md_param.u8_period, ADR_METER_PARAM1_MD, 2, MEM_E2P1);
+  81   1      
+  82   1          if(api_check_Demand_para(&gs_md_param) ==FALSE)
+  83   1          {
+  84   2              // ³ö´íºóÈ¡Ä¬ÈÏÊý¾Ý //
+  85   2              gs_md_param.u8_period =30;
+  86   2              gs_md_param.u8_slid =30;
+  87   2          }
+  88   1      
+  89   1          // Çå³ýÐèÁ¿¼ÆËãÏà¹ØÊ±Ê±±äÁ¿ //
+  90   1          Lib_Set_String(&gs_md_var.min_var[0].cnt_sec,0,sizeof(MD_VAR));
+  91   1      }
+  92          
+  93          /*****************************************************************************
+  94          ** Function name    :api_updata_md_var_min_per_second
+  95          **
+  96          ** Description         :ÐèÁ¿¹¦ÂÊÊý¾ÝÍ¨µÀÃ¿ÃëÀÛ¼Ó´¦Àí£¬Ãë±ä»¯Ê±µ÷ÓÃ    
+  97          **
+  98          ** Parameters         :NONE          
+  99          **
+ 100          ** Returned value   :NONE
+ 101          **
+ 102          **----------------------------------------------------------------------------
+ 103          ** V01.01  MJ  2016-04-23
+ 104          ******************************************************************************/
+ 105          void api_cmp_save_md_data(uint8 ch, uint32 val_hex32)
+ 106          {
+ 107   1       MMD_DATA_UNIT st_mmd_unit;
+ 108   1       uint16 adr_offset;
+ 109   1       //SUM_MMD_DATA_UNIT sum_st_mmd_unit;//ÀÛ¼Æ×î´óÐèÁ¿
+ 110   1      
+ 111   1          if(ch<MD_CH_NUM)
+ 112   1          {
+ 113   2              adr_offset = ( ch*(1+TARIFF_MAX_NUM)*LEN_MMD_UNIT) ;  
+ 114   2              mem_read(&st_mmd_unit.buf[0], ADR_BLOCK01_MMD_L0_E2P+adr_offset, LEN_MMD_UNIT, MEM_E2P1);  
+C51 COMPILER V9.01   API_DEMAND                                                            02/14/2019 10:20:40 PAGE 3   
+
+ 115   2              if(val_hex32>st_mmd_unit.val.val_hex32) 
+ 116   2              {
+ 117   3                  st_mmd_unit.val.val_hex32 =  val_hex32;
+ 118   3                  st_mmd_unit.val.date_rtc[0] = gs_CurDateTime.Year;
+ 119   3                  st_mmd_unit.val.date_rtc[1] = gs_CurDateTime.Month;
+ 120   3                  st_mmd_unit.val.date_rtc[2] = gs_CurDateTime.Day;
+ 121   3                  st_mmd_unit.val.date_rtc[3] = gs_CurDateTime.Hour;
+ 122   3                  st_mmd_unit.val.date_rtc[4] = gs_CurDateTime.Minute;
+ 123   3                  mem_db_write(ADR_BLOCK01_MMD_L0_E2P+adr_offset,&st_mmd_unit.buf[0],LEN_MMD_UNIT,MEM_E2P1);
+ 124   3                              mem_write(&st_mmd_unit_array[0].buf[0],&st_mmd_unit.buf[0],LEN_MMD_UNIT,MEM_RAM);
+*** WARNING C214 IN LINE 124 OF ..\C_SOURCE\S3_APIPLAT\API_DEMAND.C: 'Argument': conversion: pointer to non-pointer
+ 125   3                              mem_write(ADR_BLOCK_4MMD_L0_E2P,&st_mmd_unit.buf[0],LEN_MMD_UNIT,MEM_E2P1);
+ 126   3              }
+ 127   2              #if (TARIFF_MAX_NUM>1)
+ 128   2              // ·ÑÂÊ ×î´óÐèÁ¿´¦Àí    //
+ 129   2              adr_offset = ( ch*(1+TARIFF_MAX_NUM)*LEN_MMD_UNIT) +(EN_TRIFF_no*LEN_MMD_UNIT);  
+ 130   2              mem_read(&st_mmd_unit.buf[0], ADR_BLOCK01_MMD_L0_E2P+adr_offset, LEN_MMD_UNIT, MEM_E2P1);  
+ 131   2              if(val_hex32>st_mmd_unit.val.val_hex32) 
+ 132   2              {
+ 133   3                  st_mmd_unit.val.val_hex32 =  val_hex32;
+ 134   3                  st_mmd_unit.val.date_rtc[0] = gs_CurDateTime.Year;
+ 135   3                  st_mmd_unit.val.date_rtc[1] = gs_CurDateTime.Month;
+ 136   3                  st_mmd_unit.val.date_rtc[2] = gs_CurDateTime.Day;
+ 137   3                  st_mmd_unit.val.date_rtc[3] = gs_CurDateTime.Hour;
+ 138   3                  st_mmd_unit.val.date_rtc[4] = gs_CurDateTime.Minute;
+ 139   3                  mem_db_write(ADR_BLOCK01_MMD_L0_E2P+adr_offset,&st_mmd_unit.buf[0],LEN_MMD_UNIT,MEM_E2P1);
+ 140   3              }
+ 141   2              
+ 142   2              #endif   
+ 143   2                      
+ 144   2      //                              //ÈÕ¶³½áÐèÁ¿
+ 145   2      //              mem_read(&st_mmd_unit.buf[0], ADR_BLOCK_4MMD_L0_E2P, LEN_MMD_UNIT, MEM_E2P1);//¶Á³öµ±Ç°×î´óÐèÁ¿£¨µ±ÈÕÖ
+             -ÐµÄ£©
+ 146   2      //              mem_read(&sum_st_mmd_unit.buf[0], ADR_BLOCK_4MMD_sum_L0_E2P, LEN_SUM_MMD_UNIT, MEM_E2P1);
+ 147   2      //              if(val_hex32>st_mmd_unit.val.val_hex32)
+ 148   2      //              {
+ 149   2      //                      st_mmd_unit.val.val_hex32 =  val_hex32;
+ 150   2      //                      sum_st_mmd_unit.val.val_hex32 = val_hex32;
+ 151   2      //                      sum_st_mmd_unit.val.val_count ++;
+ 152   2      //                      sum_st_mmd_unit.val.date_rtc[0] = st_mmd_unit.val.date_rtc[0] = gs_CurDateTime.Year;
+ 153   2      //                      sum_st_mmd_unit.val.date_rtc[1] = st_mmd_unit.val.date_rtc[1] = gs_CurDateTime.Month;
+ 154   2      //                      sum_st_mmd_unit.val.date_rtc[2] = st_mmd_unit.val.date_rtc[2] = gs_CurDateTime.Day;
+ 155   2      //                      sum_st_mmd_unit.val.date_rtc[3] = st_mmd_unit.val.date_rtc[3] = gs_CurDateTime.Hour;
+ 156   2      //                      sum_st_mmd_unit.val.date_rtc[4] = st_mmd_unit.val.date_rtc[4] = gs_CurDateTime.Minute;
+ 157   2      //                      mem_db_write(ADR_BLOCK_4MMD_L0_E2P,&st_mmd_unit.buf[0],LEN_MMD_UNIT,MEM_E2P1);
+ 158   2      //                      mem_db_write(ADR_BLOCK_4MMD_sum_L0_E2P,&sum_st_mmd_unit.buf[0],LEN_SUM_MMD_UNIT,MEM_E2P1);
+ 159   2      //              }    
+ 160   2          }
+ 161   1        
+ 162   1      
+ 163   1      }
+ 164          
+ 165          
+ 166          /*****************************************************************************
+ 167          ** Function name    :lnk_updata_md_var_power_per_second
+ 168          **
+ 169          ** Description         :Ã¿Ãë¸üÐÂÃ¿¸ö×î´óÐèÁ¿Í¨µÀµÄÊ±Ê±¹¦ÂÊÊý¾Ý    
+ 170          **
+ 171          ** Parameters         :NONE          
+ 172          **
+ 173          ** Returned value   :NONE
+ 174          **
+C51 COMPILER V9.01   API_DEMAND                                                            02/14/2019 10:20:40 PAGE 4   
+
+ 175          **----------------------------------------------------------------------------
+ 176          ** V01.01  MJ  2016-04-23
+ 177          ******************************************************************************/
+ 178          void lnk_updata_md_var_power_per_second(void)
+ 179          {
+ 180   1       uint8 i;
+ 181   1          
+ 182   1          for(i=0;i<MD_CH_NUM;i++)
+ 183   1          {
+ 184   2              switch(i)
+ 185   2              {
+ 186   3                  case MD_CH_AC_PT_TT:   // µ±Ç°×ÜÓÐ¹¦×î´óÐèÁ¿Í¨µÀ  //
+ 187   3                      gs_md_var.power_val[i] = gs_measure_var_data.gs_really[PHASE_TT].dw_p_val.u32 ;    // ÐèÒª
+             -ÐÞ¸ÄÎª×îÖÕµÄ¹¦ÂÊÊý¾Ý±äÁ¿£¬²»Ó¦¸ÃÊÇ0 //
+ 188   3                      break;
+ 189   3      
+ 190   3                              case MD_CH_RE_PT_TT:   // µ±Ç°×ÜÓÐ¹¦×î´óÐèÁ¿Í¨µÀ  //
+ 191   3                                      gs_md_var.power_val[i] = gs_measure_var_data.gs_really[PHASE_TT].dw_q_val.u32 ;    // ÐèÒªÐÞ¸ÄÎª×îÖÕµÄ
+             -¹¦ÂÊÊý¾Ý±äÁ¿£¬²»Ó¦¸ÃÊÇ0 //
+ 192   3                              break;
+ 193   3                  default:
+ 194   3                      sys_err();
+ 195   3              }
+ 196   2          }
+ 197   1      
+ 198   1      }
+ 199          
+ 200          
+ 201          /*****************************************************************************
+ 202          ** Function name    :api_updata_md_var_min_per_second
+ 203          **
+ 204          ** Description         :ÐèÁ¿¹¦ÂÊÊý¾ÝÍ¨µÀÃ¿ÃëÀÛ¼Ó´¦Àí£¬Ãë±ä»¯Ê±µ÷ÓÃ    
+ 205          **
+ 206          ** Parameters         :NONE          
+ 207          **
+ 208          ** Returned value   :NONE
+ 209          **
+ 210          **----------------------------------------------------------------------------
+ 211          ** V01.01  MJ  2016-04-23
+ 212          ******************************************************************************/
+ 213          void api_updata_md_var_min_per_second(void)
+ 214          {
+ 215   1       uint8 i;
+ 216   1      
+ 217   1          //»ñÈ¡Ã¿¸öÍ¨µÀµÄÃë¹¦ÂÊÊý¾Ý //
+ 218   1          lnk_updata_md_var_power_per_second();
+ 219   1      
+ 220   1      
+ 221   1      
+ 222   1          for(i=0;i<MD_CH_NUM;i++)
+ 223   1          {
+ 224   2              gs_md_var.min_var[i].cnt_sec++;
+ 225   2              gs_md_var.min_var[i].sum_min += gs_md_var.power_val[i] ;
+ 226   2          }
+ 227   1       
+ 228   1      }
+ 229          
+ 230          
+ 231          
+ 232          /*****************************************************************************
+ 233          ** Function name    :api_updata_md_var_slid_per_minute
+ 234          **
+C51 COMPILER V9.01   API_DEMAND                                                            02/14/2019 10:20:40 PAGE 5   
+
+ 235          ** Description         :³õÊ¼»¯µ±Ç°ÐèÁ¿¼ÆËãRAMÇøÊý¾Ý£¬³ÌÐò¸´Î»³õÊ¼»¯µ÷ÓÃ        
+ 236          **
+ 237          ** Parameters         :NONE          
+ 238          **
+ 239          ** Returned value   :NONE
+ 240          **
+ 241          **----------------------------------------------------------------------------
+ 242          ** V01.01  MJ  2016-04-23
+ 243          ******************************************************************************/
+ 244          void api_updata_md_var_slid_per_minute(void)
+ 245          {
+ 246   1       uint8 i,j;
+ 247   1       uint32 sum_hex32;
+ 248   1      
+ 249   1          // ÐèÁ¿²ÎÊý¼ì²é //
+ 250   1        if(api_check_Demand_para(&gs_md_param) ==FALSE)
+ 251   1          {
+ 252   2              // ³ö´íºóÈ¡Ä¬ÈÏÊý¾Ý //
+ 253   2              gs_md_param.u8_period =30;
+ 254   2              gs_md_param.u8_slid =30;
+ 255   2          }
+ 256   1      
+ 257   1          for(i=0;i<MD_CH_NUM;i++)
+ 258   1          {
+ 259   2              // ¼ÆËãÃ¿·ÖÖÓÊ±Ê±Æ½¾ù¹¦ÂÊ(Ê±Ê±ÐèÁ¿) //
+ 260   2              if(gs_md_var.min_var[i].cnt_sec !=0)
+ 261   2              {
+ 262   3                  gs_md_var.min_var[i].val_min = (gs_md_var.min_var[i].sum_min/gs_md_var.min_var[i].cnt_sec);
+ 263   3                  gs_md_var.min_var[i].cnt_sec  = 0; 
+ 264   3                  gs_md_var.min_var[i].sum_min = 0;
+ 265   3              }
+ 266   2              
+ 267   2              // ¸üÐÂ»¬²î¼ÆËã·½·¨Ïà¹ØÊý¾Ý //
+ 268   2              if(gs_md_var.slid_var[i].cnt_min<gs_md_param.u8_period)
+ 269   2              {
+ 270   3                  gs_md_var.slid_var[i].date_buff[gs_md_var.slid_var[i].cnt_min] = gs_md_var.min_var[i].val_min;
+ 271   3                  gs_md_var.slid_var[i].cnt_min++;
+ 272   3                  if(gs_md_var.slid_var[i].cnt_min==gs_md_param.u8_period)
+ 273   3                  {
+ 274   4                      gs_md_var.slid_var[i].cal_flg = TRUE;
+ 275   4                      gs_md_var.slid_var[i].cnt_min = 0;
+ 276   4                  }
+ 277   3      
+ 278   3                  if(gs_md_var.slid_var[i].cal_flg == TRUE)
+ 279   3                  {
+ 280   4                      sum_hex32 =0;
+ 281   4                      if((gs_md_var.slid_var[i].cnt_min %gs_md_param.u8_slid)==0 )   
+ 282   4                      {
+ 283   5                          for(j=0;j<gs_md_param.u8_period;j++)
+ 284   5                          {
+ 285   6                              sum_hex32 += gs_md_var.slid_var[i].date_buff[j];    
+ 286   6                          }
+ 287   5                          gs_md_var.slid_var[i].val_slid =sum_hex32/gs_md_param.u8_period;
+ 288   5                          api_cmp_save_md_data(i, gs_md_var.slid_var[i].val_slid );
+ 289   5                      }
+ 290   4                  }
+ 291   3              }
+ 292   2      
+ 293   2          }
+ 294   1      
+ 295   1      }
+ 296          
+C51 COMPILER V9.01   API_DEMAND                                                            02/14/2019 10:20:40 PAGE 6   
+
+ 297          
+ 298          /*****************************************************************************
+ 299          ** Function name    :api_clr_current_energy_data
+ 300          **
+ 301          ** Description         :µ±Ç°µçÄÜÊý¾ÝµÄÇåÁã´¦Àí
+ 302          **
+ 303          ** Parameters         :NONE          
+ 304          **
+ 305          ** Returned value   :NONE
+ 306          **
+ 307          **----------------------------------------------------------------------------
+ 308          ** V01.01  MJ  2016-04-23
+ 309          ******************************************************************************/
+ 310          void api_clr_current_MD_data(void)
+ 311          {
+ 312   1          MD_USER_DATA tmp_ms_user_data;
+ 313   1              MMD_DATA_UNIT st_mmd_unit;
+ 314   1      
+ 315   1              mem_read(&st_mmd_unit.buf[0], ADR_BLOCK01_MMD_L0_E2P, LEN_MMD_UNIT, MEM_E2P1);
+ 316   1              sum_st_mmd_unit_array[0].val.val_hex32 += st_mmd_unit.val.val_hex32;
+ 317   1              sum_st_mmd_unit_array[0].val.val_count++;
+ 318   1          mem_write(ADR_BLOCK_4MMD_sum_L0_E2P,&sum_st_mmd_unit_array[0].buf[0],LEN_SUM_MMD_UNIT,MEM_E2P1);   
+ 319   1          //µ±Ç°ÐèÁ¿ÇåÁã  //
+ 320   1          Lib_Clr_String(&tmp_ms_user_data.us_val[0][0].buf[0],LEN_MMD_CURRENT);
+ 321   1              Lib_Clr_String(&st_mmd_unit_array[0].buf[0],LEN_NEW_MMD_UNIT);
+ 322   1          mem_db_write(ADR_BLOCK01_MMD_L0_E2P,&tmp_ms_user_data.us_val[0][0].buf[0], LEN_MMD_CURRENT, MEM_E2P1);
+             -   
+ 323   1              mem_write(ADR_BLOCK_4MMD_L0_E2P,&st_mmd_unit_array[0].buf[0],LEN_MMD_UNIT,MEM_E2P1);
+ 324   1              CLRWDT();
+ 325   1          // Çå³ýÐèÁ¿¼ÆËãÏà¹ØÊ±Ê±±äÁ¿ //
+ 326   1          Lib_Set_String(&gs_md_var.min_var[0].cnt_sec,0,sizeof(MD_VAR));
+ 327   1      }
+ 328          
+ 329          void api_clr_freeze_energy(void)
+ 330          {
+ 331   1              Lib_Clr_String(&energy_data_array[0].buf[0],LEN_EC_UNIT*5);
+ 332   1              Lib_Clr_String(&st_mmd_unit_array[0].buf[0],LEN_NEW_MMD_UNIT*5);
+ 333   1              Lib_Clr_String(&sum_st_mmd_unit_array[0].buf[0],LEN_SUM_MMD_UNIT*5);
+ 334   1              mem_write(ADR_BLOCK_4Energy_L0_E2P,&energy_data_array[0].buf[0],LEN_EC_UNIT*5,MEM_E2P1);
+ 335   1              mem_write(ADR_BLOCK_4MMD_L0_E2P,&st_mmd_unit_array[0].buf[0],LEN_NEW_MMD_UNIT*5,MEM_E2P1);
+ 336   1              mem_write(ADR_BLOCK_4MMD_sum_L0_E2P,&sum_st_mmd_unit_array[0].buf[0],LEN_SUM_MMD_UNIT*5,MEM_E2P1);
+ 337   1      }
+ 338          
+ 339          
+ 340          
+ 341          /***************************************************************
+ 342          *    END
+ 343          ****************************************************************/
+ 344          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1671    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    143      80
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

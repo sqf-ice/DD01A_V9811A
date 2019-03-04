@@ -1,0 +1,134 @@
+C51 COMPILER V9.01   PROC_DATA                                                             02/14/2019 10:20:30 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE PROC_DATA
+OBJECT MODULE PLACED IN .\Proc_Data.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S0_System\Proc_Data.c LARGE BROWSE INCDIR(..\C_Source\S0_System
+                    -;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiProtocol;..
+                    -\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_HardDrv\E2P_2
+                    -4CXXX) DEBUG OBJECTEXTEND PRINT(.\Proc_Data.lst) OBJECT(.\Proc_Data.obj)
+
+line level    source
+
+   1          /*
+   2          *****************Copyright (c)*************************************
+   3          **      Hangzhou Xili Watthour Meter Manufacture Co., Ltd. 
+   4          **--------------file info--------------------------------------------
+   5          **name                  : Proc_Data.c
+   6          **Author                : maji
+   7          **date                  : 2016-04-20
+   8          **description   : ÏµÍ³Ïà¹ØÊý¾Ý´¦ÀíCÎÄ¼þ
+   9          **note                  : V9811A £¬MERTER FOR DL03C
+  10          **--------------------Version History -------------------------------------
+  11          ** NO. Date         Ver      By         Description 
+  12          **==============================================================
+  13          ** 1   2016-04-26   v01.00   sosomj     1. frist version                             
+  14          **
+  15          **==============================================================
+  16          */
+  17          
+  18          
+  19          #include <MyIncludes_H.h>
+  20          
+  21          
+  22          
+  23          SYS_RUN_STATUS  gs_sys_run;
+  24          SYS_GLOBAL_VAR gs_sys_globaL_var;
+  25          
+  26          
+  27          
+  28          
+  29          // 0 °æ±¾ºÅ ³£Êý ¶¨Òå //
+  30          /*********************************************************************************************************
+  31          **  °æ±¾ºÅ ³£Êý ¶¨Òå
+  32          ********************************************************************************************************/
+  33          
+  34          #if(meter_type == D_1P3W)
+              const SYS_PARM code sys_parm={
+                    0x00,METER_CONST_10WH_BCD,0x00,        //µç±íÓÐ¹¦³£Êý//
+                    'D','D','0','1','A','-','V','3','0','.','0','3',   //Èí¼þ°æ±¾ºÅ  //
+              };
+              #endif
+  40          #if(meter_type == D_1P2W)
+  41          const SYS_PARM code sys_parm={
+  42                0x00,METER_CONST_10WH_BCD,0x00,        //µç±íÓÐ¹¦³£Êý//
+  43                'D','D','0','1','A','-','V','2','0','.','0','3',   //Èí¼þ°æ±¾ºÅ  //
+  44          };
+  45          #endif
+  46          /*********************************************************************************************************
+  47          **  µçÄÜ±í²ÎÊý1 ³õÊ¼»¯Ä¬ÈÏÊý¾Ý
+  48          ********************************************************************************************************/
+  49          const  E2P_METER_PARAM1_MAP   code  default_meter_parm1_tab = 
+  50          {
+  51              30,30,       //  MD_PARAM                                md_param;
+  52          #if (BILL_MAX_NUM>0)
+C51 COMPILER V9.01   PROC_DATA                                                             02/14/2019 10:20:30 PAGE 2   
+
+  53              0x26,0x00,        //BILL_MONTH_SETTLED_PARAM     bill_ms_param; 
+  54              0x30, //ÎªÔÂ½áËã
+  55          #endif
+  56              0,           //INT8U   EMU_fast_flg;    = 0X//EMU ¼Ó±¶±êÊ¶ //
+  57              0X11,0X11,0X11,0X11,0X11,0X11,0XFF,0XFF,//INT8U   meter_id[16];
+  58              0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,0XFF,
+  59                  0x11,0x11,0x11,0x11,0x11,0x11,                          // Ä¬ÈÏRFÍ¨Ñ¶µØÖ·12¸ö1,¬¹¹²6×Ö½Ú //     
+  60              0,0,0,0,//INT8U   password[2][4];   //  2 ¼¶ÃÜÂë //
+  61              0,0,0,0,
+  62              0,0,0,0,//INT8U   RF_password[2][4];   // RF 2 ¼¶ÃÜÂë //
+  63              0,0,0,0,
+  64              METER_FACTORY_MARK,0,0,0,//INT8U   fac_cfg[4];          //  ¹¤³§ÐÅÏ¢ÅäÖÃ×Ö//
+  65              0,28,   //INT8U   bat_level[2];          //  µç³ØµçÑ¹·§Öµ//  29=2.90v
+  66              0,0, // ÓÐ¹¦×éºÏ·½Ê½×Ö//
+  67              0,0, // ÎÞ¹¦×éºÏ·½Ê½×Ö//
+  68              0,     //¸÷Í¨µÀ¸ººÉ¼ÇÂ¼Ö¸Õë(1¸öÍ¨µÀ)        2       BIN  XXXX    
+  69              0,      //¸÷Í¨µÀ¸ººÉ¼ÇÂ¼ÌõÊý                        2       BIN  XXXX    
+  70              15,            //¸÷Í¨µÀ¼ÇÂ¼Ê±¼ä¼ä¸ô£¨min£©          2       BCD  XXXX     
+  71              1,1,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,   // ¸÷¼Ä´æÆ÷´úÂë(1+9)                         10      BCD  XXXX         µÚÒ
+             -»¸öÎ»¸öÊý   
+  72              0x123456,
+  73              0,  //INT8U relay_cmd;                       //¼ÌµçÆ÷¿ØÖÆÃüÁî =0x00 ºÏÕ¢ =0x3A À­Õ¢
+  74              0,  //INT8U relay_status;            //¼ÌµçÆ÷×´Ì¬ =0x00ºÏÕ¢ =0x3A  À­Õ¢
+  75              0,  //INT8U const_fast_flg;          //³£ÊýÀ©´ó±êÊ¶ =0x3C ³£ÊýÀ©´ó10±¶£¬ÆäËû³£Êý±£³Ö
+  76              0x65,0x34,0x12,// INT8U     EEPROM_Flag[3];           // //  Ê×´ÎÉÏµçEEPROM¼ì²é×´Ì¬×Ö !=0x653412±êÖ¾µ±Ç°ÎªÊ×´ÎÉÏµ
+             -ç 
+  77              0,          //INT16U  param1_csck;    //16Î»ÀÛ¼ÓºÍÐ£ÑéÖµ//
+  78          };
+  79          
+  80          
+  81          
+  82          void Proc_sys_data_init(void)
+  83          {
+  84   1          gs_sys_run.back_fg = 0;
+  85   1          gs_sys_run.font_fg = 0;
+  86   1          gs_sys_globaL_var.delay_emu =3;   // EMU ÎÂ¶ÈÊ±¼äÓ³Éä //
+  87   1          gs_sys_globaL_var.qf_time =0;     //ÎÞ¹¦Âö¿í¿ØÖÆ//
+  88   1          mem_read(&gs_sys_globaL_var.meter_factory_status, ADR_METER_PARAM1_FC_CFG, 1, MEM_E2P1);   //Êý¾Ý0=0X5
+             -A ´ú±í¹¤³§×´Ì¬ // 
+  89   1          mem_read(&gs_sys_globaL_var.fac_energy[0], ADR_METER_PARAM1_FAC_ENERGY, 2, MEM_E2P1);   
+  90   1          mem_read(&gs_sys_globaL_var.Rac_energy[0], ADR_METER_PARAM1_REC_ENERGY, 2, MEM_E2P1);    
+  91   1              //ÏÂµçÏÔÊ¾Î¬³ÖÊ±¼ä»Ö¸´
+  92   1              mem_read(&gs_sys_globaL_var.sleep_sec.B08[0], ADR_DIS_PARAM_SLEEP_SEC, 4, MEM_E2P1);    
+  93   1      
+  94   1      }
+  95          
+  96          
+  97          
+  98          /***************************************************************
+  99          *    END
+ 100          ****************************************************************/
+ 101          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    115    ----
+   CONSTANT SIZE    =     97    ----
+   XDATA SIZE       =     24    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.01   PROC_DATA                                                             02/14/2019 10:20:30 PAGE 3   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

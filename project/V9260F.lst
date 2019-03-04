@@ -1,0 +1,858 @@
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE V9260F
+OBJECT MODULE PLACED IN .\V9260F.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\C_Source\S1_HardDrv\V9811A_EMU\V9260F.c LARGE BROWSE INCDIR(..\C_Source\
+                    -S0_System;..\C_Source\S1_HardDrv;..\C_Source\S2_MyLib;..\C_Source\S3_ApiPlat;..\C_Source\S4_ApiUser;..\C_Source\S5_ApiPr
+                    -otocol;..\C_Source\S6_MyIncludes;..\C_Source\S1_HardDrv\V9811A_EMU;..\C_Source\S1_HardDrv\V9811A_MCU;..\C_Source\S1_Hard
+                    -Drv\E2P_24CXXX) DEBUG OBJECTEXTEND PRINT(.\V9260F.lst) OBJECT(.\V9260F.obj)
+
+line level    source
+
+   1          #define  RACCOONEXT
+   2          #include <MyIncludes_H.h>
+   3          
+   4          
+   5          /*=========================================================================================\n
+   6          * @function_name: Init_RacCtrl
+   7          * @function_file: ComRaccoon.c
+   8          * @ÃèÊö: 
+   9          * 
+  10          * @²ÎÊý: 
+  11          * @·µ»Ø: 
+  12          * @×÷Õß:   (2013-04-15)
+  13          * @±¸×¢: 
+  14          *-------------------------------------------------------------------------------------------
+  15          * @ÐÞ¸ÄÈË:  
+  16          * @ÐÞ¸ÄÄÚÈÝ: 
+  17          ===========================================================================================*/
+  18          void Init_RacCtrl(void)
+  19          {
+  20   1          uint8 i;
+  21   1          gs_RacCtrl.ucSendLen=0;
+  22   1          gs_RacCtrl.ucSendPoint=0;
+  23   1          gs_RacCtrl.ucRevLen=0;
+  24   1          gs_RacCtrl.ucRevPoint=0;
+  25   1          gs_RacCtrl.ucStatus=Rac_Idle;
+  26   1          for(i=0;i<100;i++)
+  27   1          {
+  28   2              gs_RacCtrl.ucBuf[i] =0;
+  29   2          }
+  30   1      }
+  31          /*=========================================================================================\n
+  32          * @function_name: RxReset_V9281
+  33          * @function_file: Raccoon.c
+  34          * @ÃèÊö: µÍµçÆ½ÓÐÐ§ P2.5Êä³öµÍµçÆ½ ³ÖÐø63ms
+  35          * 
+  36          * @²ÎÊý: 
+  37          * @·µ»Ø: 
+  38          * @×÷Õß:   lwb (2013-07-10)
+  39          * @±¸×¢: 
+  40          *-------------------------------------------------------------------------------------------
+  41          * @ÐÞ¸ÄÈË:  
+  42          * @ÐÞ¸ÄÄÚÈÝ: 
+  43          ===========================================================================================*/
+  44          void RxReset_V9260(void)
+  45          {
+  46   1          P21FS=0; 
+  47   1          P20FS=0; 
+  48   1          P2OE&=(~BIT1);       //TXD ÔÊÐíÊä³ö
+  49   1          P2IE&=(~BIT1);       
+  50   1          
+  51   1          P2OD |=(BIT1);
+  52   1      
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 2   
+
+  53   1          P2OD&=(~BIT1);  
+  54   1              // È¥³ýÖÐ¶Ï £¬Ê¹ÓÃÑÓÊ±//
+  55   1              //guc_CommDelayTime = 10;
+  56   1              // while(guc_CommDelayTime >0);  //100ms
+  57   1              CLRWDT();       
+  58   1              Lib_Delay_ms(100);
+  59   1              CLRWDT();       
+  60   1           P2OD |=(BIT1);
+  61   1      
+  62   1          P21FS=2;  
+  63   1          P20FS=2; 
+  64   1      }
+  65          /*=========================================================================================\n
+  66          * @function_name: WriteRaccoon
+  67          * @function_file: Raccoon.h
+  68          * @ÃèÊö: Ïòraccoon·¢ËÍÊý¾Ý
+  69          * 
+  70          * 
+  71          * @²ÎÊý: 
+  72          * @param:Data  Ð´ÈëÊý¾Ý
+  73          *               ×Ö½Ú1£ºÖ¡Í·0xFE    ×Ö½Ú2£º¸ß4Î»µØÖ·¸ß4bit£¬µÍ4Î»¿ØÖÆ
+  74          *               ×Ö½Ú3£ºµØÖ·µÍ8bit  ×Ö½Ú4~7£ºÊý¾Ý   ×Ö½Ú8£ºÐ£Ñé
+  75          * @param:addr  Ð´ÈëµØÖ·
+  76          * ¿ØÖÆ
+  77          * @·µ»Ø: 
+  78          * @return: uint8 
+  79          * @×÷Õß:   lwb (2013-07-04)
+  80          * @±¸×¢: 
+  81          *-------------------------------------------------------------------------------------------
+  82          * @ÐÞ¸ÄÈË:  hjj
+  83          * @ÐÞ¸ÄÄÚÈÝ: Ìí¼ÓRaccoonÎïÀíµØÖ·£¬ÈýÏà±íÒ»¹²Ê¹ÓÃ3¸öRaccoon
+  84          * @param:Phyadd RaccoonµØÖ·
+  85          
+  86          ===========================================================================================*/
+  87          uint8  WriteRaccoon(uint32 Data,uint16 Addr,uint8 Phyadd)
+  88          {
+  89   1          uint8 i;
+  90   1          volatile uint8 ucSum;
+  91   1          switch(Phyadd)
+  92   1          {
+  93   2          case APhy:
+  94   2            {
+  95   3              return SetMeterCfgACK( Data, Addr);
+  96   3            }
+  97   2            break;
+  98   2          case BPhy:
+  99   2            {   
+ 100   3              gs_RacCtrl.ucBuf[0] = 0xfe;
+ 101   3              
+ 102   3              gs_RacCtrl.ucBuf[1] = (uint8)((Addr&0x0f00)>>4)+RacWrite+ BPhy;
+ 103   3              gs_RacCtrl.ucBuf[2] = (uint8)(Addr&0x00ff);
+ 104   3              
+ 105   3              gs_RacCtrl.ucBuf[3] = (uint8)(Data&0x000000ff);
+ 106   3              gs_RacCtrl.ucBuf[4] = (uint8)((Data&0x0000ff00)>>8);
+ 107   3              gs_RacCtrl.ucBuf[5] = (uint8)((Data&0x00ff0000)>>16);
+ 108   3              gs_RacCtrl.ucBuf[6] = (uint8)((Data&0xff000000)>>24);
+ 109   3              //¼ÆËãÐ£ÑéºÍ
+ 110   3              gs_RacCtrl.ucBuf[7] =  gs_RacCtrl.ucBuf[0];
+ 111   3              for(i=1;i<7;i++)
+ 112   3              {
+ 113   4                gs_RacCtrl.ucBuf[7] += gs_RacCtrl.ucBuf[i]; 
+ 114   4              }
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 3   
+
+ 115   3              
+ 116   3              gs_RacCtrl.ucBuf[7]  = ~gs_RacCtrl.ucBuf[7];
+ 117   3              gs_RacCtrl.ucBuf[7]  = gs_RacCtrl.ucBuf[7]+0x33;
+ 118   3              
+ 119   3              
+ 120   3              gs_RacCtrl.ucStatus=Rac_Send;       //½øÈë·¢ËÍ×´Ì¬
+ 121   3              gs_RacCtrl.ucSendLen=8;
+ 122   3              gs_RacCtrl.ucSendPoint=0;
+ 123   3              gs_RacCtrl.ucRevLen=4;
+ 124   3              gs_RacCtrl.ucRevPoint=0;
+ 125   3              //gs_RacPhy.uc_Uartstat |= flgEtwrite;
+ 126   3                       Uart4_Transmit();
+ 127   3              guc_CommDelayTime=9;
+ 128   3              while(gs_RacCtrl.ucStatus!=Rac_WaitPro)
+ 129   3              {
+ 130   4                CLRWDT(); 
+ 131   4                if(guc_CommDelayTime==0)
+ 132   4                {
+ 133   5                  //gs_RacPhy.uc_Uartstat &= ~flgEtwrite;
+ 134   5                  return FALSE;                   //Èç¹û³¬Ê± 
+ 135   5                }
+ 136   4              }  
+ 137   3              //gs_RacPhy.uc_Uartstat &= ~flgEtwrite;
+ 138   3              ucSum=0;
+ 139   3              for(i=0;i<3;i++)
+ 140   3              {
+ 141   4                ucSum += gs_RacCtrl.ucBuf[i]; 
+ 142   4              }
+ 143   3              
+ 144   3              ucSum=~ucSum;
+ 145   3              ucSum+=0x33;
+ 146   3              Lib_Delay_ms(5);
+ 147   3              if(gs_RacCtrl.ucBuf[3]==ucSum)
+ 148   3              {
+ 149   4                return TRUE;
+ 150   4              }else
+ 151   3              {
+ 152   4                return FALSE;
+ 153   4              }
+ 154   3            }
+ 155   2            break;
+ 156   2          default:
+ 157   2            return FALSE;
+ 158   2            break;
+ 159   2          }
+ 160   1        //  return TRUE;
+ 161   1      }
+ 162          
+ 163          /*=========================================================================================\n
+ 164          * @function_name: ReadRaccoon
+ 165          * @function_file: Raccoon.h
+ 166          * @ÃèÊö: Ïòraccoon¶ÁÈ¡Êý¾Ý
+ 167          * ×Ö½Ú0£ºÖ¡Í·0xFE    ×Ö½Ú1£º¸ß4Î»µØÖ·¸ß4bit£¬µÍ4Î»¿ØÖÆ
+ 168          * ×Ö½Ú2£ºµØÖ·µÍ8bit  ×Ö½Ú3£ºword¸öÊý ×Ö½Ú4~6£ºÎÞÒâÒå ×Ö½Ú7£ºÐ£Ñé
+ 169          * @²ÎÊý: 
+ 170          * @param:Addr  ¶ÁÈ¡ÆðÊ¼µØÖ·
+ 171          * @param:num  ¶ÁÈ¡word¸öÊý£¬32bit
+ 172          * 
+ 173          * @·µ»Ø: 
+ 174          *        
+ 175          * @return: uint8 
+ 176          * @×÷Õß:   lwb (2013-07-04)
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 4   
+
+ 177          * @±¸×¢: 
+ 178          *-------------------------------------------------------------------------------------------
+ 179          * @ÐÞ¸ÄÈË:  
+ 180          * @ÐÞ¸ÄÄÚÈÝ: Ìí¼ÓRaccoonÎïÀíµØÖ·£¬ÈýÏà±íÒ»¹²Ê¹ÓÃ3¸öRaccoon
+ 181          * @param:Phyadd RaccoonµØÖ·
+ 182          
+ 183          ==========================================================================================*/
+ 184          uint8 ReadRaccoon(uint16 Addr,uint8 num,uint8 Phyadd)
+ 185          {
+ 186   1          uint8 i;
+ 187   1          volatile uint8 ucSum;
+ 188   1          ST_U32_U08 TempValue;  
+ 189   1              
+ 190   1          switch(Phyadd)
+ 191   1          {
+ 192   2          case APhy:               //¶Á9811A
+ 193   2            {
+ 194   3              gs_RacCtrl.ucBuf[0] = 0xFE;      //ÓëraccoonÖÐ½ÓÊÕµÄÊý¾Ý±£³ÖÒ»ÖÂ
+ 195   3              gs_RacCtrl.ucBuf[1] = (uint8)((Addr&0x0f00)>>4)+ RacRead+ APhy;
+ 196   3              gs_RacCtrl.ucBuf[2] = num;
+ 197   3              
+ 198   3              for( i=0; i<num; i++)               //¶ÁÈ¡²»³¬¹ý100¸ö×Ö½Ú
+ 199   3              {
+ 200   4                TempValue.u32= ReadMeterParaACK( Addr+i);
+ 201   4                memcpy(gs_RacCtrl.ucBuf+3+4*i,(uint8*)TempValue.B08,4); 
+ 202   4              }
+ 203   3              ucSum=0;;
+ 204   3              for(i=0;i<num*4+3;i++)
+ 205   3              {
+ 206   4                ucSum += gs_RacCtrl.ucBuf[i]; 
+ 207   4              }
+ 208   3              ucSum = ~ucSum;
+ 209   3              gs_RacCtrl.ucBuf[num*4+3] = ucSum+0x33;
+ 210   3            }
+ 211   2            break;
+ 212   2            
+ 213   2          case BPhy:
+ 214   2            {
+ 215   3              gs_RacCtrl.ucBuf[0] = 0xFE;
+ 216   3              
+ 217   3              gs_RacCtrl.ucBuf[1] = (uint8)((Addr&0x0f00)>>4)+ RacRead+ BPhy;
+ 218   3              gs_RacCtrl.ucBuf[2] = (uint8)(Addr&0x00ff);
+ 219   3              
+ 220   3              gs_RacCtrl.ucBuf[3] = num;                   //num£ºÐèÒª¶ÁÈ¡¶àÉÙ×ÖµÄÄÚÈÝ
+ 221   3              gs_RacCtrl.ucBuf[4] = 0;
+ 222   3              gs_RacCtrl.ucBuf[5] = 0;
+ 223   3              gs_RacCtrl.ucBuf[6] = 0;
+ 224   3              gs_RacCtrl.ucBuf[7] = 0;                    //sum ÇåÁã
+ 225   3              for(i=0;i<7;i++)
+ 226   3              {
+ 227   4                gs_RacCtrl.ucBuf[7] += gs_RacCtrl.ucBuf[i]; 
+ 228   4              }
+ 229   3              
+ 230   3              gs_RacCtrl.ucBuf[7]  = ~gs_RacCtrl.ucBuf[7];
+ 231   3              gs_RacCtrl.ucBuf[7]  = gs_RacCtrl.ucBuf[7]+0x33;
+ 232   3              
+ 233   3              gs_RacCtrl.ucStatus=Rac_Send;       //½øÈë·¢ËÍ×´Ì¬
+ 234   3      
+ 235   3      
+ 236   3                      
+ 237   3              gs_RacCtrl.ucSendLen=8;
+ 238   3              gs_RacCtrl.ucSendPoint=0;
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 5   
+
+ 239   3              gs_RacCtrl.ucRevLen=(num*4)+4;           
+ 240   3              gs_RacCtrl.ucRevPoint=0;
+ 241   3              guc_CommDelayTime=17; 
+ 242   3              //gs_RacPhy.uc_Uartstat |= flgEtread;   
+ 243   3              Uart4_Transmit();           //¿ªÆô·¢ËÍ
+ 244   3              while(gs_RacCtrl.ucStatus!=Rac_WaitPro)
+ 245   3              {
+ 246   4      
+ 247   4                 CLRWDT(); 
+ 248   4                if(guc_CommDelayTime==0)
+ 249   4                {
+ 250   5                  //gs_RacPhy.uc_Uartstat &= ~flgEtread;
+ 251   5                  return FALSE;           //Èç¹û³¬Ê± 
+ 252   5                  
+ 253   5                }
+ 254   4              }
+ 255   3              //gs_RacPhy.uc_Uartstat &= ~flgEtread;
+ 256   3              ucSum=0;
+ 257   3              for(i=0;i<(num*4)+3;i++)               //¶ÁÈ¡²»³¬¹ý255¸ö×Ö½Ú
+ 258   3              {
+ 259   4                ucSum += gs_RacCtrl.ucBuf[i]; 
+ 260   4              }
+ 261   3              
+ 262   3              ucSum=~ucSum;
+ 263   3              ucSum+=0x33;
+ 264   3      
+ 265   3              if(gs_RacCtrl.ucBuf[num*4+3]==ucSum)
+ 266   3              {
+ 267   4                return TRUE;
+ 268   4              }else
+ 269   3              {
+ 270   4                return FALSE;
+ 271   4              } 
+ 272   3            }
+ 273   2          default:
+ 274   2            return FALSE;
+ 275   2            break;
+ 276   2          }
+ 277   1          return TRUE;
+ 278   1      }
+ 279          
+ 280          /*=========================================================================================\n
+ 281          * @function_name: ReadRaccoonInt
+ 282          * @function_file: Raccoon.h
+ 283          * @ÃèÊö: Ïòraccoon¶ÁÈ¡µçÁ¿Êý¾Ý
+ 284          * ×Ö½Ú0£ºÖ¡Í·0xFE    ×Ö½Ú1£º¸ß4Î»µØÖ·¸ß4bit£¬µÍ4Î»¿ØÖÆ
+ 285          * ×Ö½Ú2£ºµØÖ·µÍ8bit  ×Ö½Ú3£ºword¸öÊý ×Ö½Ú4~6£ºÎÞÒâÒå ×Ö½Ú7£ºÐ£Ñé
+ 286          * @²ÎÊý: 
+ 287          * @param:Addr  ¶ÁÈ¡ÆðÊ¼µØÖ·
+ 288          * @param:num  ¶ÁÈ¡word¸öÊý£¬32bit
+ 289          * 
+ 290          * @·µ»Ø: 
+ 291          *        
+ 292          * @return: uint8 
+ 293          * @×÷Õß:  
+ 294          * @±¸×¢: 
+ 295          *-------------------------------------------------------------------------------------------
+ 296          
+ 297          ==========================================================================================*/
+ 298          void ReadRaccoonInt(uint16 Addr,uint8 num,uint8 Phyadd)
+ 299          {
+ 300   1          uint8 i;
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 6   
+
+ 301   1          volatile uint8 ucSum;
+ 302   1       //   ST_U32_U08 TempValue;
+ 303   1          switch(Phyadd)
+ 304   1          {
+ 305   2          case BPhy:
+ 306   2            {     
+ 307   3              gs_RacCtrl.ucBuf[0] = 0xfe;   
+ 308   3              gs_RacCtrl.ucBuf[1] = (uint8)((Addr&0x0f00)>>4)+ RacRead+ BPhy;
+ 309   3              gs_RacCtrl.ucBuf[2] = (uint8)(Addr&0x00ff);
+ 310   3              
+ 311   3              gs_RacCtrl.ucBuf[3] = num;                   //num£ºÐèÒª¶ÁÈ¡¶àÉÙ×ÖµÄÄÚÈÝ
+ 312   3              gs_RacCtrl.ucBuf[4] = 0;
+ 313   3              gs_RacCtrl.ucBuf[5] = 0;
+ 314   3              gs_RacCtrl.ucBuf[6] = 0;
+ 315   3              gs_RacCtrl.ucBuf[7] = 0;                    //sum ÇåÁã
+ 316   3              for(i=0;i<7;i++)
+ 317   3              {
+ 318   4                gs_RacCtrl.ucBuf[7] += gs_RacCtrl.ucBuf[i]; 
+ 319   4              }
+ 320   3              
+ 321   3              gs_RacCtrl.ucBuf[7]  = ~gs_RacCtrl.ucBuf[7];
+ 322   3              gs_RacCtrl.ucBuf[7]  = gs_RacCtrl.ucBuf[7]+0x33;
+ 323   3              
+ 324   3              gs_RacCtrl.ucStatus=Rac_Send;       //½øÈë·¢ËÍ×´Ì¬
+ 325   3              gs_RacCtrl.ucSendLen=8;
+ 326   3              gs_RacCtrl.ucSendPoint=0;
+ 327   3              gs_RacCtrl.ucRevLen=(num*4)+4;           
+ 328   3              gs_RacCtrl.ucRevPoint=0;
+ 329   3              gs_RacPhy.uc_Physendtim= guc_Dy9260FOver; //¶Ë¿Ú³¬Ê±±£»¤
+ 330   3              gs_RacPhy.uc_Phystat = BPhy;
+ 331   3              gs_RacPhy.uc_Sendstat = TRUE;
+ 332   3      
+ 333   3      
+ 334   3          // ¿ªÆô·¢ËÍ  200ms ½ÓÊÕÑÓÊ±//
+ 335   3              guc_CommDelayTime=0x20;     
+ 336   3               Uart4_Transmit();           //¿ªÆô·¢ËÍ
+ 337   3              while(gs_RacCtrl.ucStatus!=Rac_WaitPro)   // µÈ´ýÖÐ¶Ï½ÓÊÕÍê³É//
+ 338   3              {
+ 339   4                CLRWDT(); 
+ 340   4                if(guc_CommDelayTime==0)
+ 341   4                {
+ 342   5                  goto ENDERR;
+ 343   5                }
+ 344   4              }
+ 345   3      
+ 346   3              ucSum=0;
+ 347   3              for(i=0;i<(num*4)+3;i++)               //¶ÁÈ¡²»³¬¹ý255¸ö×Ö½Ú
+ 348   3              {
+ 349   4                ucSum += gs_RacCtrl.ucBuf[i]; 
+ 350   4              }
+ 351   3              
+ 352   3              ucSum=~ucSum;
+ 353   3              ucSum+=0x33;
+ 354   3      
+ 355   3              if(gs_RacCtrl.ucBuf[num*4+3]==ucSum)
+ 356   3              {
+ 357   4                  gs_sys_run.font_fg |= BIT3_FONT_FG_readpower; // ¶ÁÈ¡ºó¼ìÑéÍê³É±êÊ¶//
+ 358   4       
+ 359   4              }else
+ 360   3              {
+ 361   4      ENDERR:    gs_RacPhy.uc_Sendstat = FALSE;
+ 362   4                   gs_RacPhy.uc_Physendtim = guc_Dy9260FOver;  
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 7   
+
+ 363   4                   gs_sys_run.font_fg |= BIT4_FONT_FG_EnyBottom;  // ²ÎÊýË¢ÐÂ
+ 364   4                  // return FALSE;     
+ 365   4              } 
+ 366   3            }
+ 367   2            break;
+ 368   2          default:
+ 369   2            break;
+ 370   2          }
+ 371   1      
+ 372   1               
+ 373   1      }
+ 374          
+ 375          
+ 376          uint8 I_Dirct = 0,Aphy_Dly = 0;    
+ 377          /*=========================================================================================\n
+ 378          * @function_name: ReadbackABCPhy
+ 379          * @function_file: ¹¦ÂÊ¡¢µçÑ¹µçÁ÷Ô­Ê¼Öµ¶ÁÈ¡//
+ 380          * @ÃèÊö: 
+ 381          * 
+ 382          * 
+ 383          * @²ÎÊý: 
+ 384          * @param:Phyadd  
+ 385          * @·µ»Ø: 
+ 386          * @×÷Õß:   zwk(2013-09-25)
+ 387          * @±¸×¢: 
+ 388          *-------------------------------------------------------------------------------------------
+ 389          * @ÐÞ¸ÄÈË:  
+ 390          * @ÐÞ¸ÄÄÚÈÝ: 
+ 391          ===========================================================================================*/
+ 392          void ReadbackABCPhy(void)
+ 393          {
+ 394   1          volatile uint8 ucSum;
+ 395   1              uint8 i;
+ 396   1          ST_U32_U08 TempValue,TempValue1,TempValue2,TempValue3,TempValue4;//TempValue5;
+ 397   1          TempValue.u32 = 0;
+ 398   1          TempValue1.u32 = 0;
+ 399   1          TempValue2.u32 = 0;
+ 400   1          TempValue3.u32 = 0;
+ 401   1          TempValue4.u32 = 1;        
+ 402   1      
+ 403   1          ucSum=0;
+ 404   1          gs_RacPhy.uc_Physendtim = 0;
+ 405   1          for(i=0;i<(5*4)+3;i++)               //¶ÁÈ¡²»³¬¹ý255¸ö×Ö½Ú
+ 406   1          {
+ 407   2              ucSum += gs_RacCtrl.ucBuf[i]; 
+ 408   2          }
+ 409   1      
+ 410   1          ucSum=~ucSum;
+ 411   1          ucSum+=0x33;
+ 412   1      
+ 413   1          if(gs_RacCtrl.ucBuf[5*4+3]==ucSum)
+ 414   1          {
+ 415   2            if((gs_RacCtrl.ucBuf[1]&0x03) != RacRead)  // ÑéÖ¤Îª¶Á·µ»Ø//
+ 416   2            {
+ 417   3              return;
+ 418   3            }
+ 419   2            else
+ 420   2            {
+ 421   3                  memcpy((uint8*)TempValue.B08,gs_RacCtrl.ucBuf+3,4); //ÓÐ¹¦ÃëÆ½¾ù¹¦ÂÊ
+ 422   3                  Lib_Rev_Copy_Arry(&TempValue.B08[0],4);// µÍ×Ö½ÚÔÚÇ°  µ¹ÖÃ//
+ 423   3                  if(TempValue.B08[3]>0x7f)          //Èç¹ûÊÇ¸ºÊýµÄÊý£¬ÏÈ±ä³ÉÕýÊý
+ 424   3                  {
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 8   
+
+ 425   4                      TempValue.u32=~TempValue.u32+1;
+ 426   4                  }
+ 427   3                  memcpy((uint8*)TempValue1.B08,gs_RacCtrl.ucBuf+7,4);//ÎÞ¹¦
+ 428   3                  Lib_Rev_Copy_Arry(&TempValue1.B08[0],4);// µÍ×Ö½ÚÔÚÇ°  µ¹ÖÃ//
+ 429   3                  if(TempValue1.B08[3]>0x7f)          //Èç¹ûÊÇ¸ºÊýµÄÊý£¬ÏÈ±ä³ÉÕýÊý
+ 430   3                  {
+ 431   4                      TempValue1.u32=~(TempValue1.u32) +1;
+ 432   4                  }
+ 433   3                  memcpy((uint8*)TempValue2.B08,gs_RacCtrl.ucBuf+11,4);//µçÑ¹
+ 434   3                  Lib_Rev_Copy_Arry(&TempValue2.B08[0],4);// µÍ×Ö½ÚÔÚÇ°  µ¹ÖÃ//
+ 435   3                  memcpy((uint8*)TempValue3.B08,gs_RacCtrl.ucBuf+15,4);//µçÁ÷
+ 436   3                  Lib_Rev_Copy_Arry(&TempValue3.B08[0],4);// µÍ×Ö½ÚÔÚÇ°  µ¹ÖÃ//
+ 437   3                  memcpy((uint8*)TempValue4.B08,gs_RacCtrl.ucBuf+19,4);//ÆµÂÊ
+ 438   3                  Lib_Rev_Copy_Arry(&TempValue4.B08[0],4);// µÍ×Ö½ÚÔÚÇ°  µ¹ÖÃ//
+ 439   3             }
+ 440   2          }
+ 441   1          else
+ 442   1          {        
+ 443   2            
+ 444   2            TempValue.u32= 0;
+ 445   2            TempValue1.u32 = 0;
+ 446   2            TempValue2.u32 = 0;
+ 447   2            TempValue3.u32 = 0;
+ 448   2            TempValue4.u32 = 1;        
+ 449   2          }
+ 450   1               
+ 451   1               gs_RacPhy.uc_Powstat &= ~power_b;  //ÓÐµç±êÖ¾ 
+ 452   1               gs_measure_var_data.gs_really[WIRE_L2].dw_p_val.u32=  (TempValue.u32+(TempValue.u32/12)); //9811A
+             -ÓÐ¹¦ÊÇ9260ÓÐ¹¦µÄ1.086±¶
+ 453   1                   gs_measure_var_data.gs_really[WIRE_L2].dw_u_val.u32=  TempValue2.u32;
+ 454   1               gs_measure_var_data.gs_really[WIRE_L2].dw_i_val.u32=   TempValue2.u32;
+ 455   1               gs_measure_var_data.gs_really[WIRE_L2].w_freq_val.u16 =  (uint16)(((uint32)23575*divf)/TempValue4
+             -.u32);
+ 456   1               if(( gs_measure_var_data.gs_really[WIRE_L2].w_freq_val.u16 /gs_JbPm.ul_PG) < ((gs_JbPm.ui_Ib/1000
+             -)*(gs_JbPm.ui_Un/100))/500 )
+ 457   1               {
+ 458   2                  gs_measure_var_data.gs_really[WIRE_L2].dw_p_val.u32   = 0;
+ 459   2                  guc_powerdirB = 0;
+ 460   2               }
+ 461   1      }
+ 462          
+ 463          /*=========================================================================================\n
+ 464          * @function_name: CheckRegSum
+ 465          * @function_file: Raccoon.c
+ 466          * @ÃèÊö: ¼ì²âÐ£ÑéºÍ
+ 467          * 
+ 468          * @²ÎÊý: 
+ 469          * @·µ»Ø: 
+ 470          * @×÷Õß:   lwb (2013-07-10)
+ 471          * @±¸×¢: 
+ 472          *-------------------------------------------------------------------------------------------
+ 473          * @ÐÞ¸ÄÈË:  
+ 474          * @ÐÞ¸ÄÄÚÈÝ: 
+ 475          ===========================================================================================*/
+ 476          void CheckRegSum(void)
+ 477          {
+ 478   1          uint32 ucSum=0;
+ 479   1      
+ 480   1          ucSum = 
+ 481   1                + gs_JbPm.gs_JBB.Rac_WARTI 
+ 482   1                + gs_JbPm.gs_JBB.Rac_WARTU 
+ 483   1                + gs_JbPm.gs_JBB.Rac_WAPT
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 9   
+
+ 484   1                + gs_JbPm.gs_JBB.Rac_WAPT //ÎÞ¹¦±È²î
+ 485   1                + gs_JbPm.gs_JBB.Rac_WWAPT
+ 486   1                + gs_JbPm.gs_JBB.Rac_WWAQT
+ 487   1                + gs_JbPm.Rac_BPFPARA
+ 488   1                + gs_JbPm.Rac_ANCtrl0
+ 489   1                + gs_JbPm.Rac_ANCtrl1
+ 490   1                + gs_JbPm.Rac_ANCtrl2
+ 491   1                + gs_JbPm.Rac_MTPARA0
+ 492   1                + gs_JbPm.gs_JBB.Rac_MTPARA1;   
+ 493   1          ucSum = 0xFFFFFFFF-ucSum;
+ 494   1          WriteRaccoon(ucSum,RegCKSUM,BPhy);
+ 495   1      
+ 496   1      }
+ 497          
+ 498           
+ 499          /*=========================================================================================\n
+ 500          * @function_name: CheckSysErr
+ 501          * @function_file: Raccoon.c
+ 502          * @ÃèÊö: RACCOONµÄÏµÍ³×Ô¼ìÐ£Ñé  CHSUM
+ 503          * 
+ 504          * @²ÎÊý: 
+ 505          * @·µ»Ø: 
+ 506          * @×÷Õß:   lwb (2013-07-10)
+ 507          * @±¸×¢: 
+ 508          *-------------------------------------------------------------------------------------------
+ 509          * @ÐÞ¸ÄÈË:  
+ 510          * @ÐÞ¸ÄÄÚÈÝ: 
+ 511          ===========================================================================================*/
+ 512          void CheckSysErr(void)
+ 513          {
+ 514   1          WriteRaccoon( 0x09FB0004,RegSysCtrl,BPhy);
+ 515   1      }
+ 516          /*=========================================================================================\n
+ 517          * @function_name: V9281_InitDefaultPara
+ 518          * @function_file: Raccoon.c
+ 519          * @ÃèÊö: ³õÊ¼»¯Ä¬ÈÏ²ÎÊý
+ 520          * 
+ 521          * @²ÎÊý: 
+ 522          * @·µ»Ø: 
+ 523          * @×÷Õß:   lwb (2013-07-10)
+ 524          * @±¸×¢: 
+ 525          *-------------------------------------------------------------------------------------------
+ 526          * @ÐÞ¸ÄÈË:  
+ 527          * @ÐÞ¸ÄÄÚÈÝ: 
+ 528          ===========================================================================================*/
+ 529          void V9260_InitDefaultPara(void)
+ 530          {
+ 531   1          gs_JbPm.ui_MeterC=1200;             // ±í³£Êý
+ 532   1          gs_JbPm.ui_Un=12700;                // ±ê³ÆµçÑ¹
+ 533   1          gs_JbPm.ui_Ib=5000;                 // ±ê³ÆµçÁ÷
+ 534   1          
+ 535   1          gs_JbPm.Com_EGYTH     = 0x067215D8;    //ÓÐ¹¦ÃÅÏÞÖµ
+ 536   1          gs_JbPm.Com_REEGYTH   = 0x067215D8;    //ÎÞ¹¦ÃÅÏÞÖµ
+ 537   1          
+ 538   1          gs_JbPm.Rac_ANCtrl0 = 0xDf000440;    //0x185 ÔöÒæI:32£¬U:1£¬M:4 ÎÂ¶ÈÏµÊý£¬È«¾ÖµçÁ÷Æ«ÖÃ
+ 539   1          gs_JbPm.Rac_ANCtrl1 = 0x30000000;    //0x186 
+ 540   1          gs_JbPm.Rac_ANCtrl2 = 0x0000000F;    //0x187     
+ 541   1          gs_JbPm.Rac_BPFPARA = 0x811D2BA7;    //0x0125 ´øÍ¨ÂË²¨Æ÷ÏµÊý 0x811D2BA7
+ 542   1          gs_JbPm.Rac_MTPARA0 = 0xE0000000;    //0x183 CF¹¤×÷Ê±ÖÓ3.2MHz Ê¹ÄÜCFÊä³ö£¬ÄÜÁ¿ÀÛ¼Ó£¬Æð¶¯Ç±¶¯£¬ÄÜÁ¿À´Ô´
+             -£ºÆ½¾ùÈ«²¨ÓÐ¹¦
+ 543   1          
+ 544   1          gs_JbPm.gs_JBA.Soc_SCP = 0x00000000;         //ÓÐ¹¦¹¦ÂÊ±È²î¼Ä´æÆ÷  
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 10  
+
+ 545   1          gs_JbPm.gs_JBA.Soc_SCQ = 0x00000000;         //ÎÞ¹¦¹¦ÂÊ±È²î¼Ä´æÆ÷  
+ 546   1          gs_JbPm.gs_JBA.Soc_SCU = 0x00000000;         //µçÑ¹ÓÐÐ§Öµ±È²î¼Ä´æÆ÷
+ 547   1          gs_JbPm.gs_JBA.Soc_SCI1 = 0x00000000;        //µçÁ÷ÓÐÐ§Öµ±È²î¼Ä´æÆ÷
+ 548   1          gs_JbPm.gs_JBA.Soc_PARAPC = 0x00000000;      //ÓÐ¹¦¹¦ÂÊ¶þ´Î²¹³¥Öµ
+ 549   1          gs_JbPm.gs_JBA.Soc_PARAQC = 0x00000000;      //ÎÞ¹¦¹¦ÂÊ¶þ´Î²¹³¥Öµ
+ 550   1          gs_JbPm.gs_JBA.Soc_PHCCtrl1 = 0x00;          //IaÍ¨µÀ ½Ç²î¼Ä´æÆ÷
+ 551   1          
+ 552   1          gs_JbPm.gs_JBB.Rac_MTPARA1 = 0x0a0b0900;      //0x184 MÍ¨µÀ¹Ø±Õ£¬½ö½øÐÐÅäÖÃ×Ô¼ì£¬Ê¹ÄÜÈ¥Ö±¸ßÍ¨ÂË²¨Æ÷£¬Ê
+             -¹ÄÜ£¨U/I£©ÊäÈë£¬½Ç²î   
+ 553   1          gs_JbPm.gs_JBB.Rac_WARTU = 0x00000000;        //È«²¨µçÑ¹ÓÐÐ§Öµ±È²î   
+ 554   1          gs_JbPm.gs_JBB.Rac_WARTI = 0x00000000;        //È«²¨µçÁ÷ÓÐÐ§Öµ±È²î
+ 555   1          gs_JbPm.gs_JBB.Rac_WAPT = 0x00000000;         //È«²¨ÓÐ¹¦¹¦ÂÊ±È²î
+ 556   1          gs_JbPm.gs_JBB.Rac_WWAPT = 0x00000000;        //È«²¨ÓÐ¹¦¹¦ÂÊ¶þ´Î²¹³¥Öµ
+ 557   1          gs_JbPm.gs_JBB.Rac_WWAQT = 0x00000000;       //È«²¨ÎÞ¹¦¹¦ÂÊ¶þ´Î²¹³¥Öµ
+ 558   1          
+ 559   1          gs_JbPm.ul_PG=1;               //¹¦ÂÊ±ÈÀýÏµÊý
+ 560   1          gs_JbPm.ul_URmG=1;             //µçÑ¹Í¨µÀ±ÈÀýÏµÊý
+ 561   1          gs_JbPm.ul_I1RmG=1;            //µçÁ÷Í¨µÀ1±ÈÀýÏµÊý
+ 562   1          
+ 563   1          gs_JbPm.Soc_AnaG=0x03;
+ 564   1      
+ 565   1         gs_JbPm.u16_csck = Lib_get_csck_int16u_num((uint8*)&gs_JbPm,sizeof(S_JBPM)-2,CHECKWORD);
+ 566   1      
+ 567   1      //    gs_JbPm.ui_JbCRC=do_CRC((uint8*)&gs_JbPm,sizeof(S_JBPM)-2);     // Ð£±í²ÎÊýµÄCRC½á¹û
+ 568   1      }
+ 569          /*=========================================================================================\n
+ 570          * @function_name: UpdateRaccoonPara
+ 571          * @function_file: Raccoon.c
+ 572          * @ÃèÊö: 
+ 573          * 
+ 574          * @²ÎÊý: 
+ 575          * 
+ 576          * @·µ»Ø: 
+ 577          * @return: uint8 
+ 578          * @×÷Õß:   lwb (2013-07-10)
+ 579          * @±¸×¢: 
+ 580          *-------------------------------------------------------------------------------------------
+ 581          * @ÐÞ¸ÄÈË:  
+ 582          * @ÐÞ¸ÄÄÚÈÝ: 
+ 583          ===========================================================================================*/
+ 584          uint8 UpdateRaccoonPara(void)
+ 585          {
+ 586   1          uint8 i;
+ 587   1          uint32 *ul_pRacReg;
+ 588   1      //    uint32 temp = 0;
+ 589   1          
+ 590   1          ul_pRacReg=(uint32*)&gs_JbPm.gs_JBA.Soc_SCP;   //AÏà
+ 591   1          for( i=0; i<sizeof(RegAddrSoc)/sizeof(uint16)-3; i++) //Ð´RegAddrSocÖÐSCP,SCQ,SCU,SCI1µ½9811
+ 592   1          {
+ 593   2            CLRWDT(); 
+ 594   2            SetMeterCfgACK( ul_pRacReg[i],RegAddrSoc[i]);
+ 595   2          }
+ 596   1          //SetMeterCfgACK( 0,SCQ);
+ 597   1      //    //1.28S¶¨Ê±ÄÇ±ßÒÑ¾­¼Ó½øÈ¥ÁË£¬Õâ±ß²»ÐèÒª´¦ÀíÁË
+ 598   1      //    temp = ReadMeterParaACK( PARAPC);//BÏàÓÐ¹¦¹¦ÂÊ»á¼Óµ½¶þ´Î²¹³¥¼Ä´æÆ÷ÖÐ£¬ËùÒÔÔöÁ¿´¦Àí
+ 599   1      //    temp += gs_JbPm.gs_JBA.Soc_PARAPC;
+ 600   1         SetMeterCfgACK(gs_JbPm.gs_JBA.Soc_PARAPC, PARAPC);
+ 601   1      //    temp = ReadMeterParaACK( PARAQC);//BÏàÎÞ¹¦¹¦ÂÊ»á¼Óµ½¶þ´Î²¹³¥¼Ä´æÆ÷ÖÐ£¬ËùÒÔÔöÁ¿´¦Àí
+ 602   1      //    temp += gs_JbPm.gs_JBA.Soc_PARAQC;
+ 603   1      //    SetMeterCfgACK(temp, PARAQC);
+ 604   1      //    SetMeterCfgACK(0X002FFFFF,PARAPC);
+ 605   1          SetMeterCfgACK((uint32)gs_JbPm.gs_JBA.Soc_PHCCtrl1, PHCCtrl1); //IaÍ¨µÀ ½Ç²î¼Ä´æÆ÷
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 11  
+
+ 606   1          
+ 607   1          CtrlADC0 = gs_JbPm.Soc_AnaG;                         //ÉèÖÃADCÔöÒæ
+ 608   1          if((gs_JbPm.Soc_AnaG&0x07)==0x07)                    //IAÔöÒæ32±¶µÄ»°£¬Ôö¼ÓIA Æ«ÖÃµçÁ÷
+ 609   1          {
+ 610   2              CtrlADC4|=BIT4;             //Ôö¼ÓÆ«ÖÃµçÁ÷
+ 611   2          }else
+ 612   1          {
+ 613   2              CtrlADC4&=~BIT4;            //¼õÉÙÆ«ÖÃµçÁ÷
+ 614   2          }
+ 615   1           
+ 616   1           ul_pRacReg=(uint32*)&gs_JbPm.Rac_ANCtrl0;   //BÏà
+ 617   1       //    uint8 temp2;
+ 618   1       //   BE_ReadP(0x2A,&temp2,1);
+ 619   1        //  gs_JbPm.Rac_ANCtrl0 =((((uint16)temp2)<<8)&0xff00)|0x1D2000C2;    //0x0ff0     0f00 
+ 620   1          //gs_JbPm.Rac_ANCtrl0 = 0x1D2004C2;       
+ 621   1          //  0xC2,0x64,0x20,0x1D,//Ä£Äâ¿ØÖÆ¼Ä´æÆ÷0
+ 622   1      
+ 623   1          //Ä¬ÈÏ¶¨Öµ
+ 624   1       //   gs_JbPm.Rac_ANCtrl0 = 0x1D2064C2;
+ 625   1      
+ 626   1          for(i=0;i<sizeof(RegAddrRac)/sizeof(uint16) ;i++) //Ð´RegAddrRacÖÐ¼Ä´æÆ÷µ½9250
+ 627   1          {
+ 628   2            CLRWDT(); 
+ 629   2            if(i  < 5)   //ANCTRL0,ANCTRL1,ANCTRL2,BPFPARA,MTPARA0
+ 630   2            {
+ 631   3              WriteRaccoon(ul_pRacReg[i],RegAddrRac[i], BPhy);  
+ 632   3              CLRWDT();  
+ 633   3            }
+ 634   2            if(i == 5)
+ 635   2            {
+ 636   3              ul_pRacReg = (uint32*)&gs_JbPm.gs_JBB.Rac_MTPARA1;
+ 637   3            }
+ 638   2            if(i >= 5)
+ 639   2            {
+ 640   3              WriteRaccoon(ul_pRacReg[i-5],RegAddrRac[i], BPhy);//MTPARA1,WARTU,WARTI,WAPT,WWAPT,WWAQT  
+ 641   3            }
+ 642   2          }
+ 643   1          WriteRaccoon(gs_JbPm.gs_JBB.Rac_WAPT,RegWAPT, BPhy);    //BÏàÎÞ¹¦±È²îÖµ
+ 644   1          
+ 645   1        return TRUE;
+ 646   1      }
+ 647          /*=========================================================================================\n
+ 648          * @function_name: InitRaccoon
+ 649          * @function_file: Raccoon.c
+ 650          * @ÃèÊö: ³õÊ¼»¯9260F
+ 651          * 
+ 652          * @²ÎÊý: 
+ 653          * @·µ»Ø: 
+ 654          * @×÷Õß:   lwb (2013-07-10)
+ 655          * @±¸×¢: 
+ 656          *-------------------------------------------------------------------------------------------
+ 657          * @ÐÞ¸ÄÈË:  
+ 658          * @ÐÞ¸ÄÄÚÈÝ: 
+ 659          ===========================================================================================*/
+ 660          void InitRaccoon(void)
+ 661          {
+ 662   1          Init_RacCtrl();   // Í¨Ñ¶ 
+ 663   1          Init_9260F_EMU();    // ¼Ä´æÆ÷ÅäÖÃ³õÊ¼»¯//
+ 664   1      }
+ 665          
+ 666          
+ 667          
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 12  
+
+ 668          /*=========================================================================================\n
+ 669          * @function_name: InitRaccoon
+ 670          * @function_file: Raccoon.c
+ 671          * @ÃèÊö:  ¸üÐÂ9260F ¼Ä´æÆ÷Öµ
+ 672          * 
+ 673          * @²ÎÊý: 
+ 674          * @·µ»Ø: 
+ 675          * @×÷Õß:   zwk (2016-05-10)
+ 676          * @±¸×¢: 
+ 677          *-------------------------------------------------------------------------------------------
+ 678          * @ÐÞ¸ÄÈË:  
+ 679          * @ÐÞ¸ÄÄÚÈÝ: 
+ 680          ===========================================================================================*/
+ 681          void  Init_9260F_EMU(void)
+ 682          {
+ 683   1          
+ 684   1      
+ 685   1               //ANCTRL0,ANCTRL1,ANCTRL2,BPFPARA,MTPARA0   //  //
+ 686   1              WriteRaccoon(0x1D000483 ,RegANCtrl0, BPhy);   // Ä£Äâ²»ÔöÒæ1D0004C3   0x185 ÔöÒæI:32£¬U:1£¬M:4 ÎÂ¶
+             -ÈÏµÊý£¬È«¾ÖµçÁ÷Æ«ÖÃ
+ 687   1                      WriteRaccoon(0x30000000 ,RegANCtrl1, BPhy);    //0x186  
+ 688   1          
+ 689   1              WriteRaccoon(0x00000000 ,RegANCtrl2, BPhy);    //0x187  
+ 690   1              WriteRaccoon(0x811D2BA7 ,RegBPFPARA, BPhy);    //0x0125 ´øÍ¨ÂË²¨Æ÷ÏµÊý 0x811D2BA7
+ 691   1              WriteRaccoon(0x00000000 ,RegMTPARA0, BPhy);  //0x183 CF¹¤×÷Ê±ÖÓ3.2MHz Ê¹ÄÜCFÊä³ö£¬ÄÜÁ¿ÀÛ¼Ó£¬Æð¶¯Ç±
+             -¶¯£¬ÄÜÁ¿À´Ô´£ºÆ½¾ùÈ«²¨ÓÐ¹¦
+ 692   1      //B09A9  0x000b0900   0x000B09A9  Êý×ÖÔöÒæ//  x2 U  x4 I  
+ 693   1      //          WriteRaccoon(0x000b09A9 ,RegMTPARA1, BPhy);  //0x184 MÍ¨µÀ¹Ø±Õ£¬½ö½øÐÐÅäÖÃ×Ô¼ì£¬Ê¹ÄÜÈ¥Ö±¸ßÍ¨ÂË²¨Æ÷£
+             -¬Ê¹ÄÜ£¨U/I£©ÊäÈë£¬½Ç²î  
+ 694   1                  WriteRaccoon(0x000B00D9 ,RegMTPARA1, BPhy);  //0x184 MÍ¨µÀ¹Ø±Õ£¬½ö½øÐÐÅäÖÃ×Ô¼ì£¬Ê¹ÄÜÈ¥Ö±¸ßÍ¨ÂË²¨Æ÷£¬Ê
+             -¹ÄÜ£¨U/I£©ÊäÈë£¬½Ç²î  
+ 695   1      
+ 696   1              CLRWDT(); 
+ 697   1      
+ 698   1      
+ 699   1      
+ 700   1              //MTPARA1,WARTU,WARTI,WAPT,WWAPT,WWAQT  
+ 701   1              WriteRaccoon(0x00000000 ,RegWARTU, BPhy);    // //È«²¨µçÑ¹ÓÐÐ§Öµ±È²î¼Ä´æÆ÷
+ 702   1              WriteRaccoon(0x00000000 ,RegWARTI, BPhy);     //È«²¨µçÁ÷ÓÐÐ§Öµ±È²î¼Ä´æÆ÷ 
+ 703   1              WriteRaccoon(0x00000000 ,RegWAPT, BPhy);      //È«²¨ÓÐ¹¦¹¦ÂÊ±È²î¼Ä´æÆ÷
+ 704   1              WriteRaccoon(0x00000000 ,RegWWAPT, BPhy);   //È«²¨ÓÐ¹¦¹¦ÂÊ¶þ´Î²¹³¥Öµ¼Ä´æÆ÷
+ 705   1              WriteRaccoon(0x00000000 ,RegWWAQT, BPhy);  // //È«²¨µçÑ¹ÓÐÐ§Öµ±È²î¼Ä´æÆ÷
+ 706   1               CLRWDT(); 
+ 707   1      
+ 708   1        //    WriteRaccoon(gs_JbPm.gs_JBB.Rac_WAPT,RegWAPT, BPhy);    //BÏàÎÞ¹¦±È²îÖµ
+ 709   1      
+ 710   1        
+ 711   1      
+ 712   1      }
+ 713          
+ 714          /*=========================================================================================\n
+ 715          * @function_name: Accumulate_abc
+ 716          * @function_file: EnergyBottom.c
+ 717          * @ÃèÊö  ·ÖÏà¹¦ÂÊÀÛ¼Ó
+ 718          * 
+ 719          * @²ÎÊý: 
+ 720          * @·µ»Ø: 
+ 721          * @×÷Õß:   
+ 722          * @±¸×¢: 
+ 723          *-------------------------------------------------------------------------------------------
+ 724          * @ÐÞ¸ÄÈË:  
+ 725          * @ÐÞ¸ÄÄÚÈÝ: 
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 13  
+
+ 726          ===========================================================================================*/
+ 727          void Accumulate_abc(void)
+ 728          {
+ 729   1          /*static uint8 times=0;
+ 730   1          uint32 tmp_egyth;
+ 731   1          times++;
+ 732   1          if(times >=4)     //40msÀÛ¼ÓÒ»´Î ÓÉÓÚºÏÏàÃÅÏÞÒÑ¾­/1024ÁË,·ÖÏàÃÅÏÞÀ©´ó1024/(6400/25)=4±¶ 
+ 733   1          {
+ 734   1              times = 0;      
+ 735   1               //¸÷ÏàÓÐ¹¦ÄÜÁ¿
+ 736   1              tmp_egyth =  (gs_JbPm.Com_EGYTH*4)>>8;   //AÏà  ÕýÏò¹¦ÂÊºÍ·´Ïò¹¦ÂÊÈ¡¾ø¶ÔÖµÖ®ºÍÀÛ¼Ó
+ 737   1              gs_power.ul_power_all[0] += (gs_power.ul_power[0] >> 8);     //·ÀÖ¹ÀÛ¼ÓÒç³ö ´¦Àí
+ 738   1              gs_power.ui_power_rem[0] += (gs_power.ul_power[0] & 0x000000ff);
+ 739   1              if(gs_power.ui_power_rem[0] > 255)
+ 740   1              {
+ 741   1                  gs_power.ul_power_all[0]++;
+ 742   1                  gs_power.ui_power_rem[0] -= 255;
+ 743   1              }
+ 744   1      
+ 745   1              if(gs_power.ul_power_all[0] >= tmp_egyth)
+ 746   1              {
+ 747   1                  gs_power.ul_power_all[0] -= tmp_egyth;
+ 748   1                  EnyB_IntCF(0,active);
+ 749   1              }
+ 750   1              
+ 751   1              tmp_egyth =  (gs_JbPm.Com_EGYTH*4)>>8;   //BÏà  ÕýÏò¹¦ÂÊºÍ·´Ïò¹¦ÂÊÈ¡¾ø¶ÔÖµÖ®ºÍÀÛ¼Ó    
+ 752   1              gs_power.ul_power_all[1] += (gs_power.ul_power[1] >> 8);     //·ÀÖ¹ÀÛ¼ÓÒç³ö ´¦Àí
+ 753   1              gs_power.ui_power_rem[1] += (gs_power.ul_power[1] & 0x000000ff);
+ 754   1              if(gs_power.ui_power_rem[1] > 255)
+ 755   1              {
+ 756   1                  gs_power.ul_power_all[1]++;
+ 757   1                  gs_power.ui_power_rem[1] -= 255;
+ 758   1              }
+ 759   1      
+ 760   1              if(gs_power.ul_power_all[1] >= tmp_egyth)
+ 761   1              {
+ 762   1                  gs_power.ul_power_all[1] -= tmp_egyth;
+ 763   1                  EnyB_IntCF(1,active);
+ 764   1              }
+ 765   1      
+ 766   1               //¸÷ÏàÎÞ¹¦ÄÜÁ¿
+ 767   1              tmp_egyth =  (gs_JbPm.Com_REEGYTH*4)>>8; //AÏà   ÕýÏò¹¦ÂÊºÍ·´Ïò¹¦ÂÊÈ¡¾ø¶ÔÖµÖ®ºÍÀÛ¼Ó
+ 768   1              gs_power.ul_Npower_all[0] += (gs_power.ul_Npower[0] >> 8);
+ 769   1              gs_power.ui_Npower_rem[0] += (gs_power.ul_Npower[0] & 0x000000ff);
+ 770   1              if(gs_power.ui_Npower_rem[0] > 255)
+ 771   1              {
+ 772   1                  gs_power.ul_Npower_all[0]++;
+ 773   1                  gs_power.ui_Npower_rem[0] -= 255;
+ 774   1              }
+ 775   1      
+ 776   1              if(gs_power.ul_Npower_all[0] >= tmp_egyth)
+ 777   1              {
+ 778   1                  gs_power.ul_Npower_all[0] -= tmp_egyth;
+ 779   1                  EnyB_IntCF(0,reactive);
+ 780   1              }
+ 781   1              
+ 782   1              tmp_egyth =  (gs_JbPm.Com_REEGYTH*4)>>8; //BÏà  ÕýÏò¹¦ÂÊºÍ·´Ïò¹¦ÂÊÈ¡¾ø¶ÔÖµÖ®ºÍÀÛ¼Ó   
+ 783   1              gs_power.ul_Npower_all[1] += (gs_power.ul_Npower[1] >> 8);
+ 784   1              gs_power.ui_Npower_rem[1] += (gs_power.ul_Npower[1] & 0x000000ff);
+ 785   1              if(gs_power.ui_Npower_rem[1] > 255)
+ 786   1              {
+ 787   1                  gs_power.ul_Npower_all[1]++;
+C51 COMPILER V9.01   V9260F                                                                01/08/2019 23:11:36 PAGE 14  
+
+ 788   1                  gs_power.ui_Npower_rem[1] -= 255;
+ 789   1              }
+ 790   1      
+ 791   1              if(gs_power.ul_Npower_all[1] >= tmp_egyth)
+ 792   1              {
+ 793   1                  gs_power.ul_Npower_all[1] -= tmp_egyth;
+ 794   1                  EnyB_IntCF(1,reactive);
+ 795   1              }
+ 796   1          } */  
+ 797   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   3259    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =    263      48
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
