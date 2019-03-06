@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 1   
+C51 COMPILER V9.01   IEC62056_21                                                           03/05/2019 13:48:07 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE IEC62056_21
@@ -62,7 +62,7 @@ line level    source
   50   2                      if( (*(sptr+1)) !=  '?' )     return FALSE;
   51   2                      for(i=0;i<meter_id_lenth;i++)           //±íºÅ¶Ô±È
   52   2                      {
-C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 2   
+C51 COMPILER V9.01   IEC62056_21                                                           03/05/2019 13:48:07 PAGE 2   
 
   53   3                              if( (*(sptr+2+i)) !=  (*(id_ptr+i) ))    
   54   3                              {
@@ -126,7 +126,7 @@ line level    source
  111   1           if( (*(sptr+0)) != SOH)         return FALSE;
  112   1           if( (*(sptr+len-2)) != ETX)    return FALSE;
  113   1      
-C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 3   
+C51 COMPILER V9.01   IEC62056_21                                                           03/05/2019 13:48:07 PAGE 3   
 
  114   1           if( (*(sptr+len-1)) != Get_Bcc_Chk(sptr, 1, len-2))    return FALSE;
  115   1      
@@ -190,7 +190,7 @@ line level    source
  172          //  Others:                1
  173          //                            2 
  174          //  author:                 sosomj         2009.02.16      V01.00
-C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 4   
+C51 COMPILER V9.01   IEC62056_21                                                           03/05/2019 13:48:07 PAGE 4   
 
  175          //-------------------------------------------------------------------------------//
  176          void Get_IEC_Comm_Request_Cmd_Answer(INT8U* sptr,INT8U len,INT8U* info_ptr)
@@ -254,7 +254,7 @@ line level    source
  234          {
  235   1            (*(sptr+0)) =  NAK;
  236   1      }
-C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 5   
+C51 COMPILER V9.01   IEC62056_21                                                           03/05/2019 13:48:07 PAGE 5   
 
  237          
  238          
@@ -319,7 +319,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
-C51 COMPILER V9.01   IEC62056_21                                                           02/14/2019 10:20:45 PAGE 6   
+C51 COMPILER V9.01   IEC62056_21                                                           03/05/2019 13:48:07 PAGE 6   
 
 
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

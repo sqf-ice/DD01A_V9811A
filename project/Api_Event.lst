@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 1   
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE API_EVENT
@@ -62,7 +62,7 @@ line level    source
   50          0, // even_csck
   51          };
   52          EVEN_FUN_VAR   gs_even_fun_var;
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 2   
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 2   
 
   53          
   54          
@@ -126,7 +126,7 @@ line level    source
  112   1         
  113   1              
  114   1        CLASS_II_UNIT  data_class2;
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 3   
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 3   
 
  115   1        INT8U buftmp[22];
  116   1        ST_U32_U08 Time;
@@ -190,7 +190,7 @@ line level    source
  170   3                              gs_even_fun_var.esc_cnt[even_id]++;             // 写结束标识//
  171   3      
  172   3                      }       
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 4   
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 4   
 
  173   2                      else 
  174   2                      {
@@ -254,7 +254,7 @@ line level    source
  230          ** Parameters         :NONE   adr 卷页地址 
  231          **
  232          ** Returned value   :NONE   type 发生类型   1 开始  0x55  进行时候  0xFF 结束   
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 5   
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 5   
 
  233          **                                      ID   只有二类时间有效，前期处理 0 - 6
  234          **----------------------------------------------------------------------------
@@ -318,7 +318,7 @@ line level    source
  289   4                                      mem_read(&gs_even_fun_var.even_fun_doingflg[ID],ADR_CLASS2FLG_START_E2P+ ID* LEN_CLASSII_flg,LEN_CLASS
              -II_flg,MEM_E2P1);
  290   4                                      CLRWDT();     
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 6   
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 6   
 
  291   4                                      
  292   4                                      if(0x5a!=gs_even_fun_var.even_fun_doingflg[ID])  // 未开始
@@ -382,7 +382,7 @@ line level    source
  347   6                                              }
  348   5                                              
  349   5                                              // 写结束标识//
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 7   
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 7   
 
  350   5                                              gs_even_fun_var.even_fun_doingflg[ID] = 0;
  351   5                                              mem_db_write(ADR_CLASS2FLG_START_E2P+ ID* LEN_CLASSII_flg,&gs_even_fun_var.even_fun_doingflg[ID],LEN_
@@ -446,7 +446,7 @@ line level    source
  407          ** Function name    :api_measure_deal_pre_second
  408          **
  409          ** Description         :每秒调用的测量函数
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 8   
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 8   
 
  410          **
  411          ** Parameters         :NONE          
@@ -510,7 +510,7 @@ line level    source
  469   1          CLASS_I_UNIT   data_class1;
  470   1          CLASS_II_UNIT  data_class2;
  471   1      
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 9   
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 9   
 
  472   1              Lib_Set_String(&data_class1.u16_num.B08[0], 0, LEN_CLASS_I_UNIT);
  473   1              Lib_Set_String(&data_class2.u16_num.B08[0], 0, LEN_CLASS_II_UNIT);
@@ -574,7 +574,7 @@ line level    source
  527   2          }
  528   1              
  529   1              Lib_Copy_Str_TwoArry(&buftmp[4], &temp1.BYTE[0], 4 );
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 10  
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 10  
 
  530   1      }
  531          
@@ -638,7 +638,7 @@ line level    source
  589   1      
  590   1       if(gs_emu_run_var.net_flg& REV_N_ACPOWER)
  591   1         return TRUE;
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 11  
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 11  
 
  592   1      
  593   1        else   return FALSE ;
@@ -702,7 +702,7 @@ line level    source
  651          ** Parameters         :NONE          
  652          **
  653          ** Returned value   :NONE
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 12  
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 12  
 
  654          **
  655          **----------------------------------------------------------------------------
@@ -766,7 +766,7 @@ line level    source
  713   2          gs_sys_globaL_var.sys_e2_err_flg=0;
  714   2        }
  715   1        
-C51 COMPILER V9.01   API_EVENT                                                             02/14/2019 10:20:41 PAGE 13  
+C51 COMPILER V9.01   API_EVENT                                                             03/05/2019 13:48:05 PAGE 13  
 
  716   1        if((gs_sys_globaL_var.sys_e2_err_flg==0)&&(gs_sys_globaL_var.sys_e2_err.u32 !=0x123456))
  717   1        {
