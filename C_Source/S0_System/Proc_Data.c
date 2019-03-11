@@ -51,7 +51,7 @@ const  E2P_METER_PARAM1_MAP   code  default_meter_parm1_tab =
     30,30,       //  MD_PARAM                                md_param;
 #if (BILL_MAX_NUM>0)
     0x26,0x00,        //BILL_MONTH_SETTLED_PARAM     bill_ms_param; 
-    0x30, //为月结算
+    0x20, //为不结算
 #endif
     0,           //INT8U   EMU_fast_flg;    = 0X//EMU 加倍标识 //
     0X11,0X11,0X11,0X11,0X11,0X11,0XFF,0XFF,//INT8U   meter_id[16];

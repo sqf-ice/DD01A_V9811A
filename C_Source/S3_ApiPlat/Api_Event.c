@@ -565,8 +565,8 @@ void api_even_Detect_sec(void)
 //	if(api_even_Detect_L2reverse()==TRUE)api_deal_even_class_recode(ID_CLASS_II_L2reverse,START);
 //	else  api_deal_even_class_recode(ID_CLASS_II_L2reverse,END);
 
-  if(Judge_ERR_COVER_key()==TRUE)api_deal_even_class_recode(ID_CLASS_II_COVER,START);
-  else api_deal_even_class_recode(ID_CLASS_II_COVER,END);
+//  if(Judge_ERR_COVER_key()==TRUE)api_deal_even_class_recode(ID_CLASS_II_COVER,START);
+//  else api_deal_even_class_recode(ID_CLASS_II_COVER,END);
 
 //   Proc_Check_COVER_Pre_sec();
 }

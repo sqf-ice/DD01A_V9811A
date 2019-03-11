@@ -69,7 +69,7 @@ void main(void)
 			}
 			// 上电状态下的电源管理处理  //	
 			Proc_judge_Power_down_process();	  
-			Drv_relay_run_check();   //继电器操作状态检查  //
+//			Drv_relay_run_check();   //继电器操作状态检查  //
 			CLRWDT();	// 清看门狗//
 	    }
 		// 上电状态下的电源管理处理  //   

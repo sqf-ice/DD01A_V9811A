@@ -29,6 +29,7 @@ uint8 MD_delay = 1;
 uint8 MAGN_flag = 0;
 uint8 MAGN_delay = 0;
 uint8 MD_dis_delay = 0;
+INT8U Bill_Data;
 
 
 
@@ -164,7 +165,7 @@ void Proc_handl_tou_10ms(void)
 ******************************************************************************/
 void Proc_handl_tou_1s(void)
 {
-	INT8U Bill_Data;
+//	INT8U Bill_Data;
 
 //	NEW_MMD_DATA_UNIT st_mmd_unit;
 //	SUM_MMD_DATA_UNIT sum_st_mmd_unit;
@@ -222,7 +223,7 @@ void Proc_handl_tou_1s(void)
 		//ÈÕ¶³½á
 		api_freeze_energy_Ram_pre_day();
 		api_freeze_energy_pre_day(); 
-		mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E2P1);
+//		mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E2P1);
 		#if (BILL_MAX_NUM>0)
 		if(Bill_Data == 0x30)
 		{

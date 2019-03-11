@@ -67,6 +67,7 @@ extern uint8 MD_delay;
 extern uint8 MD_flag;
 extern uint8 MAGN_flag;
 extern uint8 MD_dis_delay;
+extern INT8U Bill_Data;
 
 /***************************************************************
 *    5     其他内容，例如伪指令等       

@@ -41,7 +41,7 @@ ENERGY_VAR		      gs_energy_var;                 // 电能增量脉冲变量数据，上电初
 void api_init_current_energy_data_ram(void)
 {
 //定义变量
-	uint8 Bill_Data;
+//	uint8 Bill_Data;
 	uint8 i;
 	ST_U16_U08 u16_month_A,u16_month_B;
 	ST_U16_U08 u16_day_A,u16_day_B;
@@ -52,7 +52,7 @@ void api_init_current_energy_data_ram(void)
     Lib_Set_String(&gs_energy_user_data_back.us_val[0][0].buf[0],0,sizeof(ENERGY_USER_DATA));
     api_check_current_energy_data(); 
 
-
+	mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E2P1);
 	//校验和不对就从EEP读取数据
 	mem_read(&energy_data_array[0].buf[0],ADR_BLOCK_4Energy_L0_E2P,  5*LEN_EC_UNIT,MEM_E2P1);
 	mem_read(&st_mmd_unit_array[0].buf[0],ADR_BLOCK_4MMD_L0_E2P,5*LEN_NEW_MMD_UNIT,MEM_E2P1);
@@ -93,7 +93,7 @@ void api_init_current_energy_data_ram(void)
 					max_dateTime = gs_CurDateTime.Day -last_rec_dateTime[2];
 			}
 			//读取结算方式  2019-01-30
-			mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E2P1);
+//			mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E2P1);
 	
 			if(Bill_Data == 0x01)
 			{

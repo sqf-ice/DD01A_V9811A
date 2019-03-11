@@ -77,10 +77,11 @@ Others:
 void Proc_Initialize_INRam(void)
 {
 //	uint8 Bill_Data;
-//	uint8 i;
+	uint8 i,j;
 //	ST_U16_U08 u16_month_A,u16_month_B;
 //	ST_U16_U08 u16_day_A,u16_day_B;
-//	uint8 last_rec_dateTime[6];//最近一次冻结时间
+	uint8 last_rec_dateTime[6];//最近一次冻结时间
+	uint8 param_settel[2];
 //	uint8 max_dateTime;
 
 
@@ -140,31 +141,43 @@ void Proc_Initialize_INRam(void)
 	api_update_triffNo_pre_minute();  
 	CLRWDT();
 #endif
-//mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E2P1);
-//if(Bill_Data == 0x30)
-//{
-//#if (BILL_MAX_NUM>1)
-//	CLRWDT();
-//	mem_read(&last_rec_dateTime[0],ADR_BLOCK161_EVENII_PWN_E2P+6,5,MEM_E2P1);//年月日时分
-//	u16_month_A.u16 = Lib_bcd_byte(last_rec_dateTime[0])*12 + Lib_bcd_byte(last_rec_dateTime[1]);	    //最近1次结算的月单位数据 //
-//    u16_month_B.u16 = Lib_bcd_byte(gs_CurDateTime.Year)*12 + Lib_bcd_byte(gs_CurDateTime.Month);
-//	if(u16_month_B.u16 - u16_month_A.u16 > 6)
-//	{
-//		max_dateTime = 6;
-//	}
-//	else
-//	{
-//		max_dateTime = u16_month_B.u16 - u16_month_A.u16;
-//	}
-//	for(i=0;i<max_dateTime ;i++)
-//	{
-//		CLRWDT();
-//		api_handl_settle_per_minute();
-//		CLRWDT();
-//	}
-//	//api_handl_settle_when_powerUp();   
-//#endif
-//}
+
+#if (BILL_MAX_NUM>1)
+if (Bill_Data == 0x30)
+{
+	CLRWDT();
+	i = 0;
+
+	mem_read(&last_rec_dateTime[0],ADR_BLOCK161_EVENII_PWN_E2P+6,5,MEM_E2P1);
+	mem_read(&param_settel[0], ADR_METER_PARAM1_SETL_DDHH, 2, MEM_E2P1);
+	if(last_rec_dateTime[2]<param_settel[0])
+	{	
+		i = 1;	
+	}else{
+		i = 0;
+	}
+	i = i + gs_CurDateTime.Month - last_rec_dateTime[1];
+	if (gs_CurDateTime.Month < param_settel[0])
+	{
+		i = i - 1;
+	}else{
+		i = i + 0;
+	}
+	if (i > 6)
+	{	i = 6;	}
+	if (i > 0)
+	{
+		for(j=0;j<i;j++)
+		{
+			api_write_bill_data(BILL_ID0_MOTTH_SETTL);
+			CLRWDT();
+		}
+		CLRWDT();
+		api_clr_current_MD_data();
+	}
+}
+#endif
+
 	////////////////////////////////////////////////
 	//  S4_ApiUser 区相关RAM初始化
 	////////////////////////////////////////////////
@@ -449,9 +462,9 @@ void Proc_judge_Power_down_process(void)
 		E2p_Stop_i2c();
 		api_Measure_ram_INIT();          //清除瞬时量 //
 		
-		KEY_ERR_COVER_INITLIZE() ;		
-		gs_even_fun_var.esc_cnt[ID_CLASS_II_COVER-ID_CLASS_II_min] =0; 
-		gs_even_fun_var.into_cnt[ID_CLASS_II_COVER-ID_CLASS_II_min] =0;
+//		KEY_ERR_COVER_INITLIZE() ;		
+//		gs_even_fun_var.esc_cnt[ID_CLASS_II_COVER-ID_CLASS_II_min] =0; 
+//		gs_even_fun_var.into_cnt[ID_CLASS_II_COVER-ID_CLASS_II_min] =0;
 
 		gs_dis_ctl_var.keep_sec[0] = 0;//2019-01-18		cxy
 		d_flag = 0;
@@ -471,10 +484,10 @@ void Proc_judge_Power_down_process(void)
 			//获取当前时间数据数据   //
     		Get_RTCTime(&rtc_data_tmp);
 			Lib_Copy_Str_TwoArry(&gs_CurDateTime.Week, &rtc_data_tmp.Week, 7);
-			if(Judge_ERR_COVER_key()==TRUE)
-				api_pwl_cover_even_class_recode(ID_CLASS_II_COVER-ID_CLASS_II_min,START);
-			else 
-				api_pwl_cover_even_class_recode(ID_CLASS_II_COVER-ID_CLASS_II_min,END);
+//			if(Judge_ERR_COVER_key()==TRUE)
+//				api_pwl_cover_even_class_recode(ID_CLASS_II_COVER-ID_CLASS_II_min,START);
+//			else 
+//				api_pwl_cover_even_class_recode(ID_CLASS_II_COVER-ID_CLASS_II_min,END);
 			
 			if((Systate&BIT0)==0x01)  
 			{

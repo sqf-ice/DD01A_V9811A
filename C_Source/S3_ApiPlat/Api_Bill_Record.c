@@ -224,7 +224,7 @@ void api_handl_settle_per_minute(void)
 ******************************************************************************/
 void api_freeze_energy_pre_day(void)
 {
-		INT8U Bill_Data;
+//		INT8U Bill_Data;
 		if(d_flag == 1){
 			d_flag = 0;
 			mem_write(ADR_BLOCK_4Energy_L0_E2P, &energy_data_array[0].buf[0], 5*LEN_EC_UNIT,MEM_E2P1);
@@ -239,7 +239,7 @@ void api_freeze_energy_pre_day(void)
 				{
 					if(gs_CurDateTime.Hour == 0)
 					{
-						mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E2P1);
+//						mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E2P1);
 						if(Bill_Data == 0x01)
 						{
 							//结算数据电量需量  2019-01-30
