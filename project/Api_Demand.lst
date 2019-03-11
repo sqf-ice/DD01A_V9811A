@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   API_DEMAND                                                            03/05/2019 13:48:04 PAGE 1   
+C51 COMPILER V9.01   API_DEMAND                                                            03/11/2019 10:40:56 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE API_DEMAND
@@ -62,7 +62,7 @@ line level    source
   50   3                  {
   51   4                      if((u8_period%u8_slid)==0)
   52   4                      {
-C51 COMPILER V9.01   API_DEMAND                                                            03/05/2019 13:48:04 PAGE 2   
+C51 COMPILER V9.01   API_DEMAND                                                            03/11/2019 10:40:56 PAGE 2   
 
   53   5                          flg=TRUE;
   54   5                      }
@@ -126,7 +126,7 @@ line level    source
  112   1          {
  113   2              adr_offset = ( ch*(1+TARIFF_MAX_NUM)*LEN_MMD_UNIT) ;  
  114   2              mem_read(&st_mmd_unit.buf[0], ADR_BLOCK01_MMD_L0_E2P+adr_offset, LEN_MMD_UNIT, MEM_E2P1);  
-C51 COMPILER V9.01   API_DEMAND                                                            03/05/2019 13:48:04 PAGE 3   
+C51 COMPILER V9.01   API_DEMAND                                                            03/11/2019 10:40:56 PAGE 3   
 
  115   2              if(val_hex32>st_mmd_unit.val.val_hex32) 
  116   2              {
@@ -190,7 +190,7 @@ line level    source
  172          **
  173          ** Returned value   :NONE
  174          **
-C51 COMPILER V9.01   API_DEMAND                                                            03/05/2019 13:48:04 PAGE 4   
+C51 COMPILER V9.01   API_DEMAND                                                            03/11/2019 10:40:56 PAGE 4   
 
  175          **----------------------------------------------------------------------------
  176          ** V01.01  MJ  2016-04-23
@@ -254,7 +254,7 @@ line level    source
  232          /*****************************************************************************
  233          ** Function name    :api_updata_md_var_slid_per_minute
  234          **
-C51 COMPILER V9.01   API_DEMAND                                                            03/05/2019 13:48:04 PAGE 5   
+C51 COMPILER V9.01   API_DEMAND                                                            03/11/2019 10:40:56 PAGE 5   
 
  235          ** Description         :初始化当前需量计算RAM区数据，程序复位初始化调用        
  236          **
@@ -318,7 +318,7 @@ line level    source
  294   1      
  295   1      }
  296          
-C51 COMPILER V9.01   API_DEMAND                                                            03/05/2019 13:48:04 PAGE 6   
+C51 COMPILER V9.01   API_DEMAND                                                            03/11/2019 10:40:56 PAGE 6   
 
  297          
  298          /*****************************************************************************

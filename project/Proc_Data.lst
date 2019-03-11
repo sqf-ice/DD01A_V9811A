@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   PROC_DATA                                                             03/05/2019 13:47:56 PAGE 1   
+C51 COMPILER V9.01   PROC_DATA                                                             03/11/2019 10:40:47 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE PROC_DATA
@@ -44,17 +44,17 @@ line level    source
   32          ********************************************************************************************************/
   33          
   34          #if(meter_type == D_1P3W)
-  35          const SYS_PARM code sys_parm={
-  36                0x00,METER_CONST_10WH_BCD,0x00,        //电表有功常数//
-  37                'D','D','0','1','A','-','V','3','0','.','0','3',   //软件版本号  //
-  38          };
-  39          #endif
-  40          #if(meter_type == D_1P2W)
               const SYS_PARM code sys_parm={
                     0x00,METER_CONST_10WH_BCD,0x00,        //电表有功常数//
-                    'D','D','0','1','A','-','V','2','0','.','0','3',   //软件版本号  //
+                    'D','D','0','1','A','-','V','3','0','.','0','3',   //软件版本号  //
               };
               #endif
+  40          #if(meter_type == D_1P2W)
+  41          const SYS_PARM code sys_parm={
+  42                0x00,METER_CONST_10WH_BCD,0x00,        //电表有功常数//
+  43                'D','D','0','1','A','-','V','2','0','.','0','3',   //软件版本号  //
+  44          };
+  45          #endif
   46          /*********************************************************************************************************
   47          **  电能表参数1 初始化默认数据
   48          ********************************************************************************************************/
@@ -62,10 +62,10 @@ line level    source
   50          {
   51              30,30,       //  MD_PARAM                                md_param;
   52          #if (BILL_MAX_NUM>0)
-C51 COMPILER V9.01   PROC_DATA                                                             03/05/2019 13:47:56 PAGE 2   
+C51 COMPILER V9.01   PROC_DATA                                                             03/11/2019 10:40:47 PAGE 2   
 
   53              0x26,0x00,        //BILL_MONTH_SETTLED_PARAM     bill_ms_param; 
-  54              0x30, //为月结算
+  54              0x20, //为不结算
   55          #endif
   56              0,           //INT8U   EMU_fast_flg;    = 0X//EMU 加倍标识 //
   57              0X11,0X11,0X11,0X11,0X11,0X11,0XFF,0XFF,//INT8U   meter_id[16];
@@ -126,7 +126,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
-C51 COMPILER V9.01   PROC_DATA                                                             03/05/2019 13:47:56 PAGE 3   
+C51 COMPILER V9.01   PROC_DATA                                                             03/11/2019 10:40:47 PAGE 3   
 
 END OF MODULE INFORMATION.
 

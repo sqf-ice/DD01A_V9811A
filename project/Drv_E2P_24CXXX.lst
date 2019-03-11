@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/05/2019 13:47:58 PAGE 1   
+C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/11/2019 10:40:49 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DRV_E2P_24CXXX
@@ -62,7 +62,7 @@ line level    source
   50   1      
   51   1              do
   52   1              {
-C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/05/2019 13:47:58 PAGE 2   
+C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/11/2019 10:40:49 PAGE 2   
 
   53   2                      E2p_Stop_i2c();
   54   2                      err_cnt++;
@@ -126,7 +126,7 @@ line level    source
  112   2                      err_cnt++;
  113   2                      if(err_cnt>10)  return FALSE;   // 重试10次不能成功则返回失败标识//
  114   2                      E2p_Start_i2c();
-C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/05/2019 13:47:58 PAGE 3   
+C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/11/2019 10:40:49 PAGE 3   
 
  115   2              }while (E2p_TxByte_i2c(NewWrCmd)!=TRUE);
  116   1      
@@ -190,7 +190,7 @@ line level    source
  173   1      }
  174          
  175          
-C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/05/2019 13:47:58 PAGE 4   
+C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/11/2019 10:40:49 PAGE 4   
 
  176          /*******************************************************************************************
  177          ** 函数名称: Write_EEPROM_Page
@@ -254,7 +254,7 @@ line level    source
  233   2      
  234   2                      if(Read_EEPROM_Page(u8p_dst, u16_src, u8_lenth) == FALSE)  return(FALSE);
  235   2                      u8p_dst += u8_lenth;
-C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/05/2019 13:47:58 PAGE 5   
+C51 COMPILER V9.01   DRV_E2P_24CXXX                                                        03/11/2019 10:40:49 PAGE 5   
 
  236   2                      u16_src += u8_lenth;
  237   2                      u16_len -= u8_lenth;

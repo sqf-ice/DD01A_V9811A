@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   API_ENERGY                                                            03/05/2019 13:48:04 PAGE 1   
+C51 COMPILER V9.01   API_ENERGY                                                            03/11/2019 10:40:57 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE API_ENERGY
@@ -53,7 +53,7 @@ line level    source
   41          void api_init_current_energy_data_ram(void)
   42          {
   43   1      //定义变量
-  44   1              uint8 Bill_Data;
+  44   1      //      uint8 Bill_Data;
   45   1              uint8 i;
   46   1              ST_U16_U08 u16_month_A,u16_month_B;
   47   1              ST_U16_U08 u16_day_A,u16_day_B;
@@ -62,11 +62,12 @@ line level    source
   50   1      ////////
   51   1          Lib_Set_String(&gs_energy_user_data.us_val[0][0].buf[0],0,sizeof(ENERGY_USER_DATA));
   52   1          Lib_Set_String(&gs_energy_user_data_back.us_val[0][0].buf[0],0,sizeof(ENERGY_USER_DATA));
-C51 COMPILER V9.01   API_ENERGY                                                            03/05/2019 13:48:04 PAGE 2   
+C51 COMPILER V9.01   API_ENERGY                                                            03/11/2019 10:40:57 PAGE 2   
 
   53   1          api_check_current_energy_data(); 
   54   1      
-  55   1      
+  55   1              mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_E2
+             -P1);
   56   1              //校验和不对就从EEP读取数据
   57   1              mem_read(&energy_data_array[0].buf[0],ADR_BLOCK_4Energy_L0_E2P,  5*LEN_EC_UNIT,MEM_E2P1);
   58   1              mem_read(&st_mmd_unit_array[0].buf[0],ADR_BLOCK_4MMD_L0_E2P,5*LEN_NEW_MMD_UNIT,MEM_E2P1);
@@ -109,8 +110,8 @@ line level    source
   93   3                                              max_dateTime = gs_CurDateTime.Day -last_rec_dateTime[2];
   94   3                              }
   95   2                              //读取结算方式  2019-01-30
-  96   2                              mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, MEM_
-             -E2P1);
+  96   2      //                      mem_read(&Bill_Data, ADR_BLOCK20_METER_PARAM1_E2P+ST_MB_OFFSET(E2P_METER_PARAM1_MAP,BILL_FLAG), 1, ME
+             -M_E2P1);
   97   2              
   98   2                              if(Bill_Data == 0x01)
   99   2                              {
@@ -125,9 +126,9 @@ line level    source
  108   4                                              CLRWDT();
  109   4                                              api_clr_current_MD_data();
  110   4              //                              sum_st_mmd_unit_array[0].val.val_count--;  //多加一次
- 111   4                                              CLRWDT();
-C51 COMPILER V9.01   API_ENERGY                                                            03/05/2019 13:48:04 PAGE 3   
+C51 COMPILER V9.01   API_ENERGY                                                            03/11/2019 10:40:57 PAGE 3   
 
+ 111   4                                              CLRWDT();
  112   4                                      }
  113   3                              }
  114   2      //                      if(Bill_Data == 0x30)
@@ -189,9 +190,9 @@ line level    source
  163   3                                      Lib_Set_String(&gs_energy_user_data_back.us_val[0][0].buf[0],0,sizeof(ENERGY_USER_DATA));
  164   3                              }
  165   3                              */
- 166   3              }
-C51 COMPILER V9.01   API_ENERGY                                                            03/05/2019 13:48:04 PAGE 4   
+C51 COMPILER V9.01   API_ENERGY                                                            03/11/2019 10:40:57 PAGE 4   
 
+ 166   3              }
  167   2              Lib_Copy_Str_TwoArry(&gs_energy_user_data.us_val[0][0].buf[0],&gs_energy_user_data_back.us_val[0][
              -0].buf[0],LEN_EC_CURRENT);
  168   2              gs_energy_user_data.u16_csck = gs_energy_user_data_back.u16_csck;       
@@ -253,9 +254,9 @@ line level    source
  224          uint8 lnk_add_rac_energy_pluse(void)
  225          {
  226   1      
- 227   1      uint8 chg_fg=FALSE;
-C51 COMPILER V9.01   API_ENERGY                                                            03/05/2019 13:48:04 PAGE 5   
+C51 COMPILER V9.01   API_ENERGY                                                            03/11/2019 10:40:57 PAGE 5   
 
+ 227   1      uint8 chg_fg=FALSE;
  228   1              /*
  229   1              uint8 u8_tmp;
  230   1      
@@ -317,9 +318,9 @@ line level    source
  286   1      */
  287   1               return (chg_fg);
  288   1      }
- 289          
-C51 COMPILER V9.01   API_ENERGY                                                            03/05/2019 13:48:04 PAGE 6   
+C51 COMPILER V9.01   API_ENERGY                                                            03/11/2019 10:40:57 PAGE 6   
 
+ 289          
  290          /*****************************************************************************
  291          ** Function name    :api_accum_current_energy_data_pre_second
  292          **
@@ -381,9 +382,9 @@ line level    source
  346   1              // 电能数据保存 //
  347   1              if(save_fg == TRUE)
  348   1              {
- 349   2                      mem_db_write(ADR_BLOCK00_EC_L0_E2P,&gs_energy_user_data.us_val[0][0].buf[0],LEN_EC_CURRENT,MEM_E2P1);
-C51 COMPILER V9.01   API_ENERGY                                                            03/05/2019 13:48:04 PAGE 7   
+C51 COMPILER V9.01   API_ENERGY                                                            03/11/2019 10:40:57 PAGE 7   
 
+ 349   2                      mem_db_write(ADR_BLOCK00_EC_L0_E2P,&gs_energy_user_data.us_val[0][0].buf[0],LEN_EC_CURRENT,MEM_E2P1);
  350   2              }
  351   1      }
  352          
@@ -424,7 +425,7 @@ line level    source
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   1535    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =    126      19
+   XDATA SIZE       =    126      18
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

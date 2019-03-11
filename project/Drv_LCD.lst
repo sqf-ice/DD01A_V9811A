@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   DRV_LCD                                                               03/05/2019 13:48:01 PAGE 1   
+C51 COMPILER V9.01   DRV_LCD                                                               03/11/2019 10:40:53 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DRV_LCD
@@ -62,7 +62,7 @@ line level    source
   50          //  Function:      void Lcd_initial(void)       
   51          //  Description:                                           
   52          //  Others:           
-C51 COMPILER V9.01   DRV_LCD                                                               03/05/2019 13:48:01 PAGE 2   
+C51 COMPILER V9.01   DRV_LCD                                                               03/11/2019 10:40:53 PAGE 2   
 
   53          //***************************************************************
   54          void Clr_all_lcd(void)
@@ -126,7 +126,7 @@ line level    source
  112   1          P5IE &=~  0xFF;          // P5.0~P5.1
  113   1          P6IE &=~ (BIT2+BIT3+BIT4+BIT5+BIT6+BIT7);          // P6.0~P6.3
  114   1          P7IE &=~ (BIT6+BIT7);           // P7.6~P7.7   
-C51 COMPILER V9.01   DRV_LCD                                                               03/05/2019 13:48:01 PAGE 3   
+C51 COMPILER V9.01   DRV_LCD                                                               03/11/2019 10:40:53 PAGE 3   
 
  115   1          P8IE &=~ (BIT0+BIT1+BIT2);      //P8.0~P8.2   cxy 2018-11-13ÐÂÔö¹Ü½Å
  116   1          
