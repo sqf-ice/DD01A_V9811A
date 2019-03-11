@@ -238,7 +238,7 @@
 
   <Group>
     <GroupName>S0_System</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <File>
@@ -247,10 +247,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>22</ColumnNumber>
+      <ColumnNumber>36</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>27</TopLine>
-      <CurrentLine>36</CurrentLine>
+      <TopLine>38</TopLine>
+      <CurrentLine>38</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S0_System\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -289,10 +289,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>15</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>151</TopLine>
+      <CurrentLine>163</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S0_System\Proc_System_Check.c</PathWithFileName>
       <FilenameWithoutPath>Proc_System_Check.c</FilenameWithoutPath>
@@ -303,10 +303,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>52</ColumnNumber>
+      <ColumnNumber>11</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>189</TopLine>
-      <CurrentLine>216</CurrentLine>
+      <TopLine>404</TopLine>
+      <CurrentLine>408</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S0_System\Proc_System_Initialize.c</PathWithFileName>
       <FilenameWithoutPath>Proc_System_Initialize.c</FilenameWithoutPath>
@@ -317,10 +317,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>66</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>383</TopLine>
+      <CurrentLine>397</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S0_System\Proc_System_Interrupt.c</PathWithFileName>
       <FilenameWithoutPath>Proc_System_Interrupt.c</FilenameWithoutPath>
@@ -770,7 +770,7 @@
 
   <Group>
     <GroupName>S6_MyIncludes</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <File>
@@ -900,136 +900,6 @@
       <FilenameWithoutPath>SYS_typedef_H.h</FilenameWithoutPath>
     </File>
   </Group>
-
-  <AlienFiles>
-    <PathWithFilename>C:\Users\lyq19\Desktop\DD01A_V9811A\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU_H.H</PathWithFilename>
-    <TopLine>58</TopLine>
-    <CurrentLine>58</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
-
-  <AlienFiles>
-    <PathWithFilename>C:\USERS\LYQ19\DESKTOP\DD01A_V9811A\C_SOURCE\S3_APIPLAT\API_LOADPROFILE_H.H</PathWithFilename>
-    <TopLine>21</TopLine>
-    <CurrentLine>40</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
-
-  <AlienFiles>
-    <PathWithFilename>C:\Users\lyq19\Desktop\DD01A_V9811A\C_Source\S1_HardDrv\V9811A_EMU\V9260F.c</PathWithFilename>
-    <TopLine>437</TopLine>
-    <CurrentLine>458</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
-
-  <AlienFiles>
-    <PathWithFilename>C:\Users\lyq19\Desktop\DD01A_V9811A\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE_H.H</PathWithFilename>
-    <TopLine>47</TopLine>
-    <CurrentLine>47</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
-
-  <AlienFiles>
-    <PathWithFilename>C:\USERS\LYQ19\DESKTOP\DD01A_V9811A\C_SOURCE\S3_APIPLAT\API_BILL_RECORD_H.H</PathWithFilename>
-    <TopLine>92</TopLine>
-    <CurrentLine>92</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
 
   <WinLayout>
     <sActiveDebugView>Default</sActiveDebugView>
@@ -2372,121 +2242,49 @@
     <ActiveMDIGroup>0</ActiveMDIGroup>
     <MDIGroup>
       <Size>100</Size>
-      <ActiveTab>4</ActiveTab>
+      <ActiveTab>0</ActiveTab>
       <Documents>
         <Doc>
-          <Name>..\C_Source\S0_System\main.c</Name>
-          <ColumnNumber>22</ColumnNumber>
-          <TopLine>27</TopLine>
-          <CurrentLine>36</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_Source\S3_ApiPlat\Api_Bill_Record.c</Name>
-          <ColumnNumber>50</ColumnNumber>
-          <TopLine>187</TopLine>
-          <CurrentLine>210</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>\USERS\LYQ19\DESKTOP\DD01A_V9811A\C_SOURCE\S3_APIPLAT\API_BILL_RECORD_H.H</Name>
-          <ColumnNumber>12</ColumnNumber>
-          <TopLine>92</TopLine>
-          <CurrentLine>92</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_Source\S3_ApiPlat\Api_Energy.c</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>98</TopLine>
-          <CurrentLine>105</CurrentLine>
+          <Name>..\C_Source\S0_System\Proc_System_Interrupt.c</Name>
+          <ColumnNumber>66</ColumnNumber>
+          <TopLine>383</TopLine>
+          <CurrentLine>397</CurrentLine>
         </Doc>
         <Doc>
           <Name>..\C_Source\S0_System\Proc_System_Initialize.c</Name>
-          <ColumnNumber>52</ColumnNumber>
-          <TopLine>189</TopLine>
-          <CurrentLine>216</CurrentLine>
+          <ColumnNumber>11</ColumnNumber>
+          <TopLine>404</TopLine>
+          <CurrentLine>408</CurrentLine>
         </Doc>
         <Doc>
-          <Name>..\C_Source\S3_ApiPlat\Api_Demand.c</Name>
-          <ColumnNumber>42</ColumnNumber>
-          <TopLine>310</TopLine>
-          <CurrentLine>317</CurrentLine>
+          <Name>..\C_Source\S0_System\main.c</Name>
+          <ColumnNumber>36</ColumnNumber>
+          <TopLine>38</TopLine>
+          <CurrentLine>38</CurrentLine>
         </Doc>
         <Doc>
-          <Name>..\C_Source\S0_System\Proc_System_Tou.c</Name>
-          <ColumnNumber>17</ColumnNumber>
-          <TopLine>216</TopLine>
-          <CurrentLine>230</CurrentLine>
+          <Name>..\C_Source\S0_System\Proc_System_Check.c</Name>
+          <ColumnNumber>15</ColumnNumber>
+          <TopLine>151</TopLine>
+          <CurrentLine>163</CurrentLine>
         </Doc>
         <Doc>
-          <Name>..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE_H.H</Name>
-          <ColumnNumber>12</ColumnNumber>
-          <TopLine>47</TopLine>
-          <CurrentLine>47</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_Source\S4_ApiUser\Api_User_Comm.c</Name>
-          <ColumnNumber>17</ColumnNumber>
-          <TopLine>1101</TopLine>
-          <CurrentLine>1107</CurrentLine>
+          <Name>..\C_SOURCE\S6_MYINCLUDES\LEOPARTREG.H</Name>
+          <ColumnNumber>36</ColumnNumber>
+          <TopLine>5</TopLine>
+          <CurrentLine>23</CurrentLine>
         </Doc>
         <Doc>
           <Name>..\C_SOURCE\S6_MYINCLUDES\MYINCLUDES_H.H</Name>
-          <ColumnNumber>1</ColumnNumber>
-          <TopLine>26</TopLine>
-          <CurrentLine>30</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_SOURCE\S6_MYINCLUDES\SYS_TYPEDEF_H.H</Name>
-          <ColumnNumber>0</ColumnNumber>
+          <ColumnNumber>24</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>1</CurrentLine>
         </Doc>
         <Doc>
-          <Name>..\C_Source\S1_HardDrv\V9811A_EMU\Lnk_EMU_handl.c</Name>
-          <ColumnNumber>25</ColumnNumber>
-          <TopLine>516</TopLine>
-          <CurrentLine>516</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>C:\Users\lyq19\Desktop\DD01A_V9811A\C_Source\S1_HardDrv\V9811A_EMU\V9260F.c</Name>
+          <Name>..\C_SOURCE\S6_MYINCLUDES\SYS_IODEFINE_H.H</Name>
           <ColumnNumber>0</ColumnNumber>
-          <TopLine>437</TopLine>
-          <CurrentLine>458</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_Source\S0_System\Proc_Data.c</Name>
-          <ColumnNumber>93</ColumnNumber>
-          <TopLine>58</TopLine>
-          <CurrentLine>61</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>\USERS\LYQ19\DESKTOP\DD01A_V9811A\C_SOURCE\S3_APIPLAT\API_LOADPROFILE_H.H</Name>
-          <ColumnNumber>37</ColumnNumber>
-          <TopLine>21</TopLine>
-          <CurrentLine>40</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_Source\S3_ApiPlat\Api_LoadProfile.C</Name>
-          <ColumnNumber>23</ColumnNumber>
-          <TopLine>365</TopLine>
-          <CurrentLine>379</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_Source\S1_HardDrv\E2P_24CXXX\Drv_E2P_i2cSoft.c</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>96</TopLine>
-          <CurrentLine>113</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU_H.H</Name>
-          <ColumnNumber>12</ColumnNumber>
-          <TopLine>58</TopLine>
-          <CurrentLine>58</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_Source\S3_ApiPlat\Api_Measure.c</Name>
-          <ColumnNumber>20</ColumnNumber>
-          <TopLine>49</TopLine>
-          <CurrentLine>61</CurrentLine>
+          <TopLine>99</TopLine>
+          <CurrentLine>99</CurrentLine>
         </Doc>
       </Documents>
     </MDIGroup>

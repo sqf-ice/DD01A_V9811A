@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   API_BILL_RECORD                                                       02/16/2019 15:28:14 PAGE 1   
+C51 COMPILER V9.01   API_BILL_RECORD                                                       03/05/2019 13:48:04 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE API_BILL_RECORD
@@ -62,7 +62,7 @@ line level    source
   49   1      }
   50          //返回值为输入月份有多少天
   51          uint8 Judage_Month(uint8 month,uint8 year)
-C51 COMPILER V9.01   API_BILL_RECORD                                                       02/16/2019 15:28:14 PAGE 2   
+C51 COMPILER V9.01   API_BILL_RECORD                                                       03/05/2019 13:48:04 PAGE 2   
 
   52          {
   53   1              if(month == 2)
@@ -126,7 +126,7 @@ line level    source
  111   1              temp = hist_addr / bill_info[i].data_size;
  112   1              num = hist_addr - temp*bill_info[i].data_size;
  113   1              if ( ptr < temp ) 
-C51 COMPILER V9.01   API_BILL_RECORD                                                       02/16/2019 15:28:14 PAGE 3   
+C51 COMPILER V9.01   API_BILL_RECORD                                                       03/05/2019 13:48:04 PAGE 3   
 
  114   1              {
  115   2                  ptr = ptr + ( bill_info[i].ptr_num -temp);    
@@ -190,7 +190,7 @@ line level    source
  170   2                  //当前需量清零  //
  171   2       //           api_clr_current_MD_data();
  172   2              break;
-C51 COMPILER V9.01   API_BILL_RECORD                                                       02/16/2019 15:28:14 PAGE 4   
+C51 COMPILER V9.01   API_BILL_RECORD                                                       03/05/2019 13:48:04 PAGE 4   
 
  173   2      
  174   2              default:
@@ -254,7 +254,7 @@ line level    source
  230   2                              mem_write(ADR_BLOCK_4Energy_L0_E2P, &energy_data_array[0].buf[0], 5*LEN_EC_UNIT,MEM_E2P1);
  231   2                              mem_write(ADR_BLOCK_4MMD_L0_E2P,&st_mmd_unit_array[0].buf[0],5*LEN_NEW_MMD_UNIT,MEM_E2P1);
  232   2                              mem_write(ADR_BLOCK_4MMD_sum_L0_E2P,&sum_st_mmd_unit_array[0].buf[0],5*LEN_SUM_MMD_UNIT,MEM_E2P1);              
-C51 COMPILER V9.01   API_BILL_RECORD                                                       02/16/2019 15:28:14 PAGE 5   
+C51 COMPILER V9.01   API_BILL_RECORD                                                       03/05/2019 13:48:04 PAGE 5   
 
  233   2                              
  234   2      
@@ -318,7 +318,7 @@ line level    source
 *** WARNING C214 IN LINE 288 OF ..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C: 'Argument': conversion: pointer to non-pointer
  289   5                                      }
  290   4                                      
-C51 COMPILER V9.01   API_BILL_RECORD                                                       02/16/2019 15:28:14 PAGE 6   
+C51 COMPILER V9.01   API_BILL_RECORD                                                       03/05/2019 13:48:04 PAGE 6   
 
  291   4                              //累计需量
  292   4                                      for(i=4;i>0;i--)
@@ -382,7 +382,7 @@ line level    source
  348   1      // 读取下电时间用下电时间比较???//
  349   1      //现在模式会导致时间前改后刷新所有记录
  350   1      //////////////////////////////////////////////////////////
-C51 COMPILER V9.01   API_BILL_RECORD                                                       02/16/2019 15:28:14 PAGE 7   
+C51 COMPILER V9.01   API_BILL_RECORD                                                       03/05/2019 13:48:04 PAGE 7   
 
  351   1      //    mem_read(&last_rec_dateTime[0], ADR_BLOCK26_BILL_VAR_DATETTIME_E2P, 6, MEM_E2P1); //读取上次结算时间
              -(年月日时分秒 )
@@ -446,7 +446,7 @@ line level    source
  408          **
  409          ** Parameters         :NONE          
  410          **
-C51 COMPILER V9.01   API_BILL_RECORD                                                       02/16/2019 15:28:14 PAGE 8   
+C51 COMPILER V9.01   API_BILL_RECORD                                                       03/05/2019 13:48:04 PAGE 8   
 
  411          ** Returned value   :NONE
  412          **
@@ -510,7 +510,7 @@ line level    source
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   2409    ----
    CONSTANT SIZE    =      8    ----
-C51 COMPILER V9.01   API_BILL_RECORD                                                       02/16/2019 15:28:14 PAGE 9   
+C51 COMPILER V9.01   API_BILL_RECORD                                                       03/05/2019 13:48:04 PAGE 9   
 
    XDATA SIZE       =    128     269
    PDATA SIZE       =   ----    ----

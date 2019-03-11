@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       02/14/2019 10:20:32 PAGE 1   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/05/2019 13:47:58 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE PROC_SYSTEM_TOU
@@ -62,7 +62,7 @@ line level    source
   50   1      
   51   1          //获取当前时间数据数据   //
   52   1          Get_RTCTime(&rtc_data_tmp);  
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       02/14/2019 10:20:32 PAGE 2   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/05/2019 13:47:58 PAGE 2   
 
   53   1          if(Lib_Check_RTC_data_FORM(&rtc_data_tmp.Week) ==FALSE)
   54   1          {
@@ -126,7 +126,7 @@ line level    source
  109   1              {
  110   2                      MD_delay = 0;
  111   2              }
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       02/14/2019 10:20:32 PAGE 3   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/05/2019 13:47:58 PAGE 3   
 
  112   1              if(Judge_MAGN_CHK_key() == TRUE && MAGN_delay == 0)
 *** WARNING C206 IN LINE 112 OF ..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C: 'Judge_MAGN_CHK_key': missing function-prototyp
@@ -190,7 +190,7 @@ line level    source
  169   1      //      NEW_MMD_DATA_UNIT st_mmd_unit;
  170   1      //      SUM_MMD_DATA_UNIT sum_st_mmd_unit;
  171   1              Proc_get_clock();
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       02/14/2019 10:20:32 PAGE 4   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/05/2019 13:47:58 PAGE 4   
 
  172   1      //      mem_db_check();
  173   1              CLRWDT();       // 清看门狗//
@@ -232,11 +232,10 @@ line level    source
  209   2              }
  210   1           //分钟级处理  //
  211   1      #if meter_type == D_1P2W
- 212   1      
- 213   1               //无功补偿
- 214   1               TimeEventProc();
-*** WARNING C206 IN LINE 214 OF ..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C: 'TimeEventProc': missing function-prototype
- 215   1      #endif
+              
+                       //无功补偿
+                       TimeEventProc();
+              #endif
  216   1          if(gs_CurDateTime.Second == 0)
  217   1          {
  218   2                      Check_EMU_AdjParam();
@@ -254,9 +253,9 @@ line level    source
  229   3                              CLRWDT();
  230   3                              api_handl_settle_per_minute();
  231   3                      }
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       02/14/2019 10:20:32 PAGE 5   
-
  232   2                      CLRWDT();       // 清看门狗//
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/05/2019 13:47:58 PAGE 5   
+
  233   2                      #endif
  234   2                      LoadPro_Rec();         
  235   2                      CLRWDT();       // 清看门狗//
@@ -318,14 +317,14 @@ line level    source
  291          
  292          /***************************************************************
  293          *    END
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       02/14/2019 10:20:32 PAGE 6   
-
  294          ****************************************************************/
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/05/2019 13:47:58 PAGE 6   
+
  295          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    607    ----
+   CODE SIZE        =    604    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     24       9
    PDATA SIZE       =   ----    ----
@@ -335,4 +334,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  4 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  3 WARNING(S),  0 ERROR(S)

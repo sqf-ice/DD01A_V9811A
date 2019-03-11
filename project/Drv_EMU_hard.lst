@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 1   
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          03/05/2019 13:47:59 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DRV_EMU_HARD
@@ -62,7 +62,7 @@ line level    source
   50              SetMeterCfgACK(INITGATEP,GATEP);//设置计量初始值
   51              SetMeterCfgACK(INITGATEQ,GATEQ);
   52              SetMeterCfgACK(0,0x10f0);
-C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 2   
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          03/05/2019 13:47:59 PAGE 2   
 
   53              SetMeterCfgACK(0,0x10f1);
   54              SetMeterCfgACK(0,0x10f2);
@@ -126,7 +126,7 @@ line level    source
  112          ** 函数名称: Close_Cf
  113          ** 函数描述:  关闭CF计量功能
  114          ** 输入参数: 无
-C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 3   
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          03/05/2019 13:47:59 PAGE 3   
 
  115          ** 输出参数: 
  116          ** 说明    : 
@@ -190,7 +190,7 @@ line level    source
  174          
  175          
  176          /*******************************************************************************************
-C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 4   
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          03/05/2019 13:47:59 PAGE 4   
 
  177          ** 函数名称: SetMeterCfgI
  178          ** 函数描述: 双口ram设置，使用ACK信号
@@ -254,7 +254,7 @@ line level    source
  236          *******************************************************************************************/
  237          INT8U SetMeterCfgACK(unsigned long u32PMdatal ,unsigned int addr)
  238          {
-C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 5   
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          03/05/2019 13:47:59 PAGE 5   
 
  239   1          unsigned char  index;
  240   1          index=0;
@@ -318,7 +318,7 @@ line level    source
  298   1          _nop_();
  299   1          index=0;
  300   1          while(XBYTE[ACK])
-C51 COMPILER V9.01   DRV_EMU_HARD                                                          02/14/2019 10:20:33 PAGE 6   
+C51 COMPILER V9.01   DRV_EMU_HARD                                                          03/05/2019 13:47:59 PAGE 6   
 
  301   1          {
  302   2              index++;

@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   DRV_KEY_IO                                                            02/14/2019 10:20:36 PAGE 1   
+C51 COMPILER V9.01   DRV_KEY_IO                                                            03/05/2019 13:48:01 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DRV_KEY_IO
@@ -62,7 +62,7 @@ line level    source
   50   1      }                  
   51          /*******************************************************************************************
   52          ** 函数名称: 
-C51 COMPILER V9.01   DRV_KEY_IO                                                            02/14/2019 10:20:36 PAGE 2   
+C51 COMPILER V9.01   DRV_KEY_IO                                                            03/05/2019 13:48:01 PAGE 2   
 
   53          ** 函数描述: 
   54          ** 输入参数: 
@@ -126,7 +126,7 @@ line level    source
  112          *******************************************************************************************/
  113          uint8 Judge_MAGN_CHK_key(void)
  114          {
-C51 COMPILER V9.01   DRV_KEY_IO                                                            02/14/2019 10:20:36 PAGE 3   
+C51 COMPILER V9.01   DRV_KEY_IO                                                            03/05/2019 13:48:01 PAGE 3   
 
  115   1              uint8 i;
  116   1      
@@ -191,7 +191,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
-C51 COMPILER V9.01   DRV_KEY_IO                                                            02/14/2019 10:20:36 PAGE 4   
+C51 COMPILER V9.01   DRV_KEY_IO                                                            03/05/2019 13:48:01 PAGE 4   
 
 
 C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

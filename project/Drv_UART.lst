@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 1   
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DRV_UART
@@ -62,7 +62,7 @@ line level    source
                       TL21=TH21=0xBC;  
               #endif
               #if(C_Fq == 50)
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 2   
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 2   
 
                       TL21=TH21=0xC7;  
               #endif
@@ -126,7 +126,7 @@ line level    source
                       TCON2 = 0xA2;           
               #if (C_Fq == 60)
                       TL21=TH21=0x9A;  
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 3   
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 3   
 
               #endif
               #if(C_Fq == 50)
@@ -190,7 +190,7 @@ line level    source
  174          ** 说明    : 
  175          *******************************************************************************************/
  176          void Set_Uart4_badu(uint16 rate)
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 4   
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 4   
 
  177          {
  178   1          TMOD4 = 0x20;                               // 8-bit counter with auto-reload
@@ -254,7 +254,7 @@ line level    source
  236   2              break;
  237   2      
  238   2              case BPS4800:
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 5   
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 5   
 
  239   2                      #if(FSYSCLK==FSYSCLK_3M2)
  240   2                              TCON4 = 0xA2;           //波特率加倍 //波特率发生器时钟源clk 作为时钟源//波特率发生器的启动
@@ -318,7 +318,7 @@ line level    source
  298          
  299          
  300          
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 6   
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 6   
 
  301          /*******************************************************************************************
  302          ** 函数名称: Dis_UART0_rx
@@ -382,7 +382,7 @@ line level    source
  360   1      }
  361          
  362          /*******************************************************************************************
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 7   
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 7   
 
  363          ** 函数名称: Dis_UART0_rx
  364          ** 功能描述: UART0串口接收禁止
@@ -446,7 +446,7 @@ line level    source
  422          ** 功能描述: UART0串口硬件初始化
  423          ** 入口参数: u16 badu：串口波特率，双字节16进制数据
  424          **           u16 bits_len: 通讯字节位数格式，8或7
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 8   
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 8   
 
  425          ** 出口参数: 无
  426          ** 说明    : 
@@ -510,7 +510,7 @@ line level    source
  484          ** 说明    : 
  485          *******************************************************************************************/
  486          void Hdl_UART_10ms_run(uint8 ch)
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 9   
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 9   
 
  487          {
  488   1          uint8 rx_len ;
@@ -574,7 +574,7 @@ line level    source
  546          /*******************************************************************************************
  547          ** 函数名称: Tx_UART_frist
  548          ** 功能描述: UART[X]通道发送首字节处理函数
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 10  
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 10  
 
  549          ** 入口参数: uint8 *p_buf: 发送数据通道的缓存区首地址
  550          **           uint8 len : 发送数据字节长度   
@@ -638,7 +638,7 @@ line level    source
  608   2             gs_uart_drv_var[CH_RF].buff_index = 0;
  609   2             gs_uart_drv_var[CH_RF].status = UART_STATUS_BUSY_TX_OVER;   
  610   2             gs_uart_drv_var[CH_RF].tx_len =0 ;
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 11  
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 11  
 
  611   2          }
  612   1      
@@ -702,7 +702,7 @@ line level    source
  669          
  670          
  671          
-C51 COMPILER V9.01   DRV_UART                                                              02/14/2019 10:20:38 PAGE 12  
+C51 COMPILER V9.01   DRV_UART                                                              03/05/2019 13:48:02 PAGE 12  
 
  672          void Uart4_Transmit(void)
  673          {
