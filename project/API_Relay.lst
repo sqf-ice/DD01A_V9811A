@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   API_RELAY                                                             03/11/2019 14:45:00 PAGE 1   
+C51 COMPILER V9.01   API_RELAY                                                             03/12/2019 09:56:17 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE API_RELAY
@@ -62,7 +62,7 @@ line level    source
   50          ** V01.01  MJ  2017-09-15
   51          ******************************************************************************/
   52          void Drv_relay_run_check(void)
-C51 COMPILER V9.01   API_RELAY                                                             03/11/2019 14:45:00 PAGE 2   
+C51 COMPILER V9.01   API_RELAY                                                             03/12/2019 09:56:17 PAGE 2   
 
   53          {
   54   1      //      if((gs_relay_manage_var.u8_CMD==CMD_RELAY_OFF)&&( gs_relay_manage_var.u8_STA !=CMD_RELAY_OFF )) 
@@ -126,7 +126,7 @@ line level    source
  110          **
  111          ** Note             :1 初始化电能表先合闸，是为了可靠性考虑，在继电器故障时可以通过上下电恢复
  112          **                  :2 注意，本函数只被上电初始化调用
-C51 COMPILER V9.01   API_RELAY                                                             03/11/2019 14:45:00 PAGE 3   
+C51 COMPILER V9.01   API_RELAY                                                             03/12/2019 09:56:17 PAGE 3   
 
  113          **----------------------------------------------------------------------------
  114          ** V01.01  MJ  2017-09-15
@@ -190,7 +190,7 @@ line level    source
  172   1                      {
  173   2                      //通讯合闸命令,强制系统合闸     //
  174   2                      gs_relay_manage_var.u8_CMD = CMD_RELAY_OFF;
-C51 COMPILER V9.01   API_RELAY                                                             03/11/2019 14:45:00 PAGE 4   
+C51 COMPILER V9.01   API_RELAY                                                             03/12/2019 09:56:17 PAGE 4   
 
  175   2                      gs_relay_manage_var.u8_STA = CMD_RELAY_ON;
  176   2                      gs_relay_manage_var.u8_tmr_opera = 0;

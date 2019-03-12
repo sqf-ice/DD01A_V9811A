@@ -51,6 +51,7 @@ extern void Proc_Initialize_systerm_reset(void);
 extern void Proc_judge_Power_down_process(void);
 extern void sys_err(void);
 extern void Proc_handle_when_systerm_reset(void);
+extern void Proc_display_Power_down_process(void);
 
 
 /***************************************************************

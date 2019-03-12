@@ -197,6 +197,7 @@ void Proc_sleep_when_reset(void)
 {
    uint8 volatile  check_cnt;
    uint8 volatile  check_cnt2;
+   RTC_TYPE rtc_data_tmp;
   
     check_cnt=0;
     check_cnt2 = 0;
@@ -269,21 +270,63 @@ void Proc_sleep_when_reset(void)
 
 
 #if(MCU_TYPE == MCU_V98XX)   //万工芯片 //
-    CLRWDT();     
-    api_Measure_ram_INIT();          //清除瞬时量 //
+//	CLRWDT();     
+//	api_Measure_ram_INIT();          //清除瞬时量 //
+//	api_init_current_energy_data_ram();//  初始化电量//
+//	//api_check_current_energy_data();		//  初始化电量//
+//	Init_LCD();
+//	api_handl_dis_sleep();
+//	Init_GPIO_sleep();
+//	SetExtRTC(0x01,0x02);// 小时唤醒
+//	//SetExtRTC(0x01,0x01);// 分钟唤醒//
+//	IOWK|=BIT0;
+//	Set_McuSleep();
+//	if((Systate&BIT0)==0x01)  //休眠以后人工上电全屏自检
+//	{   
+//		sys_err();	  //如果上电则休眠处理 //
+//	}
+
+	CLRWDT();     
+	api_Measure_ram_INIT();          //清除瞬时量 //
 	api_init_current_energy_data_ram();//  初始化电量//
-    //api_check_current_energy_data();		//  初始化电量//
-    Init_LCD();
+	//api_check_current_energy_data();		//  初始化电量//
+
+	Init_LCD();
 	api_handl_dis_sleep();
 	Init_GPIO_sleep();
-	SetExtRTC(0x01,0x02);// 小时唤醒
-    //SetExtRTC(0x01,0x01);// 分钟唤醒//
-	IOWK|=BIT0;
-  Set_McuSleep();
-	if((Systate&BIT0)==0x01)  //休眠以后人工上电全屏自检
-  {   
-     sys_err();	  //如果上电则休眠处理 //
-  }
+	//下翻按键	2019-01-18
+	P14FS = 0x00;
+	P1IE |= BIT4;//输入使能
+	while(1)
+	{
+		SetExtRTC(0x01,0x02);// 小时唤醒
+		//SetExtRTC(0x01,0x01);// 分钟唤醒//
+		IOWK|=BIT0;
+		Set_McuSleep();
+//		if((Systate&BIT0)==0x01)  //休眠以后人工上电全屏自检
+		CLRWDT();
+		Set_McuClock(FSYSCLK_3M2); 
+	
+		//获取当前时间数据数据   //
+	    Get_RTCTime(&rtc_data_tmp);
+		Lib_Copy_Str_TwoArry(&gs_CurDateTime.Week, &rtc_data_tmp.Week, 7);
+	
+		if((Systate&BIT0)==0x01)//休眠以后人工上电全屏自检  
+		{
+			Init_GPIO_run();
+	    	E2p_IIC_Initail();
+	    	E2p_Start_i2c();
+			////
+			mem_write(ADR_BLOCK_4Energy_L0_E2P, &energy_data_array[0].buf[0], 5*LEN_EC_UNIT,MEM_E2P1);
+			mem_write(ADR_BLOCK_4MMD_L0_E2P,&st_mmd_unit_array[0].buf[0],5*LEN_NEW_MMD_UNIT,MEM_E2P1);
+			mem_write(ADR_BLOCK_4MMD_sum_L0_E2P,&sum_st_mmd_unit_array[0].buf[0],5*LEN_SUM_MMD_UNIT,MEM_E2P1);		
+			/////
+			api_freeze_energy_pre_day();  
+			sys_err();	  //如果上电 //  
+		}
+		api_freeze_energy_Ram_pre_day();
+		Proc_display_Power_down_process();
+	}
 #endif
 }
 	

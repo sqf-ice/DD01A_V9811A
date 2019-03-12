@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 1   
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE API_LCD_DISPLAY
@@ -62,7 +62,7 @@ line level    source
   50          
   51          //  常量字符表定义 x  // D C B A - E G F 
   52          const INT8U code  NumSegD1_D6[DS_Chr_All_NUM] = 
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 2   
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 2   
 
   53          {       DS_Chr_0,DS_Chr_1,DS_Chr_2,
   54                  DS_Chr_3,DS_Chr_4,DS_Chr_5,
@@ -126,7 +126,7 @@ line level    source
  105          void api_init_display(void)
  106          {
  107   1          mem_read(&gs_dis_param.auto_sec, ADR_BLOCK21_DIS_PARAM_E2P, LEN_BLOCK21_DIS_PARAM_E2P, MEM_E2P1);    // 
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 3   
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 3   
 
              -    
  108   1          gs_dis_ctl_var.mode = DIS_MODE_RESET;
@@ -190,7 +190,7 @@ line level    source
  165          
  166          
  167          /*****************************************************************************
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 4   
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 4   
 
  168          ** Function name    :api_updata_LCDDisplay_per_second
  169          **
@@ -254,7 +254,7 @@ line level    source
  227   1      }
  228          
  229          
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 5   
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 5   
 
  230          /*****************************************************************************
  231          ** Function name    :api_updata_LCDDisplay_per_second
@@ -318,7 +318,7 @@ line level    source
  288   3                                      button_flag = 0;
  289   3                                      if(dis_num_char < 3)
  290   3                                      {
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 6   
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 6   
 
  291   4                                              dis_num_char = 2;
  292   4                                      }
@@ -382,7 +382,7 @@ line level    source
  350   2      
  351   2              default:
  352   2                  gs_dis_ctl_var.mode = DIS_MODE_NOMAL;
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 7   
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 7   
 
  353   2              break;
  354   2      
@@ -446,7 +446,7 @@ line level    source
  410   1      
  411   1      
  412   1              for( i = 0 ; i <=DIS_MAX_ITEM ; i++ )
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 8   
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 8   
 
  413   1              {
  414   2                      if( u8_dis_itm== LcdDisTab[i].DisID)
@@ -510,7 +510,7 @@ line level    source
  472   2                              
  473   2                      case CHAR_HZ:
  474   2                                      mem_read(&u32_tmp.B08[2],gs_LCDDISTAB_var.Addr, 2, u8_mem_type);                //获取当前数据 //
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 9   
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 9   
 
  475   2                                      Lib_word_bcd2(&buffer.B08[0],u32_tmp.W16[1]);              //  16进制转10进制// 
  476   2                                      gs_dis_pixel_var.dis_char_buff[0] |= CHAR_DATA_P9; 
@@ -574,7 +574,7 @@ line level    source
  534   2                              break;                  
  535   2      
  536   2                                              
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 10  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 10  
 
  537   2                      default:
  538   2                              mem_read(&buffer.B08[0],gs_LCDDISTAB_var.Addr, u8_len, u8_mem_type);            //获取当前数据 //
@@ -638,7 +638,7 @@ line level    source
  596   2              }
  597   1              else
  598   1              {       
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 11  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 11  
 
  599   2                      if(dis_num_char == 0)
  600   2                      {
@@ -702,7 +702,7 @@ line level    source
  654   3                              mem_read(&t, ADR_BLOCK_4MMD_sum_L0_E2P, 4, MEM_E2P1);
 *** WARNING C182 IN LINE 654 OF ..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C: pointer to different objects
  655   3                              Lib_long_bcd4(&buffer.B08[0],t.val.val_hex32);
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 12  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 12  
 
  656   3      //                      api_get_energy_LCD(&temp[0], gs_dis_param.ec_form,&buffer.B08[0]);
  657   3                              //debug////
@@ -766,7 +766,7 @@ line level    source
  711   3                              //buffer.B08[3]=0x56;
  712   3                              gs_dis_pixel_var.dis_data_buff[0] = NumSegD1_D6[(buffer.B08[0]&0x0F)] ;  
  713   3                              gs_dis_pixel_var.dis_data_buff[1] = NumSegD1_D6[(buffer.B08[1]&0xF0)>>4];
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 13  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 13  
 
  714   3                              gs_dis_pixel_var.dis_data_buff[2] = NumSegD1_D6[(buffer.B08[1]&0x0F)] ;  
  715   3                              gs_dis_pixel_var.dis_data_buff[3] = NumSegD1_D6[(buffer.B08[2]&0xF0)>>4]; 
@@ -830,7 +830,7 @@ line level    source
  771   2                      switch (gs_current_triff_var.triff_No)//显示费率
  772   2                      {
  773   3                              case 1:
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 14  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 14  
 
  774   3                                      gs_dis_pixel_var.dis_char_buff[1] |= CHAR_DATA_S1;
  775   3                                      break;
@@ -894,7 +894,7 @@ line level    source
  832   2                      case CHAR_KW:    // 功率显示 xx.x kw//
  833   2                          gs_dis_pixel_var.dis_char_buff[2] |= (CHAR_DATA_k+CHAR_DATA_W);  //kW
  834   2                              break;
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 15  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 15  
 
  835   2                      case CHAR_HZ:   // 频率显示 xx.x HZ//
  836   2                          gs_dis_pixel_var.dis_char_buff[2] |= CHAR_DATA_Hz;  //Hz
@@ -958,7 +958,7 @@ line level    source
  892   1              if(gs_dis_pixel_var.dis_char_buff[0] &CHAR_DATA_P3)     gs_dis_pixel_var.dis_buff[3] |= BIT7;
  893   1              if(gs_dis_pixel_var.dis_char_buff[0] &CHAR_DATA_P4P5)   {gs_dis_pixel_var.dis_buff[4] |= BIT7;gs_dis_pixe
              -l_var.dis_buff[9] |= BIT7;}
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 16  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 16  
 
  894   1              if(gs_dis_pixel_var.dis_char_buff[0] &CHAR_DATA_P6)     gs_dis_pixel_var.dis_buff[5] |= BIT7;
  895   1              if(gs_dis_pixel_var.dis_char_buff[0] &CHAR_DATA_P7)     gs_dis_pixel_var.dis_buff[6] |= BIT4;
@@ -1022,7 +1022,7 @@ line level    source
  951   1          Lib_Copy_Str_TwoArry(&ec_tmp.buf[0], temp, LEN_EC_UNIT);
  952   1              
  953   1          u32_result.u32 =0;
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 17  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 17  
 
  954   1      
  955   1              if(type==0x80)
@@ -1086,7 +1086,7 @@ line level    source
 1013   2                      Lib_long_bcd4(&BCD_temp.B08[0],ec_tmp.val.integ_hex32);
 1014   2                      u32_result.B08[0]= 0x00;
 1015   2                      u32_result.B08[1]= (((BCD_temp.B08[1]&0x0F)<<4)+((BCD_temp.B08[2]&0xF0)>>4));
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 18  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 18  
 
 1016   2                      u32_result.B08[2]= (((BCD_temp.B08[2]&0x0F)<<4)+((BCD_temp.B08[3]&0xF0)>>4));
 1017   2                      u32_result.B08[3]|= ((BCD_temp.B08[3]&0x0F)<<4);
@@ -1150,7 +1150,7 @@ line level    source
 1074          ** Returned value   :NONE
 1075          **
 1076          **----------------------------------------------------------------------------
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 19  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 19  
 
 1077          ** V01.01  MJ  2016-04-23
 1078          ******************************************************************************/
@@ -1214,7 +1214,7 @@ line level    source
 1136   2              break;
 1137   2          }
 1138   1       
-C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/11/2019 14:45:00 PAGE 20  
+C51 COMPILER V9.01   API_LCD_DISPLAY                                                       03/12/2019 09:56:17 PAGE 20  
 
 1139   1      }
 1140          

@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   LIB_MYMATH                                                            03/11/2019 14:44:56 PAGE 1   
+C51 COMPILER V9.01   LIB_MYMATH                                                            03/12/2019 09:56:12 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE LIB_MYMATH
@@ -62,7 +62,7 @@ line level    source
   50          
   51          //**********************************************************************
   52          // turn word data to BCD2 data
-C51 COMPILER V9.01   LIB_MYMATH                                                            03/11/2019 14:44:56 PAGE 2   
+C51 COMPILER V9.01   LIB_MYMATH                                                            03/12/2019 09:56:12 PAGE 2   
 
   53          //**********************************************************************
   54          void Lib_word_bcd2( INT8U *ptr, INT16U xx )
@@ -126,7 +126,7 @@ line level    source
  112          
  113          //**********************************************************************
  114          // turn BCD4 data to long data
-C51 COMPILER V9.01   LIB_MYMATH                                                            03/11/2019 14:44:56 PAGE 3   
+C51 COMPILER V9.01   LIB_MYMATH                                                            03/12/2019 09:56:12 PAGE 3   
 
  115          //**********************************************************************
  116          INT32U Lib_bcd4_long( INT8U* ptr )
@@ -190,7 +190,7 @@ line level    source
  172                                  INT16U key :  校验数据累计和的KEY                       
  173          Parameters:     
  174          Returns:                INT16U数据，= 数据累加和+KEY
-C51 COMPILER V9.01   LIB_MYMATH                                                            03/11/2019 14:44:56 PAGE 4   
+C51 COMPILER V9.01   LIB_MYMATH                                                            03/12/2019 09:56:12 PAGE 4   
 
  175          Others: 
  176          ****************************************************************/
@@ -254,7 +254,7 @@ line level    source
  234          /*********************************************************************
  235          原型：uint GetGmDay( INT8U* Addr )
  236          功能：日期转化为天数，
-C51 COMPILER V9.01   LIB_MYMATH                                                            03/11/2019 14:44:56 PAGE 5   
+C51 COMPILER V9.01   LIB_MYMATH                                                            03/12/2019 09:56:12 PAGE 5   
 
  237          备注：时间基准从00年1月1日算起
  238          *********************************************************************/
@@ -318,7 +318,7 @@ line level    source
  295          INT8U Lib_Check_RTC_data_FORM(INT8U* ClkData)
  296          {
  297   1          //WEEKDAY//[0]
-C51 COMPILER V9.01   LIB_MYMATH                                                            03/11/2019 14:44:56 PAGE 6   
+C51 COMPILER V9.01   LIB_MYMATH                                                            03/12/2019 09:56:12 PAGE 6   
 
  298   1          if(ClkData[0] >6) return FALSE;
  299   1              
@@ -382,7 +382,7 @@ line level    source
  356   3                   if(((*s1)&0x0f) != 0)  return(i);  
  357   3                     s1++;
  358   3                }
-C51 COMPILER V9.01   LIB_MYMATH                                                            03/11/2019 14:44:56 PAGE 7   
+C51 COMPILER V9.01   LIB_MYMATH                                                            03/12/2019 09:56:12 PAGE 7   
 
  359   2                  else
  360   2                  {
@@ -446,7 +446,7 @@ line level    source
  418   1          unsigned char i;
  419   1          INT8U *Ptr;
  420   1      
-C51 COMPILER V9.01   LIB_MYMATH                                                            03/11/2019 14:44:56 PAGE 8   
+C51 COMPILER V9.01   LIB_MYMATH                                                            03/12/2019 09:56:12 PAGE 8   
 
  421   1          Lenth >>= 1;
  422   1          for ( i=0; i<Lenth; i++ )
@@ -510,7 +510,7 @@ line level    source
  480   2              tmp ^= *(yourBuf+i);
  481   2          }
  482   1          return tmp;
-C51 COMPILER V9.01   LIB_MYMATH                                                            03/11/2019 14:44:56 PAGE 9   
+C51 COMPILER V9.01   LIB_MYMATH                                                            03/12/2019 09:56:12 PAGE 9   
 
  483   1      }
  484          //--------------------------------------------------------------------------------------------------------

@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   PROC_EXMEM                                                            03/11/2019 14:44:48 PAGE 1   
+C51 COMPILER V9.01   PROC_EXMEM                                                            03/12/2019 09:56:05 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE PROC_EXMEM
@@ -62,7 +62,7 @@ line level    source
   49              No_BLOCK84_DAY_TAB_E2P,    MEM_E2P1,    ADR_BLOCK84_DAY_TAB_E2P,    LEN_DayTab,
   50          #endif
   51              //BLOCK100~136 月结算数据区  //
-C51 COMPILER V9.01   PROC_EXMEM                                                            03/11/2019 14:44:48 PAGE 2   
+C51 COMPILER V9.01   PROC_EXMEM                                                            03/12/2019 09:56:05 PAGE 2   
 
   52          #if (BILL_MAX_NUM>0)
   53              No_BLOCK26_BILL_VAR_E2P,       MEM_E2P1,    ADR_BLOCK26_BILL_VAR_E2P,       LEN_BLOCK26_BILL_VAR_E2P,
@@ -126,7 +126,7 @@ line level    source
   99   1          return sum ;
  100   1      }
  101          
-C51 COMPILER V9.01   PROC_EXMEM                                                            03/11/2019 14:44:48 PAGE 3   
+C51 COMPILER V9.01   PROC_EXMEM                                                            03/12/2019 09:56:05 PAGE 3   
 
  102          
  103          /**********************************************************************
@@ -190,7 +190,7 @@ line level    source
  161   2                            src += size;
  162   2                            lenth -= size;
  163   2                 }
-C51 COMPILER V9.01   PROC_EXMEM                                                            03/11/2019 14:44:48 PAGE 4   
+C51 COMPILER V9.01   PROC_EXMEM                                                            03/12/2019 09:56:05 PAGE 4   
 
  164   1      
  165   1      }
@@ -254,7 +254,7 @@ line level    source
  222          **********************************************************************/
  223          void mem_write( INT16U dst,  INT8U *src, INT16U lenth, INT8U memType )
  224          {
-C51 COMPILER V9.01   PROC_EXMEM                                                            03/11/2019 14:44:48 PAGE 5   
+C51 COMPILER V9.01   PROC_EXMEM                                                            03/12/2019 09:56:05 PAGE 5   
 
  225   1      INT8U  *ptr_adr;
  226   1      
@@ -318,7 +318,7 @@ line level    source
  283   1          if(id_No<100) 
  284   1          {  
  285   2              mem_write(dst+E2PBAK_SIZE, src, len, memType);
-C51 COMPILER V9.01   PROC_EXMEM                                                            03/11/2019 14:44:48 PAGE 6   
+C51 COMPILER V9.01   PROC_EXMEM                                                            03/12/2019 09:56:05 PAGE 6   
 
  286   2              mem_write(adr_csck+E2PBAK_SIZE, &checkNum.B08[0], 2, MEM_E2P1);
  287   2          }
@@ -382,7 +382,7 @@ line level    source
              -/
  343   2              break;
  344   2      
-C51 COMPILER V9.01   PROC_EXMEM                                                            03/11/2019 14:44:48 PAGE 7   
+C51 COMPILER V9.01   PROC_EXMEM                                                            03/12/2019 09:56:05 PAGE 7   
 
  345   2              case No_BLOCK84_DAY_TAB_E2P:
  346   2                  mem_write(adrAry, (INT8U*)&default_triff_day_tab, lenth,  MEM_E2P1);//block-84 日时段表数据块 
@@ -446,7 +446,7 @@ line level    source
  403   3              }
  404   2                  
  405   2              // deal to checked  result  //
-C51 COMPILER V9.01   PROC_EXMEM                                                            03/11/2019 14:44:48 PAGE 8   
+C51 COMPILER V9.01   PROC_EXMEM                                                            03/12/2019 09:56:05 PAGE 8   
 
  406   2      //DEBUGE  //
  407   2      //staus=0X03;
@@ -510,7 +510,7 @@ line level    source
  465          //  Function:      mem_db_clr           
  466          //  Description:  将所有的备份数据备份区清零，用于初始化E2P数据
  467          //  Parameters:  char *dst : 目标数据区首地址
-C51 COMPILER V9.01   PROC_EXMEM                                                            03/11/2019 14:44:48 PAGE 9   
+C51 COMPILER V9.01   PROC_EXMEM                                                            03/12/2019 09:56:05 PAGE 9   
 
  468          //                     unsigned int src: 源数据区首地址，RAM区
  469          //                     int lenth  :  数据操作长度

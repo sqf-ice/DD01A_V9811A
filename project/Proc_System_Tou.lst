@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/11/2019 14:44:50 PAGE 1   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/12/2019 09:56:07 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE PROC_SYSTEM_TOU
@@ -62,7 +62,7 @@ line level    source
   50          ** V01.01  MJ  2016-04-23
   51          ******************************************************************************/
   52          void Proc_get_clock(void)
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/11/2019 14:44:50 PAGE 2   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/12/2019 09:56:07 PAGE 2   
 
   53          {
   54   1       RTC_TYPE rtc_data_tmp;
@@ -126,7 +126,7 @@ line level    source
  111   2                      button_delay = 1;
  112   2              //      api_updated_LCDDisplayItem_per_second();
  113   2              }
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/11/2019 14:44:50 PAGE 3   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/12/2019 09:56:07 PAGE 3   
 
  114   1              if(Judge_PG_DN_key() == FALSE)
  115   1              {
@@ -190,7 +190,7 @@ line level    source
  169          ** Function name    :Proc_handl_tou_10ms
  170          **
  171          ** Description         :10ms中断产生后的程序处理        
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/11/2019 14:44:50 PAGE 4   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/12/2019 09:56:07 PAGE 4   
 
  172          **
  173          ** Parameters         :NONE          
@@ -254,7 +254,7 @@ line level    source
  231   2              }
  232   1              if(MD_dis_delay == 0)//按键需量清零以后3秒全屏
  233   1              {
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/11/2019 14:44:50 PAGE 5   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/12/2019 09:56:07 PAGE 5   
 
  234   2                      // 显示项目每秒改变处理//        
  235   2              api_updated_LCDDisplayItem_per_second();    
@@ -318,7 +318,7 @@ line level    source
  291          //-------------------------------------------------------------------------------//
  292          //  Function:      void get_default_mem_data(INT8U index)     
  293          //  Description:  
-C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/11/2019 14:44:50 PAGE 6   
+C51 COMPILER V9.01   PROC_SYSTEM_TOU                                                       03/12/2019 09:56:07 PAGE 6   
 
  294          //  Parameters:   无  
  295          //  Returns:        无                          
