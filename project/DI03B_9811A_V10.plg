@@ -593,3 +593,1574 @@ linking...
 Program Size: data=19.6 xdata=2054 code=61600
 creating hex file from "DI03B_9811A_V10"...
 "DI03B_9811A_V10" - 0 Error(s), 66 Warning(s).
+Build target 'DI03B_9811A_V10'
+compiling main.c...
+compiling Proc_Data.c...
+compiling Proc_EXmem.c...
+..\C_SOURCE\S0_SYSTEM\PROC_EXMEM.C(205): warning C182: pointer to different objects
+..\C_SOURCE\S0_SYSTEM\PROC_EXMEM.C(230): warning C182: pointer to different objects
+compiling Proc_System_Check.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_CHECK.C(50): warning C206: 'api_clr_freeze_energy': missing function-prototype
+compiling Proc_System_Initialize.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C(318): warning C182: pointer to different objects
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C(370): warning C206: 'Judge_PG_DN_key': missing function-prototype
+compiling Proc_System_Interrupt.c...
+compiling Proc_System_Tou.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(98): error C202: 'FLASE': undefined identifier
+compiling Drv_E2P_24CXXX.c...
+compiling Drv_E2P_i2cSoft.c...
+compiling Drv_EMU_hard.c...
+compiling Lnk_EMU_Adj.c...
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(662): warning C280: 'adjust2_wcval': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(968): warning C280: 'offset': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(972): warning C280: 'temp': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(973): warning C280: 'HZ': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(1026): warning C280: 'u32_PMdataltempSII1': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(1091): warning C280: 'offset': unreferenced local variable
+compiling Lnk_EMU_handl.c...
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_HANDL.C(310): warning C280: 'TempValue': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_HANDL.C(487): warning C280: 'val2': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_HANDL.C(488): warning C280: 'TempValue': unreferenced local variable
+compiling Drv_ADC.c...
+compiling Drv_core.c...
+compiling Drv_GPIO.c...
+compiling Drv_KEY_IO.c...
+compiling Drv_LCD.c...
+compiling Drv_RTC.c...
+compiling Drv_TMR.c...
+compiling Drv_UART.c...
+compiling Lib_myMath.c...
+compiling Lib_mySpring.c...
+compiling Lib_myTimer.c...
+compiling Api_AdjErr.c...
+compiling Api_Bill_Record.c...
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(277): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(288): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(294): warning C214: 'Argument': conversion: pointer to non-pointer
+compiling Api_Demand.c...
+..\C_SOURCE\S3_APIPLAT\API_DEMAND.C(124): warning C214: 'Argument': conversion: pointer to non-pointer
+compiling Api_Energy.c...
+..\C_SOURCE\S3_APIPLAT\API_ENERGY.C(47): warning C280: 'u16_day_A': unreferenced local variable
+..\C_SOURCE\S3_APIPLAT\API_ENERGY.C(47): warning C280: 'u16_day_B': unreferenced local variable
+compiling Api_Event.c...
+compiling Api_LoadProfile.C...
+..\C_SOURCE\S3_APIPLAT\API_LOADPROFILE.C(33): warning C182: pointer to different objects
+compiling Api_Measure.c...
+compiling Api_Triff.c...
+compiling API_Relay.c...
+compiling Api_Lcd_Display.c...
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(627): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(654): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(680): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(705): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(731): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(824): warning C276: constant in condition expression
+compiling Api_User_Comm.c...
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(745): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(749): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(749): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(765): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(765): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(807): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(808): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1112): warning C206: 'api_clr_freeze_energy': missing function-prototype
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1267): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1296): warning C280: 'i': unreferenced local variable
+compiling IEC62056_21.c...
+Target not created
+Build target 'DI03B_9811A_V10'
+compiling Proc_System_Tou.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(108): warning C206: 'Judge_PG_DN_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(118): warning C206: 'Judge_MD_CLEAR_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(127): warning C206: 'Judge_MAGN_CHK_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(214): error C202: 'FLASE': undefined identifier
+Target not created
+Build target 'DI03B_9811A_V10'
+compiling Proc_System_Tou.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(108): warning C206: 'Judge_PG_DN_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(118): warning C206: 'Judge_MD_CLEAR_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(127): warning C206: 'Judge_MAGN_CHK_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(247): warning C206: 'TimeEventProc': missing function-prototype
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BC8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D31H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D3FH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D41H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A012H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A01FH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A030H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A03DH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B49BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B4A8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74D0H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74E3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 328CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33BDH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CBH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CDH
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 8FF4H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9002H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9004H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D2AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D38H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D3AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DDCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DEAH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DECH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B125H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B135H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B137H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C19H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C29H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C2BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7BF5H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C03H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C05H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B62H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B79H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B7CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E106H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E118H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E11EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E137H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E13EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E144H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E14EH
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAAAH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAADH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E5E8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E606H
+Program Size: data=19.6 xdata=2058 code=61715
+creating hex file from "DI03B_9811A_V10"...
+"DI03B_9811A_V10" - 0 Error(s), 70 Warning(s).
+Build target 'DI03B_9811A_V10'
+assembling STARTUP.A51...
+compiling main.c...
+compiling Proc_Data.c...
+compiling Proc_EXmem.c...
+..\C_SOURCE\S0_SYSTEM\PROC_EXMEM.C(205): warning C182: pointer to different objects
+..\C_SOURCE\S0_SYSTEM\PROC_EXMEM.C(230): warning C182: pointer to different objects
+compiling Proc_System_Check.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_CHECK.C(50): warning C206: 'api_clr_freeze_energy': missing function-prototype
+compiling Proc_System_Initialize.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C(318): warning C182: pointer to different objects
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C(370): warning C206: 'Judge_PG_DN_key': missing function-prototype
+compiling Proc_System_Interrupt.c...
+compiling Proc_System_Tou.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(108): warning C206: 'Judge_PG_DN_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(118): warning C206: 'Judge_MD_CLEAR_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(127): warning C206: 'Judge_MAGN_CHK_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(247): warning C206: 'TimeEventProc': missing function-prototype
+compiling Drv_E2P_24CXXX.c...
+compiling Drv_E2P_i2cSoft.c...
+compiling Drv_EMU_hard.c...
+compiling Lnk_EMU_Adj.c...
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(662): warning C280: 'adjust2_wcval': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(968): warning C280: 'offset': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(972): warning C280: 'temp': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(973): warning C280: 'HZ': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(1026): warning C280: 'u32_PMdataltempSII1': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(1091): warning C280: 'offset': unreferenced local variable
+compiling Lnk_EMU_handl.c...
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_HANDL.C(310): warning C280: 'TempValue': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_HANDL.C(487): warning C280: 'val2': unreferenced local variable
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_HANDL.C(488): warning C280: 'TempValue': unreferenced local variable
+compiling Drv_ADC.c...
+compiling Drv_core.c...
+compiling Drv_GPIO.c...
+compiling Drv_KEY_IO.c...
+compiling Drv_LCD.c...
+compiling Drv_RTC.c...
+compiling Drv_TMR.c...
+compiling Drv_UART.c...
+compiling Lib_myMath.c...
+compiling Lib_mySpring.c...
+compiling Lib_myTimer.c...
+compiling Api_AdjErr.c...
+compiling Api_Bill_Record.c...
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(277): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(288): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(294): warning C214: 'Argument': conversion: pointer to non-pointer
+compiling Api_Demand.c...
+..\C_SOURCE\S3_APIPLAT\API_DEMAND.C(124): warning C214: 'Argument': conversion: pointer to non-pointer
+compiling Api_Energy.c...
+..\C_SOURCE\S3_APIPLAT\API_ENERGY.C(47): warning C280: 'u16_day_A': unreferenced local variable
+..\C_SOURCE\S3_APIPLAT\API_ENERGY.C(47): warning C280: 'u16_day_B': unreferenced local variable
+compiling Api_Event.c...
+compiling Api_LoadProfile.C...
+..\C_SOURCE\S3_APIPLAT\API_LOADPROFILE.C(33): warning C182: pointer to different objects
+compiling Api_Measure.c...
+compiling Api_Triff.c...
+compiling API_Relay.c...
+compiling Api_Lcd_Display.c...
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(627): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(654): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(680): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(705): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(731): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(824): warning C276: constant in condition expression
+compiling Api_User_Comm.c...
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(745): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(749): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(749): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(765): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(765): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(807): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(808): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1112): warning C206: 'api_clr_freeze_energy': missing function-prototype
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1267): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1296): warning C280: 'i': unreferenced local variable
+compiling IEC62056_21.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BC8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D31H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D3FH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D41H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A012H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A01FH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A030H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A03DH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B49BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B4A8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74D0H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74E3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 328CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33BDH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CBH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CDH
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 8FF4H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9002H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9004H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D2AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D38H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D3AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DDCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DEAH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DECH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B125H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B135H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B137H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C19H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C29H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C2BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7BF5H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C03H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C05H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B62H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B79H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B7CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E106H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E118H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E11EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E137H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E13EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E144H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E14EH
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAAAH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAADH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E5E8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E606H
+Program Size: data=19.6 xdata=2058 code=61715
+creating hex file from "DI03B_9811A_V10"...
+"DI03B_9811A_V10" - 0 Error(s), 107 Warning(s).
+Build target 'DI03B_9811A_V10'
+assembling STARTUP.A51...
+compiling main.c...
+compiling Proc_Data.c...
+compiling Proc_EXmem.c...
+..\C_SOURCE\S0_SYSTEM\PROC_EXMEM.C(205): warning C182: pointer to different objects
+..\C_SOURCE\S0_SYSTEM\PROC_EXMEM.C(230): warning C182: pointer to different objects
+compiling Proc_System_Check.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_CHECK.C(50): warning C206: 'api_clr_freeze_energy': missing function-prototype
+compiling Proc_System_Initialize.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C(318): warning C182: pointer to different objects
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C(370): warning C206: 'Judge_PG_DN_key': missing function-prototype
+compiling Proc_System_Interrupt.c...
+compiling Proc_System_Tou.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(108): warning C206: 'Judge_PG_DN_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(118): warning C206: 'Judge_MD_CLEAR_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(127): warning C206: 'Judge_MAGN_CHK_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(247): warning C206: 'TimeEventProc': missing function-prototype
+compiling Drv_E2P_24CXXX.c...
+compiling Drv_E2P_i2cSoft.c...
+compiling Drv_EMU_hard.c...
+compiling Lnk_EMU_Adj.c...
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(1026): warning C280: 'u32_PMdataltempSII1': unreferenced local variable
+compiling Lnk_EMU_handl.c...
+compiling Drv_ADC.c...
+compiling Drv_core.c...
+compiling Drv_GPIO.c...
+compiling Drv_KEY_IO.c...
+compiling Drv_LCD.c...
+compiling Drv_RTC.c...
+compiling Drv_TMR.c...
+compiling Drv_UART.c...
+compiling Lib_myMath.c...
+compiling Lib_mySpring.c...
+compiling Lib_myTimer.c...
+compiling Api_AdjErr.c...
+compiling Api_Bill_Record.c...
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(277): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(288): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(294): warning C214: 'Argument': conversion: pointer to non-pointer
+compiling Api_Demand.c...
+..\C_SOURCE\S3_APIPLAT\API_DEMAND.C(124): warning C214: 'Argument': conversion: pointer to non-pointer
+compiling Api_Energy.c...
+compiling Api_Event.c...
+compiling Api_LoadProfile.C...
+..\C_SOURCE\S3_APIPLAT\API_LOADPROFILE.C(33): warning C182: pointer to different objects
+compiling Api_Measure.c...
+compiling Api_Triff.c...
+compiling API_Relay.c...
+compiling Api_Lcd_Display.c...
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(627): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(654): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(680): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(705): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(731): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(824): warning C276: constant in condition expression
+compiling Api_User_Comm.c...
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(745): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(749): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(749): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(765): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(765): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(807): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(808): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1112): warning C206: 'api_clr_freeze_energy': missing function-prototype
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1267): warning C182: pointer to different objects
+compiling IEC62056_21.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BC8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D31H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D3FH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D41H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A00BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A018H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A029H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A036H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B494H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B4A1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74D0H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74E3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 328CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33BDH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CBH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CDH
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 8FF4H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9002H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9004H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D2AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D38H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D3AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DDCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DEAH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DECH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B11EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B12EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B130H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C19H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C29H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C2BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7BF5H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C03H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C05H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B62H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B79H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B7CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E0FFH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E111H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E117H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E130H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E137H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E13DH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E147H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAA3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAA6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E5E1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E5FFH
+Program Size: data=19.6 xdata=2048 code=61708
+creating hex file from "DI03B_9811A_V10"...
+"DI03B_9811A_V10" - 0 Error(s), 96 Warning(s).
+Build target 'DI03B_9811A_V10'
+assembling STARTUP.A51...
+compiling main.c...
+compiling Proc_Data.c...
+compiling Proc_EXmem.c...
+..\C_SOURCE\S0_SYSTEM\PROC_EXMEM.C(205): warning C182: pointer to different objects
+..\C_SOURCE\S0_SYSTEM\PROC_EXMEM.C(230): warning C182: pointer to different objects
+compiling Proc_System_Check.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_CHECK.C(50): warning C206: 'api_clr_freeze_energy': missing function-prototype
+compiling Proc_System_Initialize.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C(318): warning C182: pointer to different objects
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_INITIALIZE.C(370): warning C206: 'Judge_PG_DN_key': missing function-prototype
+compiling Proc_System_Interrupt.c...
+compiling Proc_System_Tou.c...
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(108): warning C206: 'Judge_PG_DN_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(118): warning C206: 'Judge_MD_CLEAR_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(127): warning C206: 'Judge_MAGN_CHK_key': missing function-prototype
+..\C_SOURCE\S0_SYSTEM\PROC_SYSTEM_TOU.C(247): warning C206: 'TimeEventProc': missing function-prototype
+compiling Drv_E2P_24CXXX.c...
+compiling Drv_E2P_i2cSoft.c...
+compiling Drv_EMU_hard.c...
+compiling Lnk_EMU_Adj.c...
+..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C(1026): warning C280: 'u32_PMdataltempSII1': unreferenced local variable
+compiling Lnk_EMU_handl.c...
+compiling Drv_ADC.c...
+compiling Drv_core.c...
+compiling Drv_GPIO.c...
+compiling Drv_KEY_IO.c...
+compiling Drv_LCD.c...
+compiling Drv_RTC.c...
+compiling Drv_TMR.c...
+compiling Drv_UART.c...
+compiling Lib_myMath.c...
+compiling Lib_mySpring.c...
+compiling Lib_myTimer.c...
+compiling Api_AdjErr.c...
+compiling Api_Bill_Record.c...
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(277): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(288): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S3_APIPLAT\API_BILL_RECORD.C(294): warning C214: 'Argument': conversion: pointer to non-pointer
+compiling Api_Demand.c...
+..\C_SOURCE\S3_APIPLAT\API_DEMAND.C(124): warning C214: 'Argument': conversion: pointer to non-pointer
+compiling Api_Energy.c...
+compiling Api_Event.c...
+compiling Api_LoadProfile.C...
+..\C_SOURCE\S3_APIPLAT\API_LOADPROFILE.C(33): warning C182: pointer to different objects
+compiling Api_Measure.c...
+compiling Api_Triff.c...
+compiling API_Relay.c...
+compiling Api_Lcd_Display.c...
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(627): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(654): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(680): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(705): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(731): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_LCD_DISPLAY.C(824): warning C276: constant in condition expression
+compiling Api_User_Comm.c...
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(745): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(749): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(749): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(765): warning C182: pointer to different objects
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(765): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(807): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(808): warning C214: 'Argument': conversion: pointer to non-pointer
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1112): warning C206: 'api_clr_freeze_energy': missing function-prototype
+..\C_SOURCE\S4_APIUSER\API_USER_COMM.C(1267): warning C182: pointer to different objects
+compiling IEC62056_21.c...
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BC8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D31H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D3FH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D41H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A00BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A018H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A029H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A036H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B494H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B4A1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74D0H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74E3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 328CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33BDH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CBH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CDH
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 8FF4H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9002H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9004H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D2AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D38H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D3AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DDCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DEAH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DECH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B11EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B12EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B130H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C19H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C29H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C2BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7BF5H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C03H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C05H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B62H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B79H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B7CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E0FFH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E111H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E117H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E130H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E137H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E13DH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E147H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAA3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAA6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E5E1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E5FFH
+Program Size: data=19.6 xdata=2048 code=61708
+creating hex file from "DI03B_9811A_V10"...
+"DI03B_9811A_V10" - 0 Error(s), 96 Warning(s).
+Build target 'DI03B_9811A_V10'
+linking...
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BC8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8BD8H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D31H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D3FH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 8D41H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A00BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A018H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A029H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: A036H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B494H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: B4A1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  ?_WRITERACCOON?BYTE
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74D0H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _WRITERACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 74E3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 328CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 329CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33BDH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CBH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_Adj.obj (LNK_EMU_ADJ)
+    ADDRESS: 33CDH
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 8FF4H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9002H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 9004H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D2AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D38H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6D3AH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DDCH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DEAH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 6DECH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B11EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B12EH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: B130H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C19H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C29H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 3C2BH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _READRACCOON
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7BF5H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C03H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Lnk_EMU_handl.obj (LNK_EMU_HANDL)
+    ADDRESS: 7C05H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B62H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _SX1276_TXPACKET
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B79H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: 7B7CH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E0FFH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E111H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E117H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E130H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E137H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E13DH
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  GS_RACCTRL
+    MODULE:  .\Drv_UART.obj (DRV_UART)
+    ADDRESS: E147H
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L1: UNRESOLVED EXTERNAL SYMBOL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  SX127X_INIT
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAA3H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  RX_MODE
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: DAA6H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  _LSD_RF_RXPACKET
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E5E1H
+*** WARNING L2: REFERENCE MADE TO UNRESOLVED EXTERNAL
+    SYMBOL:  G_LORACONFIG
+    MODULE:  .\Api_User_Comm.obj (API_USER_COMM)
+    ADDRESS: E5FFH
+Program Size: data=19.6 xdata=2048 code=61708
+creating hex file from "DI03B_9811A_V10"...
+"DI03B_9811A_V10" - 0 Error(s), 66 Warning(s).

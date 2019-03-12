@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 1   
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE LNK_EMU_ADJ
@@ -62,7 +62,7 @@ line level    source
   49          const  ST_Adjust_CONST  code   cst_adj_const = 
   50          {
   51              C_Un*10,        //uint32 U_ref;       //参比电压值，量纲0.1V  // 
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 2   
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 2   
 
   52              C_Ib*1000,     //uint32 I_ref;       //参比电流值，量纲0.001A  //     
   53              INITGATEP,     //uint32 GATEP;       // 计量门限值 //
@@ -126,7 +126,7 @@ line level    source
  108          /*********************************************************************************************************
  109          ** 函数名称: Save_EMU_AdjParam
  110          ** 功能描述: EMU相关参数修改后的保存更新处理
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 3   
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 3   
 
  111          ** 入口参数: 无
  112          ** 出口参数: 无
@@ -190,7 +190,7 @@ line level    source
  168   2              {
  169   3                  regval.u32 = tmp_const_tab.val;
  170   3                  SetMeterCfgACK(regval.u32,tmp_const_tab.emuAdr);
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 4   
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 4   
 
  171   3              }  
  172   2          }
@@ -254,7 +254,7 @@ line level    source
  230   3                 // val=ReadMeterParaACK(DATAIQ);  // RegIAP 全波功率瞬时值
  231   3                 if(ReadRaccoon(RegIAP,1,BPhy)==TRUE)   //RegAAP 2017-1-12 ZWK   // 最大 200ms读取等待    //  理论时间7
              -6ms
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 5   
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 5   
 
  232   3                 {
  233   4                      memcpy((uint8*)TempValue.B08,gs_RacCtrl.ucBuf+3,4); //有功秒平均功率
@@ -318,7 +318,7 @@ line level    source
  291   3                 if(ReadRaccoon(RegARTI,1,BPhy)==TRUE)     // 最大 200ms读取等待    //  理论时间15ms
  292   3                 {
  293   4                      memcpy((uint8*)TempValue.B08,gs_RacCtrl.ucBuf+3,4); //有功秒平均功率
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 6   
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 6   
 
  294   4                      Lib_Rev_Copy_Arry(&TempValue.B08[0],4);// 低字节在前  倒置//
  295   4                     val = TempValue.u32;
@@ -382,7 +382,7 @@ line level    source
  353   1              f_s32_tmp2 = f_s32_tmp1* 0x80000000;
  354   1              
  355   1              f_s32_tmp3 = floor(f_s32_tmp2);     // 向下取整 //
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 7   
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 7   
 
  356   1              s32_tmp0 = (INT32S)f_s32_tmp3;  
  357   1              return (s32_tmp0);
@@ -446,7 +446,7 @@ line level    source
  414          void SoftAdjust_IB_Process(uint32 jzval,uint8 channel)
  415          {
  416   1         uint32 val;
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 8   
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 8   
 
  417   1         uint32 adjust_wcval;
  418   1      
@@ -510,7 +510,7 @@ line level    source
  475   1      
  476   1          CLRWDT(); 
  477   1          if(channel==EMU_CH_L)
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 9   
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 9   
 
  478   1          {
  479   2              gs_adj_emu_param.watt2os=val;      
@@ -574,7 +574,7 @@ line level    source
  536   2               {
  537   3                val = (val*1.1f);
  538   3                val =(val<<8);
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 10  
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 10  
 
  539   3                val&=(~0x00040000);//  取消符号位
  540   3               }
@@ -638,7 +638,7 @@ line level    source
  595   1          //计算公式更换,雷文斌，2011年7月14日
  596   1          int16 Error;                    
  597   1          uint16 Stemp0remd,Stemp2remd;  
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 11  
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 11  
 
  598   1          int32 Stemp0,Stemp1,Stemp2,Stemp3;//
  599   1          uint32 Result;
@@ -702,12 +702,12 @@ line level    source
  656   1         uint32 tmpval1=0;     
  657   1         uint32 jzwcval;
  658   1         uint8 ajust1_type; // A路校表步骤
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 12  
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 12  
 
  659   1          uint8 ajust2_type;// B路校表步骤
  660   1          uint32 cmp_val[4];//  校表点功率阈值
  661   1         uint32 adjust1_wcval;  // A 路校表功率
- 662   1         uint32 adjust2_wcval;  // B路校表功率
+ 662   1      //   uint32 adjust2_wcval;  // B路校表功率
  663   1         ST_U32_U08 TempValue;
  664   1      
  665   1          if(EA==0)  return;
@@ -766,7 +766,7 @@ line level    source
  718   1              {
  719   1                  ajust2_type=HARD_EADJ_STEP7_N_5IB_100L;//5%IB 1.0 ch1;   
  720   1              }
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 13  
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 13  
 
  721   1              else
  722   1              {
@@ -830,7 +830,7 @@ line level    source
  780   1          //  HARD_EADJ_STEP2_L_100IB_50L   L回路100%Ib, 0.5L 校准//
  781   1          if(ajust1_type==HARD_EADJ_STEP2_L_100IB_50L)
  782   1          {                            
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 14  
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 14  
 
  783   2              jzwcval=jzwcval/2;
  784   2              SoftAdjust_Phase_Process(jzwcval,EMU_CH_L);  
@@ -894,7 +894,7 @@ line level    source
  841   3                 if(ReadRaccoon(RegARTU,1,BPhy)==TRUE)    // 修改为读秒平均值  // 最大 200ms读取等待    //  理论时间76m
              -s   RegWARTU
  842   3                 {
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 15  
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 15  
 
  843   4                      memcpy((uint8*)TempValue.B08,gs_RacCtrl.ucBuf+3,4); //有功秒平均功率
  844   4                      Lib_Rev_Copy_Arry(&TempValue.B08[0],4);// 低字节在前  倒置//
@@ -953,15 +953,13 @@ line level    source
  897   1          gs_emu_adj_var.adj_flg =0;   // =0X0 标识目前退出校表状态 //        
  898   1      
  899   1      }
-*** WARNING C280 IN LINE 662 OF ..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C: 'adjust2_wcval': unreferenced local var
-             -iable
  900          //////////////以下为新增软件校准步骤 yang 2017-12-26/////////////////
  901          //-------------------------------------------------------------------------------//
  902          //  Function:      Measure_Electric_Parameter_Per_Sec(void)      
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 16  
-
  903          //  Description: 较表增益计算Gain//
  904          //  Parameters:   无  
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 16  
+
  905          //  Returns:        无                          
  906          //  Others:   xxx.xxV   xx.xxx A  xxxx.x W     
  907          //-------------------------------------------------------------------------------//
@@ -1022,17 +1020,17 @@ line level    source
  962          // 功能:   通讯中调用的校准功率能量比差的函数（1路和2路自动判断）
  963          // 输入： POWER，格式0.1W,16进制
  964          // 中间量：u32PMdatal，为比差校准的参数结果
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 17  
-
  965          //***************************************************************************
  966          void Calibration_Power(float f_err_data)
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 17  
+
  967          {
- 968   1               INT8U  offset;
+ 968   1      //       INT8U  offset;
  969   1               INT32U u32_tmp;
  970   1               INT32U u32_PMdataltemp;
  971   1      
- 972   1               static uint32 temp=0;
- 973   1               uint16 HZ;
+ 972   1      //       static uint32 temp=0;
+ 973   1      //       uint16 HZ;
  974   1              CLRWDT();
  975   1      
  976   1          if(f_err_data>0)
@@ -1075,9 +1073,6 @@ line level    source
 1013   1      
 1014   1      #endif
 1015   1      }
-*** WARNING C280 IN LINE 968 OF ..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C: 'offset': unreferenced local variable
-*** WARNING C280 IN LINE 972 OF ..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C: 'temp': unreferenced local variable
-*** WARNING C280 IN LINE 973 OF ..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C: 'HZ': unreferenced local variable
 1016          
 1017          
 1018          //***************************************************************************
@@ -1086,13 +1081,13 @@ line level    source
 1021          //        Voltage, 格式0.01V,16进制
 1022          // 中间量：u32PMdatal，为比差校准的参数结果
 1023          //***************************************************************************
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 18  
-
 1024          void  Calibration_Current(INT32U Current,INT32U Voltage)
 1025          {
 1026   1               INT32U u32_tmp,u32_PMdataltemp,u32_PMdataltempSII1;
 1027   1        
 1028   1              if(comm_data.di1_di0.u32 == 0x0000FEB0)    // DI03B  IA作为N回路  //0x0000FEB3 <-> 0x0000FEB0
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 18  
+
 1029   1              {
 1030   2                      // 电流校准 //
 1031   2                  u32_tmp = ReadMeterParaACK(RMSI1);
@@ -1150,16 +1145,16 @@ line level    source
              -cal variable
 1082          
 1083          //***************************************************************************
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 19  
-
 1084          // 功能:   功率能量角差校准（1路和2路自动判断）
 1085          // 输入： POWER，格式0.1W,16进制
 1086          // 中间量：u32PMdatal，为角差校准的参数结果
 1087          //***************************************************************************
 1088          void Calibration_Angular(float f_err_data)
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 19  
+
 1089          {
 1090   1              INT32U u32_tmp,u32_PMdataltemp;
-1091   1              INT8U  offset;
+1091   1      //      INT8U  offset;
 1092   1              union Union_DWordDef    PHCCTRL1_adj_val;       // I1 角差调节寄存器 实际为8位  //
 1093   1              union Union_DWordDef    PHCCTRL2_adj_val;       // I2 角差调节寄存器 实际为8位  //
 1094   1          if(f_err_data>0)
@@ -1214,19 +1209,18 @@ line level    source
 1143   2                      Lib_long_bcd4(&PHCCTRL1_adj_val.BYTE[0],u32_PMdataltemp);
 1144   2                      SetMeterCfgACK(PHCCTRL1_adj_val.BYTE[3],PHCCtrl1);  //设置I1角差值
 1145   2              }
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 20  
-
 1146   1              else if(comm_data.di1_di0.u32 == 0x0000FEB4)   // DI03B  IB作为主回路  //       
 1147   1              {
 1148   2                      gs_adj_emu_param.p2cal=u32_PMdataltemp;
 1149   2                      Lib_long_bcd4(&PHCCTRL2_adj_val.BYTE[0],u32_PMdataltemp);
 1150   2                      SetMeterCfgACK(PHCCTRL2_adj_val.BYTE[3],PHCCtrl2);  //设置I2角差值
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 20  
+
 1151   2      
 1152   2              }
 1153   1      #endif
 1154   1      
 1155   1      }
-*** WARNING C280 IN LINE 1091 OF ..\C_SOURCE\S1_HARDDRV\V9811A_EMU\LNK_EMU_ADJ.C: 'offset': unreferenced local variable
 1156          
 1157          //***************************************************************************
 1158          // 功能:   小信号补偿（）
@@ -1278,14 +1272,14 @@ line level    source
 1204   2                      s32_tmp = (INT32S)((float)f_err_data *s32_PMdataltemp/100.0);
 1205   2      
 1206   2                      offset=0;    //2回路的人工干预补偿值  //
-C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 10:40:50 PAGE 21  
-
 1207   2                      if(s32_tmp>0) u32_PMdataltemp = s32_tmp;
 1208   2                      else    u32_PMdataltemp =       0xFFFFFFFF +s32_tmp;
 1209   2                      
 1210   2      
 1211   2                      SetMeterCfgACK(u32_PMdataltemp,PARAPC);
 1212   2              gs_adj_emu_param.watt1os=u32_PMdataltemp;      
+C51 COMPILER V9.01   LNK_EMU_ADJ                                                           03/11/2019 14:44:52 PAGE 21  
+
 1213   2              }
 1214   1      
 1215   1              else if(comm_data.di1_di0.u32 == 0x0000FEB5)    // DI03B  IB作为主回路  //
@@ -1321,7 +1315,7 @@ line level    source
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =   7807    ----
    CONSTANT SIZE    =    185    ----
-   XDATA SIZE       =     68     301
+   XDATA SIZE       =     64     293
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
@@ -1329,4 +1323,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  6 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

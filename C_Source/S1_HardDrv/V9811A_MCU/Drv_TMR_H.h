@@ -23,8 +23,10 @@
 ****************************************************************/
 #if (C_Fq == 60)
 #define     T0_10MS_CNT        0x6665     //10ms定时   3M2主频  //
+#define		T1_80MS_CNT		   0x4724     //80ms定时   3M2主频  //
 #else
 #define     T0_10MS_CNT        0X7FFF     //10ms定时 3M2主频  //
+#define		T1_80MS_CNT		   0x555E     //80ms定时   3M2主频  //
 #endif
 /***************************************************************
 *    2     数据结构声明     
@@ -44,7 +46,7 @@
 extern void Start_Timer(void);
 extern void Stop_Timer(void);
 extern void Init_Timer(void);
-
+extern void Start_Timer1(void);
 
 
 /***************************************************************

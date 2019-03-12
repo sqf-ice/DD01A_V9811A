@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 10:40:53 PAGE 1   
+C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 14:44:55 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DRV_RTC
@@ -62,7 +62,7 @@ line level    source
   50          ** 说明    : 
   51          *******************************************************************************************/
   52          void Init_RTC(void)
-C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 10:40:53 PAGE 2   
+C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 14:44:55 PAGE 2   
 
   53          {
   54   1              EIE|=BIT1;
@@ -126,7 +126,7 @@ line level    source
  111   1          pTime->Minute = RTCMiC;              // minu  // 
  112   1          pTime->Second = RTCSC;              // sec  // 
  113   1      }
-C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 10:40:53 PAGE 3   
+C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 14:44:55 PAGE 3   
 
  114                  
  115          /*******************************************************************************************
@@ -190,7 +190,7 @@ line level    source
  173          ** 函数描述: 校正RTC频率
  174          ** 输入参数: int16 offset
  175          ** 输出参数: 无 
-C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 10:40:53 PAGE 4   
+C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 14:44:55 PAGE 4   
 
  176          ** 说明    : 温补函数中调用
  177          *******************************************************************************************/
@@ -254,7 +254,7 @@ line level    source
  235   1      
  236   1      
  237   1          return;
-C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 10:40:53 PAGE 5   
+C51 COMPILER V9.01   DRV_RTC                                                               03/11/2019 14:44:55 PAGE 5   
 
  238   1      
  239   1          Bpara = 0x061A80;

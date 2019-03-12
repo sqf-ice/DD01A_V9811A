@@ -1293,7 +1293,7 @@ void process_iec62056_21 (INT8U ch)
 
  INT8U tmp_8u_01[16];
  INT8U tmp_8u_02[32];
- int i;
+// int i;
 // INT16U  u16_badu;
 
     

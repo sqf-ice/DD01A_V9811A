@@ -659,7 +659,7 @@ void Hardware_AdjustDiv_Sub(void)
     uint8 ajust2_type;// B路校表步骤
     uint32 cmp_val[4];//  校表点功率阈值
    uint32 adjust1_wcval;  // A 路校表功率
-   uint32 adjust2_wcval;  // B路校表功率
+//   uint32 adjust2_wcval;  // B路校表功率
    ST_U32_U08 TempValue;
 
     if(EA==0)  return;
@@ -965,12 +965,12 @@ void Measure_Electric_Err_Gain(INT8U *sptr)
 //***************************************************************************
 void Calibration_Power(float f_err_data)
 {
-	 INT8U  offset;
+//	 INT8U  offset;
 	 INT32U u32_tmp;
 	 INT32U u32_PMdataltemp;
 
-	 static uint32 temp=0;
-	 uint16 HZ;
+//	 static uint32 temp=0;
+//	 uint16 HZ;
    	CLRWDT();
 
     if(f_err_data>0)
@@ -1088,7 +1088,7 @@ void  Calibration_Current(INT32U Current,INT32U Voltage)
 void Calibration_Angular(float f_err_data)
 {
 	INT32U u32_tmp,u32_PMdataltemp;
-	INT8U  offset;
+//	INT8U  offset;
 	union Union_DWordDef    PHCCTRL1_adj_val;	// I1 角差调节寄存器 实际为8位  //
 	union Union_DWordDef	PHCCTRL2_adj_val;	// I2 角差调节寄存器 实际为8位  //
     if(f_err_data>0)

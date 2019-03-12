@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 1   
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE API_TRIFF
@@ -62,7 +62,7 @@ line level    source
               #if (MAX_NUM_HOLIDAY_TAB>5)
                  0,      0,      0,   //  holiday6 data 空
               #endif
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 2   
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 2   
 
               
               #if (MAX_NUM_HOLIDAY_TAB>6)
@@ -126,7 +126,7 @@ line level    source
               #endif
               
               #if (MAX_NUM_HOLIDAY_TAB>21)
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 3   
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 3   
 
                   0,      0,      0,   //  holiday22 data 空
               #endif
@@ -190,7 +190,7 @@ line level    source
  174              0,      0,      0,   //  season-tab3 data   空
  175          #endif
  176          
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 4   
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 4   
 
  177          #if (MAX_YEAR_TAB_CHG>3)
  178              0,      0,      0,   //  season-tab4 data   空
@@ -254,7 +254,7 @@ line level    source
                   1,  1,  1,  1,  1,  1,  1,    // week-tab17 data   周日~周6  日时段表1//
               #endif
  238          
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 5   
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 5   
 
  239          #if (MAX_INDEX_WEEKDAY_TAB>7)
                   1,  1,  1,  1,  1,  1,  1,    // week-tab8 data   周日~周6  日时段表1//
@@ -318,7 +318,7 @@ line level    source
  298              #endif
  299          
  300              #if (MAX_DAY_TRIFF_CHG>3)
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 6   
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 6   
 
  301              0,      0,      0,   //  day-tab2-chg4 data  0时0分费率1  //
  302              #endif
@@ -382,7 +382,7 @@ line level    source
                   0,      0,      0,   //  day-tab3-chg9  data  0时0分费率1  //
                   #endif
  362              #if (MAX_DAY_TRIFF_CHG>9)
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 7   
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 7   
 
                   0,      0,      0,   //  day-tab3-chg10  data  0时0分费率1  //
                   #endif
@@ -446,7 +446,7 @@ line level    source
                   0,      0,      0,  //  day-tab5-chg5  data  0时0分费率1  //
                   #endif
               
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 8   
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 8   
 
                   #if (MAX_DAY_TRIFF_CHG>5)
                   0,      0,      0,   //  day-tab5-chg6  data  0时0分费率1  //
@@ -510,7 +510,7 @@ line level    source
  484          #if (MAX_INDEX_DAY_TAB>6)
                   //日时段表7  //
                   0,      0,      1,   //  day-tab7-chg1  data  0时0分费率1  //
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 9   
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 9   
 
                   #if (MAX_DAY_TRIFF_CHG>1)
                   0,      0,      0,   //  day-tab7-chg2  data  0时0分费率1  //
@@ -574,7 +574,7 @@ line level    source
                   #if (MAX_DAY_TRIFF_CHG>6)
                   0,      0,      0,   //  day-tab8-chg7  data  0时0分费率1  //
                   #endif
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 10  
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 10  
 
               
                   #if (MAX_DAY_TRIFF_CHG>7)
@@ -638,7 +638,7 @@ line level    source
               
                   //获取节假日日时段表号  //
                   result =0xff;
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 11  
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 11  
 
                   for(i=0;i<table_ok_len;i++)
                   {
@@ -702,7 +702,7 @@ line level    source
  659   1          
  660   1          if((table_ok_len==0) ||(table_ok_len>MAX_YEAR_TAB_CHG))
  661   1          {
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 12  
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 12  
 
  662   2              return (0XFF) ;   // 代表读取失败 //
  663   2          }
@@ -766,7 +766,7 @@ line level    source
  719          
  720          
  721          
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 13  
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 13  
 
  722          /*****************************************************************************
  723          ** Function name    :api_get_dayTab_No
@@ -830,7 +830,7 @@ line level    source
  780   2              result=0xff;       
  781   2          }
  782   1         
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 14  
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 14  
 
  783   1          return (result) ; 
  784   1          
@@ -894,7 +894,7 @@ line level    source
  840   2              if(Lib_BCDCHK(&s_dayTab_data.tab[i].hour_BCD8,2) ==FALSE )  break;    // 时钟数据非法 //
  841   2              if(s_dayTab_data.tab[i].hour_BCD8>0X23 )    break;    // 小时数据判断 //
  842   2              if(s_dayTab_data.tab[i].minute_BCD8>0X59 )    break;    // 分钟数据判断 //
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 15  
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 15  
 
  843   2      
  844   2      
@@ -958,7 +958,7 @@ line level    source
  902   1      
  903   1          // 先判断节假日  //
  904   1      #if (MAX_NUM_HOLIDAY_TAB >0)
-C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 10:40:58 PAGE 16  
+C51 COMPILER V9.01   API_TRIFF                                                             03/11/2019 14:45:00 PAGE 16  
 
                   u8_temp = api_get_holidayTab_No();
               #else

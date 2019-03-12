@@ -44,7 +44,7 @@ void api_init_current_energy_data_ram(void)
 //	uint8 Bill_Data;
 	uint8 i;
 	ST_U16_U08 u16_month_A,u16_month_B;
-	ST_U16_U08 u16_day_A,u16_day_B;
+//	ST_U16_U08 u16_day_A,u16_day_B;
 	uint8 last_rec_dateTime[6];//最近一次冻结时间
 	uint8 max_dateTime;
 ////////

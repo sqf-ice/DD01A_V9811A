@@ -30,6 +30,10 @@ uint8 MAGN_flag = 0;
 uint8 MAGN_delay = 0;
 uint8 MD_dis_delay = 0;
 INT8U Bill_Data;
+uint8 KEY_READ_FLAG = 0;
+uint8 KEY_READ_DELAY = 0;
+uint8 IsModeTest = FALSE;
+uint8 TestDelay = 0;
 
 
 
@@ -91,6 +95,16 @@ void Proc_init_tou_var(void)
 }
 void api_handl_button_pre_10ms(void)
 {
+	if(Judge_ERR_COVER_key() == FALSE && KEY_READ_FLAG == 0)
+	{
+		KEY_READ_FLAG = 1;
+		KEY_READ_DELAY = 3;		 //长按3秒进入test模式
+	}
+	if(Judge_ERR_COVER_key() == TRUE)
+	{
+		KEY_READ_FLAG = 0;
+		KEY_READ_DELAY = 0;
+	}
 	if(Judge_PG_DN_key() == TRUE && button_delay == 0)
 	{
 		button_flag = 1;
@@ -196,6 +210,24 @@ void Proc_handl_tou_1s(void)
 		//LED灯状态刷新//
 		api_updated_LED_per_second();
 		api_measure_VBAT_pre_min();   
+	}
+	if(Judge_ERR_COVER_key() == FALSE)
+	{
+		if(KEY_READ_DELAY > 0)
+		{
+			KEY_READ_DELAY--;	
+		}else{
+			IsModeTest = TRUE;
+			TestDelay = 600;
+			//液晶显示test模式  code
+		}
+	}else{
+		if(TestDelay > 0)
+		{
+			TestDelay --;
+		}else{
+			IsModeTest = FALSE;
+		}
 	}
 	if(MD_dis_delay == 0)//按键需量清零以后3秒全屏
 	{

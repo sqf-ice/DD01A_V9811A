@@ -68,6 +68,10 @@ extern uint8 MD_flag;
 extern uint8 MAGN_flag;
 extern uint8 MD_dis_delay;
 extern INT8U Bill_Data;
+extern uint8 KEY_READ_FLAG;
+extern uint8 KEY_READ_DELAY;
+extern uint8 IsModeTest ;
+extern uint8 TestDelay ;
 
 /***************************************************************
 *    5     其他内容，例如伪指令等       

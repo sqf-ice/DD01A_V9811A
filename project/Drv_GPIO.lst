@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   DRV_GPIO                                                              03/11/2019 10:40:52 PAGE 1   
+C51 COMPILER V9.01   DRV_GPIO                                                              03/11/2019 14:44:53 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DRV_GPIO
@@ -62,7 +62,7 @@ line level    source
   50   1              // 磁检测按键
   51   1              P13FS = 0x00;
   52   1              P1IE |= BIT3;//输入使能
-C51 COMPILER V9.01   DRV_GPIO                                                              03/11/2019 10:40:52 PAGE 2   
+C51 COMPILER V9.01   DRV_GPIO                                                              03/11/2019 14:44:53 PAGE 2   
 
   53   1              //需量清零
   54   1              P9FC &= (~BIT1);

@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 10:40:56 PAGE 1   
+C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 14:44:57 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE API_ADJERR
@@ -62,7 +62,7 @@ line level    source
   50          //        Initlize_Auto_Err_Adj_Var();
   51          //        return;
   52          //    }
-C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 10:40:56 PAGE 2   
+C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 14:44:57 PAGE 2   
 
   53          
   54          //    if(gs_auto_err_adj_var.u8_flg == FLG_HAD_ERR_ADJ)   return;
@@ -126,7 +126,7 @@ line level    source
  112          //  Others:         
  113          //-------------------------------------------------------------------------------//
  114          //void  Initlize_Auto_Err_Adj_Var(void)
-C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 10:40:56 PAGE 3   
+C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 14:44:57 PAGE 3   
 
  115          //{
  116          //      gs_auto_err_adj_var.u8_flg = 0;
@@ -190,7 +190,7 @@ line level    source
  174          //    else if(adjust_wcval>cmp_val[3])
  175          //    {
  176          //        ajust_type=HARD_EADJ_STEP3_L_5IB_100L;//5%IB 1.0 ch0;   
-C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 10:40:56 PAGE 4   
+C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 14:44:57 PAGE 4   
 
  177          //    }
  178          
@@ -254,7 +254,7 @@ line level    source
  236          
  237          //        // L回路电流有效值增益校准 //         
  238          //        tmpval=0;
-C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 10:40:56 PAGE 5   
+C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 14:44:57 PAGE 5   
 
  239          //        for(i=0;i<8;i++)
  240          //        {
@@ -318,7 +318,7 @@ line level    source
  298          //        Save_EMU_AdjParam();
  299          //        Check_EMU_AdjParam();
  300          //        CLRWDT();
-C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 10:40:56 PAGE 6   
+C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 14:44:57 PAGE 6   
 
  301          //        api_chg_LCDDisplay_adj_item(DIS_ADJ_CH2_0);   // 液晶显示 //
  302          //    }
@@ -382,7 +382,7 @@ line level    source
  360          //}
  361          
  362          
-C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 10:40:56 PAGE 7   
+C51 COMPILER V9.01   API_ADJERR                                                            03/11/2019 14:44:57 PAGE 7   
 
  363          /*--------------------------------------------------------------*/
  364          //end of file

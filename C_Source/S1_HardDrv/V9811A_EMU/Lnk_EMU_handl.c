@@ -307,7 +307,7 @@ uint32 Lnk_get_EMU_current(uint8 ch)
 {
    uint32 val,tmpval;
    fp32   f32_tmp;
-   ST_U32_U08 TempValue;
+//   ST_U32_U08 TempValue;
 
     if(ch==WIRE_L1) 
     {
@@ -484,8 +484,8 @@ void lnk_CAL_EMU_constSum_per_second(void)
 {
 	ST_U32_U08 sumval0;
 	ST_U32_U08 val1;
-	ST_U32_U08 val2;
-	ST_U32_U08 TempValue;
+//	ST_U32_U08 val2;
+//	ST_U32_U08 TempValue;
 
 	//gs_emu_run_var.net_flg &= (~REV_TT_ACPOWER);
 
