@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   PROC_DATA                                                             03/12/2019 09:56:05 PAGE 1   
+C51 COMPILER V9.01   PROC_DATA                                                             03/12/2019 13:46:19 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE PROC_DATA
@@ -46,13 +46,13 @@ line level    source
   34          #if(meter_type == D_1P3W)
               const SYS_PARM code sys_parm={
                     0x00,METER_CONST_10WH_BCD,0x00,        //电表有功常数//
-                    'D','D','0','1','A','-','V','3','0','.','0','3',   //软件版本号  //
+                    'D','D','0','1','A','-','V','3','0','.','0','4',   //软件版本号  //  样机修订第二版
               };
               #endif
   40          #if(meter_type == D_1P2W)
   41          const SYS_PARM code sys_parm={
   42                0x00,METER_CONST_10WH_BCD,0x00,        //电表有功常数//
-  43                'D','D','0','1','A','-','V','2','0','.','0','3',   //软件版本号  //
+  43                'D','D','0','1','A','-','V','2','0','.','0','4',   //软件版本号  //
   44          };
   45          #endif
   46          /*********************************************************************************************************
@@ -62,7 +62,7 @@ line level    source
   50          {
   51              30,30,       //  MD_PARAM                                md_param;
   52          #if (BILL_MAX_NUM>0)
-C51 COMPILER V9.01   PROC_DATA                                                             03/12/2019 09:56:05 PAGE 2   
+C51 COMPILER V9.01   PROC_DATA                                                             03/12/2019 13:46:19 PAGE 2   
 
   53              0x26,0x00,        //BILL_MONTH_SETTLED_PARAM     bill_ms_param; 
   54              0x20, //为不结算
@@ -126,7 +126,7 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
-C51 COMPILER V9.01   PROC_DATA                                                             03/12/2019 09:56:05 PAGE 3   
+C51 COMPILER V9.01   PROC_DATA                                                             03/12/2019 13:46:19 PAGE 3   
 
 END OF MODULE INFORMATION.
 

@@ -143,25 +143,24 @@ void mem_to_mem( INT16U dst, INT16U src, INT16U lenth, INT8U mode )
 {
 	INT8U	tmp_Buffer[E2P_PAGE];
 	INT8U		size;
-
-		  while( lenth > 0 )
-	   {
-		      if( lenth > E2P_PAGE )
-		      {
-		          size = E2P_PAGE;
-		      }
-		      else
-		      {
-		          size = lenth;
-		      }
-		      mem_read(&tmp_Buffer[0], src, size, (mode>>4)&0x0F );
-			CLRWDT();
-		      mem_write( dst, &tmp_Buffer[0], size, mode&0x0F  );
-		      dst += size;
-		      src += size;
-		      lenth -= size;
-	   }
-
+	
+	while( lenth > 0 )
+	{
+		if( lenth > E2P_PAGE )
+		{
+			size = E2P_PAGE;
+		}
+		else
+		{
+			size = lenth;
+		}
+		mem_read(&tmp_Buffer[0], src, size, (mode>>4)&0x0F );
+		CLRWDT();
+		mem_write( dst, &tmp_Buffer[0], size, mode&0x0F  );
+		dst += size;
+		src += size;
+		lenth -= size;
+	}
 }
 
 
@@ -177,18 +176,18 @@ INT8U size;
 
 	   while( lenth > 0 )
 	   {
-		      if( lenth > E2P_PAGE )
-		      {
-		          size = E2P_PAGE;
-		      }
-		      else
-		      {
-		          size = lenth;
-		      }
-		      mem_write( dst, &tmp_Buffer[0], size, memType );
+			if( lenth > E2P_PAGE )
+			{
+				size = E2P_PAGE;
+			}
+			else
+			{
+				size = lenth;
+			}
+			mem_write( dst, &tmp_Buffer[0], size, memType );
 			CLRWDT();
-		      dst += size;
-		      lenth -= size;
+			dst += size;
+			lenth -= size;
 	   }
 }
 
