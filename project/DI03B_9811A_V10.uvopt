@@ -247,10 +247,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>16</ColumnNumber>
+      <ColumnNumber>46</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>61</TopLine>
-      <CurrentLine>78</CurrentLine>
+      <TopLine>58</TopLine>
+      <CurrentLine>74</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S0_System\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -674,10 +674,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>5</ColumnNumber>
+      <ColumnNumber>8</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>37</TopLine>
-      <CurrentLine>37</CurrentLine>
+      <TopLine>46</TopLine>
+      <CurrentLine>69</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S3_ApiPlat\Api_Measure.c</PathWithFileName>
       <FilenameWithoutPath>Api_Measure.c</FilenameWithoutPath>
@@ -2346,7 +2346,7 @@
     <ActiveMDIGroup>0</ActiveMDIGroup>
     <MDIGroup>
       <Size>100</Size>
-      <ActiveTab>2</ActiveTab>
+      <ActiveTab>5</ActiveTab>
       <Documents>
         <Doc>
           <Name>..\C_Source\S0_System\Proc_System_Initialize.c</Name>
@@ -2362,9 +2362,9 @@
         </Doc>
         <Doc>
           <Name>..\C_Source\S0_System\main.c</Name>
-          <ColumnNumber>16</ColumnNumber>
-          <TopLine>61</TopLine>
-          <CurrentLine>78</CurrentLine>
+          <ColumnNumber>46</ColumnNumber>
+          <TopLine>58</TopLine>
+          <CurrentLine>74</CurrentLine>
         </Doc>
         <Doc>
           <Name>..\C_Source\S0_System\Proc_Data.c</Name>
@@ -2380,9 +2380,9 @@
         </Doc>
         <Doc>
           <Name>..\C_Source\S3_ApiPlat\Api_Measure.c</Name>
-          <ColumnNumber>5</ColumnNumber>
-          <TopLine>37</TopLine>
-          <CurrentLine>37</CurrentLine>
+          <ColumnNumber>8</ColumnNumber>
+          <TopLine>46</TopLine>
+          <CurrentLine>69</CurrentLine>
         </Doc>
         <Doc>
           <Name>..\C_Source\S3_ApiPlat\Api_Energy.c</Name>
