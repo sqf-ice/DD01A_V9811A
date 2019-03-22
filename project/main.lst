@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   MAIN                                                                  03/12/2019 13:46:19 PAGE 1   
+C51 COMPILER V9.01   MAIN                                                                  03/20/2019 16:59:16 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
@@ -61,13 +61,13 @@ line level    source
   49   4                      }
   50   3                              // 上电状态下的电源管理处理  // 
   51   3                              Proc_judge_Power_down_process();          
-  52   3                      if(gs_sys_run.back_fg&BIT1_BACK_FG_RTC)
-C51 COMPILER V9.01   MAIN                                                                  03/12/2019 13:46:19 PAGE 2   
+  52   3                      if(gs_sys_run.back_fg&BIT1_BACK_FG_RTC)                            
+C51 COMPILER V9.01   MAIN                                                                  03/20/2019 16:59:16 PAGE 2   
 
   53   3                      {
   54   4                          gs_sys_run.back_fg &= ~BIT1_BACK_FG_RTC;
   55   4                          Proc_handl_tou_1s();
-  56   4                      }
+  56   4                      }                                                                                                                
   57   3                              if(button_flag == 1||MAGN_flag == 1)
   58   3                              {
   59   4                                      api_updated_LCDDisplayItem_per_second();

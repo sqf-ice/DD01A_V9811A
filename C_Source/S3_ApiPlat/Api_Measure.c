@@ -55,10 +55,10 @@ void api_Measure_ram_INIT(void)
 void api_measure_deal_pre_second(void)
 {
  uint32 u32_UI, u32_P, u32_PF;
-     CLRWDT();   // 清看门狗//
-
-    //获取计量通道、能量数据赋值、//
-     lnk_CAL_EMU_constSum_per_second();
+	CLRWDT();   // 清看门狗//
+	
+	//获取计量通道、能量数据赋值、//
+	lnk_CAL_EMU_constSum_per_second();
 
     //电压获取  //
     gs_measure_var_data.gs_really[PHASE_TT].dw_u_val.u32= Lnk_get_EMU_voltage(WIRE_L1);
@@ -104,19 +104,19 @@ void api_measure_VBAT_pre_min(void)
 {
     gs_measure_var_data.w_bat_v.u16= (Samlpe_BatAdc());
   
-      if( gs_measure_var_data.w_bat_v.u16<= 280 ) 
-     	{
-          gs_measure_var_data.w_bat_v.u16= (Samlpe_BatAdc());
-          if( gs_measure_var_data.w_bat_v.u16<= 280 )  
-		 {
-		 gs_measure_status_judge_var.u8_status |=VBAT_LOW;
+	if( gs_measure_var_data.w_bat_v.u16<= 280 ) 
+	{
+		gs_measure_var_data.w_bat_v.u16= (Samlpe_BatAdc());
+		if( gs_measure_var_data.w_bat_v.u16<= 280 )  
+		{
+			gs_measure_status_judge_var.u8_status |=VBAT_LOW;
 		
-          	}
-     	}
-      else
-      	{
-         gs_measure_status_judge_var.u8_status &= (~VBAT_LOW);
-       }	
+		}
+	}
+	else
+	{
+		gs_measure_status_judge_var.u8_status &= (~VBAT_LOW);
+	}	
 }
 
 

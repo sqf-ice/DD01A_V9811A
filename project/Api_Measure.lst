@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   API_MEASURE                                                           03/12/2019 09:56:16 PAGE 1   
+C51 COMPILER V9.01   API_MEASURE                                                           03/20/2019 16:59:17 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE API_MEASURE
@@ -62,17 +62,17 @@ line level    source
   50          ** Returned value   :NONE
   51          **
   52          **----------------------------------------------------------------------------
-C51 COMPILER V9.01   API_MEASURE                                                           03/12/2019 09:56:16 PAGE 2   
+C51 COMPILER V9.01   API_MEASURE                                                           03/20/2019 16:59:17 PAGE 2   
 
   53          ** V01.01  MJ  2016-04-23
   54          ******************************************************************************/
   55          void api_measure_deal_pre_second(void)
   56          {
   57   1       uint32 u32_UI, u32_P, u32_PF;
-  58   1           CLRWDT();   // 清看门狗//
-  59   1      
-  60   1          //获取计量通道、能量数据赋值、//
-  61   1           lnk_CAL_EMU_constSum_per_second();
+  58   1              CLRWDT();   // 清看门狗//
+  59   1              
+  60   1              //获取计量通道、能量数据赋值、//
+  61   1              lnk_CAL_EMU_constSum_per_second();
   62   1      
   63   1          //电压获取  //
   64   1          gs_measure_var_data.gs_really[PHASE_TT].dw_u_val.u32= Lnk_get_EMU_voltage(WIRE_L1);
@@ -119,21 +119,21 @@ line level    source
  104          {
  105   1          gs_measure_var_data.w_bat_v.u16= (Samlpe_BatAdc());
  106   1        
- 107   1            if( gs_measure_var_data.w_bat_v.u16<= 280 ) 
+ 107   1              if( gs_measure_var_data.w_bat_v.u16<= 280 ) 
  108   1              {
- 109   2                gs_measure_var_data.w_bat_v.u16= (Samlpe_BatAdc());
- 110   2                if( gs_measure_var_data.w_bat_v.u16<= 280 )  
- 111   2                       {
- 112   3                       gs_measure_status_judge_var.u8_status |=VBAT_LOW;
+ 109   2                      gs_measure_var_data.w_bat_v.u16= (Samlpe_BatAdc());
+ 110   2                      if( gs_measure_var_data.w_bat_v.u16<= 280 )  
+ 111   2                      {
+ 112   3                              gs_measure_status_judge_var.u8_status |=VBAT_LOW;
  113   3                      
-C51 COMPILER V9.01   API_MEASURE                                                           03/12/2019 09:56:16 PAGE 3   
+C51 COMPILER V9.01   API_MEASURE                                                           03/20/2019 16:59:17 PAGE 3   
 
  114   3                      }
  115   2              }
- 116   1            else
+ 116   1              else
  117   1              {
- 118   2               gs_measure_status_judge_var.u8_status &= (~VBAT_LOW);
- 119   2             }        
+ 118   2                      gs_measure_status_judge_var.u8_status &= (~VBAT_LOW);
+ 119   2              }       
  120   1      }
  121          
  122          

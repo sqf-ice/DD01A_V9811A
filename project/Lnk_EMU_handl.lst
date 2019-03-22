@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 1   
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE LNK_EMU_HANDL
@@ -62,7 +62,7 @@ line level    source
                       CtrlADC6=0;         //关闭所有AD采样 //  
                       PMG=1;              //关闭计量时钟  //
                       return;
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 2   
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 2   
 
                   }
               
@@ -126,7 +126,7 @@ line level    source
               
                   // step8// 
                   SetMeterCfgACK(0x57,PMCtrl1);//BIT7= 0  测试位确保为0  ; BIT6=1 使能角差校正  //
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 3   
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 3   
 
                                                 //BIT5= 0  IA--I1,IB--I2 ; BIT4=1 使能PM数字信号处理  //
                                                 //BIT3= 0  屏蔽M通道数字信号输入; BIT2=1 使能I2数字信号输入使能  //
@@ -190,7 +190,7 @@ line level    source
  168   1              SetMeterCfgACK(0x00,PMCtrl1);   // 关闭计量通道，并停止功率/有效值计算  //
  169   1              // step2  //
  170   1              CtrlADC5=0x80;   
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 4   
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 4   
 
  171   1              CtrlADC6=0;   
  172   1              if(u8_mode==NORMAL_MODE)
@@ -254,7 +254,7 @@ line level    source
  228   1              SetMeterCfgACK(0x00,CFCtrl);           //以E2正反绝对值累加能量为依据产生CF2  以E1正相能量为依据产生CF  //
  229   1      
  230   1               // step11// 
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 5   
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 5   
 
  231   1              SetMeterCfgACK(0x00,DATACP);//清常数功率寄存器 //
  232   1              P9OE&=(~(BIT5));//打开CF2 IO输出//
@@ -318,7 +318,7 @@ line level    source
  290   2          }
  291   1      
  292   1      
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 6   
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 6   
 
  293   1          if( tmpval <50)   tmpval =0;
  294   1      
@@ -382,7 +382,7 @@ line level    source
  352   1         uint32 val,val2,tmpval;
  353   1         fp32   f32_tmp;
  354   1         ST_U32_U08 TempValue;
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 7   
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 7   
 
  355   1      
  356   1          if(ch==PHASE_TT) 
@@ -446,7 +446,7 @@ line level    source
  414   1          else
  415   1          {
  416   2              if(ch==WIRE_L1) f32_tmp = cst_adj_const.Kim_Prms*val;
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 8   
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 8   
 
  417   2              if(ch==WIRE_L2) f32_tmp = cst_adj_const.Kim_Prms*val;
  418   2              tmpval = (uint32)f32_tmp;               
@@ -510,7 +510,7 @@ line level    source
  476          /*******************************************************************************************
  477          ** 函数名称: Lnk_CAL_EMU_constSum
  478          ** 函数描述: 常量计量每秒更新数据
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 9   
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 9   
 
  479          ** 输入参数: 
  480          ** 输出参数: 
@@ -574,7 +574,7 @@ line level    source
  538   1      //      sumval0.u32=REF_START_Pn;
  539   1              sumval0.u32=val1.u32;
  540   1              if(val1.u32<REF_START_Pn) 
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 10  
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 10  
 
  541   1              {
  542   2                      sumval0.u32=0;
@@ -614,64 +614,64 @@ line level    source
  576          *******************************************************************************************/
  577          void Lnk_get_EMU_ractive_const(void)
  578          {
- 579   1         ST_U32_U08 Temp_paraqc;
- 580   1         ST_U32_U08 val1,sumval1;
- 581   1         ST_U32_U08 val2,sumval2;
- 582   1         ST_U32_U08 TempValue;
- 583   1         float err_ec;
- 584   1      
- 585   1         val1.u32 = 0;
- 586   1         Temp_paraqc.u32 = 0;
- 587   1         val2.u32 = 0;
- 588   1            //读取A路无功
- 589   1                val1.u32=ReadMeterParaACK(DATAIQ);        
- 590   1                // 读取二次补偿寄存器
- 591   1                Temp_paraqc.u32=ReadMeterParaACK(PARAQC);
- 592   1                
- 593   1            //B路功率以及电压电流获取获取9260F  //
- 594   1            if(ReadRaccoon(RegAAQ,1,BPhy)==TRUE)     // 最大 200ms读取等待    //  理论时间76ms  RegIAP
- 595   1            {
- 596   2              memcpy((uint8*)TempValue.B08,gs_RacCtrl.ucBuf+3,4); //有功秒平均功率
- 597   2              Lib_Rev_Copy_Arry(&TempValue.B08[0],4);// 低字节在前  倒置//'
- 598   2              val2.u32= TempValue.u32*1.669f; //0.01%精度
- 599   2            }
- 600   1                else 
- 601   1                {
- 602   2                  gs_sys_run.font_fg |= BIT4_FONT_FG_EnyBottom;
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 11  
+ 579   1              ST_U32_U08 Temp_paraqc;
+ 580   1              ST_U32_U08 val1,sumval1;
+ 581   1              ST_U32_U08 val2,sumval2;
+ 582   1              ST_U32_U08 TempValue;
+ 583   1              float err_ec;
+ 584   1              
+ 585   1              val1.u32 = 0;
+ 586   1              Temp_paraqc.u32 = 0;
+ 587   1              val2.u32 = 0;
+ 588   1              //读取A路无功
+ 589   1              val1.u32=ReadMeterParaACK(DATAIQ);          
+ 590   1              // 读取二次补偿寄存器
+ 591   1              Temp_paraqc.u32=ReadMeterParaACK(PARAQC);
+ 592   1              
+ 593   1              //B路功率以及电压电流获取获取9260F  //
+ 594   1              if(ReadRaccoon(RegAAQ,1,BPhy)==TRUE)     // 最大 200ms读取等待    //  理论时间76ms  RegIAP
+ 595   1              {
+ 596   2                      memcpy((uint8*)TempValue.B08,gs_RacCtrl.ucBuf+3,4); //有功秒平均功率
+ 597   2                      Lib_Rev_Copy_Arry(&TempValue.B08[0],4);// 低字节在前  倒置//'
+ 598   2                      val2.u32= TempValue.u32*1.669f; //0.01%精度
+ 599   2              }
+ 600   1              else 
+ 601   1              {
+ 602   2                      gs_sys_run.font_fg |= BIT4_FONT_FG_EnyBottom;
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 11  
 
  603   2                      return;
- 604   2                }
+ 604   2              }
  605   1      
- 606   1            if((sumval1.u32 <= REF_START_Pn)||(sumval1.u32 >= REF_START_REV_Pn))// 无功启动
- 607   1            {
- 608   2             sumval1.u32 =0; 
- 609   2            }
- 610   1      
- 611   1            if((sumval2.u32 <= REF_START_Pn)||(sumval2.u32 >= REF_START_REV_Pn))// 无功启动
- 612   1            {
- 613   2             sumval2.u32 =0; 
- 614   2            }
+ 606   1              if((sumval1.u32 <= REF_START_Pn)||(sumval1.u32 >= REF_START_REV_Pn))// 无功启动
+ 607   1              {
+ 608   2                      sumval1.u32 =0; 
+ 609   2              }
+ 610   1              
+ 611   1              if((sumval2.u32 <= REF_START_Pn)||(sumval2.u32 >= REF_START_REV_Pn))// 无功启动
+ 612   1              {
+ 613   2                      sumval2.u32 =0; 
+ 614   2              }
  615   1      
  616   1      
- 617   1            //提取合相以及分相方向//
- 618   1            if(val1.u32>=0x80000000)
- 619   1            {
- 620   2      //       gs_emu_run_var.net_flg |= REV_TT_RACPOWER; // 合相反向
- 621   2                }
- 622   1                else
- 623   1                {
- 624   2       //      gs_emu_run_var.net_flg &= (~REV_TT_RACPOWER); // 合相反向
- 625   2                }
+ 617   1              //提取合相以及分相方向//
+ 618   1              if(val1.u32>=0x80000000)
+ 619   1              {
+ 620   2              //       gs_emu_run_var.net_flg |= REV_TT_RACPOWER; // 合相反向
+ 621   2              }
+ 622   1              else
+ 623   1              {
+ 624   2              //      gs_emu_run_var.net_flg &= (~REV_TT_RACPOWER); // 合相反向
+ 625   2              }
  626   1      
- 627   1            if(val2.u32>=0x80000000)
- 628   1            {
- 629   2      //              gs_emu_run_var.net_flg |= REV_N_RACPOWER; // B路反向 //
- 630   2                }
- 631   1                else
- 632   1                {
- 633   2      //              gs_emu_run_var.net_flg &= (~REV_N_RACPOWER); // B路正向//
- 634   2                }
+ 627   1              if(val2.u32>=0x80000000)
+ 628   1              {
+ 629   2              //              gs_emu_run_var.net_flg |= REV_N_RACPOWER; // B路反向 //
+ 630   2              }
+ 631   1              else
+ 632   1              {
+ 633   2              //              gs_emu_run_var.net_flg &= (~REV_N_RACPOWER); // B路正向//
+ 634   2              }
  635   1      
  636   1                
  637   1                //根据合相以及B路大小，判断A路方向//
@@ -702,7 +702,7 @@ line level    source
  662   1      //                       }
  663   1      //                 }
  664   1      //        }
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 12  
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 12  
 
  665   1      //              else  //A路反
  666   1      //              {
@@ -766,7 +766,7 @@ line level    source
  723   4      //                           gs_emu_run_var.net_flg|REV_L_RACPOWER;   //A符号
  724   4                                   TempValue.u32 = val2.u32 - val1.u32 ;   //A路功率值
  725   4                                       if(gs_sys_globaL_var.Rac_energy[0]==0x55) //代数和
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 13  
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 13  
 
  726   4                                       {
  727   5                                         val2.u32=~val2.u32+1;  // 取反丢入
@@ -830,7 +830,7 @@ line level    source
  785   1                  //有效值获取//
  786   1                      if(val2.u32>0x80000000)
  787   1                      {
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 14  
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 14  
 
  788   2                    val2.u32=~val2.u32+1;  // 取反丢入
  789   2                      }
@@ -843,10 +843,10 @@ line level    source
  796   1                      {
  797   2                    TempValue.u32=~TempValue.u32+1;  // 取反丢入
  798   2                      }               
- 799   1                   gs_measure_var_data.gs_really[PHASE_TT].dw_q_val.u32 = cst_adj_const.Kim_Prms2*val1.u32;
- 800   1                   gs_measure_var_data.gs_really[WIRE_L1].dw_q_val.u32 = cst_adj_const.Kim_Prms2*TempValue.u32;
- 801   1                   gs_measure_var_data.gs_really[WIRE_L2].dw_q_val.u32 = cst_adj_const.Kim_Prms2*val2.u32;
- 802   1                   gs_measure_var_data.gs_really[WIRE_L3].dw_q_val.u32 = 0;
+ 799   1                      gs_measure_var_data.gs_really[PHASE_TT].dw_q_val.u32 = cst_adj_const.Kim_Prms2*val1.u32;
+ 800   1                      gs_measure_var_data.gs_really[WIRE_L1].dw_q_val.u32 = cst_adj_const.Kim_Prms2*TempValue.u32;
+ 801   1                      gs_measure_var_data.gs_really[WIRE_L2].dw_q_val.u32 = cst_adj_const.Kim_Prms2*val2.u32;
+ 802   1                      gs_measure_var_data.gs_really[WIRE_L3].dw_q_val.u32 = 0;
  803   1      
  804   1      }
  805          
@@ -894,7 +894,7 @@ line level    source
  847   3                      val=~val+1; 
  848   3      //              gs_emu_run_var.net_flg |= REV_N_RACPOWER;
  849   3             }
-C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/12/2019 09:56:09 PAGE 15  
+C51 COMPILER V9.01   LNK_EMU_HANDL                                                         03/20/2019 16:59:17 PAGE 15  
 
  850   2      
  851   2                 val = val*1.669;//2.175f/1.2f*1.086f;

@@ -576,62 +576,62 @@ void lnk_CAL_EMU_constSum_per_second(void)
 *******************************************************************************************/
 void Lnk_get_EMU_ractive_const(void)
 {
-   ST_U32_U08 Temp_paraqc;
-   ST_U32_U08 val1,sumval1;
-   ST_U32_U08 val2,sumval2;
-   ST_U32_U08 TempValue;
-   float err_ec;
-
-   val1.u32 = 0;
-   Temp_paraqc.u32 = 0;
-   val2.u32 = 0;
-      //读取A路无功
-	  val1.u32=ReadMeterParaACK(DATAIQ);	    
-	  // 读取二次补偿寄存器
-	  Temp_paraqc.u32=ReadMeterParaACK(PARAQC);
-	  
-      //B路功率以及电压电流获取获取9260F  //
-      if(ReadRaccoon(RegAAQ,1,BPhy)==TRUE)     // 最大 200ms读取等待    //  理论时间76ms  RegIAP
-      {
-        memcpy((uint8*)TempValue.B08,gs_RacCtrl.ucBuf+3,4); //有功秒平均功率
-        Lib_Rev_Copy_Arry(&TempValue.B08[0],4);// 低字节在前  倒置//'
-        val2.u32= TempValue.u32*1.669f; //0.01%精度
-      }
- 	  else 
- 	  {
-	    gs_sys_run.font_fg |= BIT4_FONT_FG_EnyBottom;
+	ST_U32_U08 Temp_paraqc;
+	ST_U32_U08 val1,sumval1;
+	ST_U32_U08 val2,sumval2;
+	ST_U32_U08 TempValue;
+	float err_ec;
+	
+	val1.u32 = 0;
+	Temp_paraqc.u32 = 0;
+	val2.u32 = 0;
+	//读取A路无功
+	val1.u32=ReadMeterParaACK(DATAIQ);	    
+	// 读取二次补偿寄存器
+	Temp_paraqc.u32=ReadMeterParaACK(PARAQC);
+	
+	//B路功率以及电压电流获取获取9260F  //
+	if(ReadRaccoon(RegAAQ,1,BPhy)==TRUE)     // 最大 200ms读取等待    //  理论时间76ms  RegIAP
+	{
+		memcpy((uint8*)TempValue.B08,gs_RacCtrl.ucBuf+3,4); //有功秒平均功率
+		Lib_Rev_Copy_Arry(&TempValue.B08[0],4);// 低字节在前  倒置//'
+		val2.u32= TempValue.u32*1.669f; //0.01%精度
+	}
+	else 
+	{
+		gs_sys_run.font_fg |= BIT4_FONT_FG_EnyBottom;
 		return;
-	  }
+	}
 
-      if((sumval1.u32 <= REF_START_Pn)||(sumval1.u32 >= REF_START_REV_Pn))// 无功启动
-      {
-       sumval1.u32 =0; 
-      }
+	if((sumval1.u32 <= REF_START_Pn)||(sumval1.u32 >= REF_START_REV_Pn))// 无功启动
+	{
+		sumval1.u32 =0; 
+	}
+	
+	if((sumval2.u32 <= REF_START_Pn)||(sumval2.u32 >= REF_START_REV_Pn))// 无功启动
+	{
+		sumval2.u32 =0; 
+	}
 
-      if((sumval2.u32 <= REF_START_Pn)||(sumval2.u32 >= REF_START_REV_Pn))// 无功启动
-      {
-       sumval2.u32 =0; 
-      }
 
+	//提取合相以及分相方向//
+	if(val1.u32>=0x80000000)
+	{
+	//       gs_emu_run_var.net_flg |= REV_TT_RACPOWER; // 合相反向
+	}
+	else
+	{
+	//      gs_emu_run_var.net_flg &= (~REV_TT_RACPOWER); // 合相反向
+	}
 
-      //提取合相以及分相方向//
-      if(val1.u32>=0x80000000)
-      {
-//       gs_emu_run_var.net_flg |= REV_TT_RACPOWER; // 合相反向
-	  }
-	  else
-	  {
- //      gs_emu_run_var.net_flg &= (~REV_TT_RACPOWER); // 合相反向
-	  }
-
-      if(val2.u32>=0x80000000)
-      {
-//		gs_emu_run_var.net_flg |= REV_N_RACPOWER; // B路反向 //
-	  }
-	  else
-	  {
-//		gs_emu_run_var.net_flg &= (~REV_N_RACPOWER); // B路正向//
-	  }
+	if(val2.u32>=0x80000000)
+	{
+	//		gs_emu_run_var.net_flg |= REV_N_RACPOWER; // B路反向 //
+	}
+	else
+	{
+	//		gs_emu_run_var.net_flg &= (~REV_N_RACPOWER); // B路正向//
+	}
 
 	  
 	  //根据合相以及B路大小，判断A路方向//
@@ -796,10 +796,10 @@ void Lnk_get_EMU_ractive_const(void)
 		{
 	      TempValue.u32=~TempValue.u32+1;  // 取反丢入
 		}		
-	     gs_measure_var_data.gs_really[PHASE_TT].dw_q_val.u32 = cst_adj_const.Kim_Prms2*val1.u32;
-	     gs_measure_var_data.gs_really[WIRE_L1].dw_q_val.u32 = cst_adj_const.Kim_Prms2*TempValue.u32;
-	     gs_measure_var_data.gs_really[WIRE_L2].dw_q_val.u32 = cst_adj_const.Kim_Prms2*val2.u32;
-	     gs_measure_var_data.gs_really[WIRE_L3].dw_q_val.u32 = 0;
+		gs_measure_var_data.gs_really[PHASE_TT].dw_q_val.u32 = cst_adj_const.Kim_Prms2*val1.u32;
+		gs_measure_var_data.gs_really[WIRE_L1].dw_q_val.u32 = cst_adj_const.Kim_Prms2*TempValue.u32;
+		gs_measure_var_data.gs_really[WIRE_L2].dw_q_val.u32 = cst_adj_const.Kim_Prms2*val2.u32;
+		gs_measure_var_data.gs_really[WIRE_L3].dw_q_val.u32 = 0;
 
 }
 

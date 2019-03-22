@@ -130,38 +130,6 @@
           <Name></Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>216</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>0</Address>
-          <ByteObject>0</ByteObject>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>0</BreakIfRCount>
-          <Filename>Proc_System_Initialize.c</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>91</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>-16750011</Address>
-          <ByteObject>0</ByteObject>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>API_ENERGY.C</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-      </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -247,10 +215,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>46</ColumnNumber>
+      <ColumnNumber>41</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>58</TopLine>
-      <CurrentLine>74</CurrentLine>
+      <TopLine>61</TopLine>
+      <CurrentLine>61</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S0_System\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -303,10 +271,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>11</ColumnNumber>
+      <ColumnNumber>5</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>95</TopLine>
-      <CurrentLine>109</CurrentLine>
+      <TopLine>460</TopLine>
+      <CurrentLine>460</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S0_System\Proc_System_Initialize.c</PathWithFileName>
       <FilenameWithoutPath>Proc_System_Initialize.c</FilenameWithoutPath>
@@ -408,10 +376,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2</ColumnNumber>
+      <ColumnNumber>72</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>302</TopLine>
-      <CurrentLine>310</CurrentLine>
+      <TopLine>568</TopLine>
+      <CurrentLine>568</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S1_HardDrv\V9811A_EMU\Lnk_EMU_handl.c</PathWithFileName>
       <FilenameWithoutPath>Lnk_EMU_handl.c</FilenameWithoutPath>
@@ -674,10 +642,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>8</ColumnNumber>
+      <ColumnNumber>19</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>46</TopLine>
-      <CurrentLine>69</CurrentLine>
+      <TopLine>56</TopLine>
+      <CurrentLine>61</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\C_Source\S3_ApiPlat\Api_Measure.c</PathWithFileName>
       <FilenameWithoutPath>Api_Measure.c</FilenameWithoutPath>
@@ -2346,13 +2314,19 @@
     <ActiveMDIGroup>0</ActiveMDIGroup>
     <MDIGroup>
       <Size>100</Size>
-      <ActiveTab>5</ActiveTab>
+      <ActiveTab>3</ActiveTab>
       <Documents>
         <Doc>
+          <Name>..\C_Source\S1_HardDrv\V9811A_EMU\Lnk_EMU_handl.c</Name>
+          <ColumnNumber>72</ColumnNumber>
+          <TopLine>568</TopLine>
+          <CurrentLine>568</CurrentLine>
+        </Doc>
+        <Doc>
           <Name>..\C_Source\S0_System\Proc_System_Initialize.c</Name>
-          <ColumnNumber>11</ColumnNumber>
-          <TopLine>95</TopLine>
-          <CurrentLine>109</CurrentLine>
+          <ColumnNumber>5</ColumnNumber>
+          <TopLine>460</TopLine>
+          <CurrentLine>460</CurrentLine>
         </Doc>
         <Doc>
           <Name>\TESTGIT\DD01A_V9811A\C_SOURCE\S3_APIPLAT\API_ENERGY_H.H</Name>
@@ -2362,9 +2336,9 @@
         </Doc>
         <Doc>
           <Name>..\C_Source\S0_System\main.c</Name>
-          <ColumnNumber>46</ColumnNumber>
-          <TopLine>58</TopLine>
-          <CurrentLine>74</CurrentLine>
+          <ColumnNumber>41</ColumnNumber>
+          <TopLine>61</TopLine>
+          <CurrentLine>61</CurrentLine>
         </Doc>
         <Doc>
           <Name>..\C_Source\S0_System\Proc_Data.c</Name>
@@ -2380,9 +2354,9 @@
         </Doc>
         <Doc>
           <Name>..\C_Source\S3_ApiPlat\Api_Measure.c</Name>
-          <ColumnNumber>8</ColumnNumber>
-          <TopLine>46</TopLine>
-          <CurrentLine>69</CurrentLine>
+          <ColumnNumber>19</ColumnNumber>
+          <TopLine>56</TopLine>
+          <CurrentLine>61</CurrentLine>
         </Doc>
         <Doc>
           <Name>..\C_Source\S3_ApiPlat\Api_Energy.c</Name>
@@ -2425,12 +2399,6 @@
           <ColumnNumber>2</ColumnNumber>
           <TopLine>648</TopLine>
           <CurrentLine>662</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>..\C_Source\S1_HardDrv\V9811A_EMU\Lnk_EMU_handl.c</Name>
-          <ColumnNumber>2</ColumnNumber>
-          <TopLine>302</TopLine>
-          <CurrentLine>310</CurrentLine>
         </Doc>
         <Doc>
           <Name>..\C_Source\S3_ApiPlat\Api_Demand.c</Name>
